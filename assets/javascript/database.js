@@ -1,0 +1,1 @@
+// javascript code for writing to and reading from the firebase database

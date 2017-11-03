@@ -1,5 +1,5 @@
 //////////////////////////////////////////////This is for testing only //////////////////////////////////////////////
-
+var numMovies = 3;
 var zipCode = "03867";
 var radius = 20;
 var date = "11/09/2017";
@@ -12,7 +12,7 @@ var date = "11/09/2017";
 
 // this calls the whole getMovies function, which includes api call & creates the movieInfo array of objects
 // this should be moved into biz logic file & attached to the onclick for the form submit button
-getMovies(zipCode, radius, date, function (moviesInfo) {
+getMovies(numMovies, zipCode, radius, date, function (moviesInfo) {
     // add all the jquery outputs for movie info here > movie title / theater & show times
     console.log(moviesInfo);
 });
@@ -22,7 +22,7 @@ getMovies(zipCode, radius, date, function (moviesInfo) {
 // the callback returns the moviesInfo object
 
 
-function getMovies(zipCode, radius, date, callback) {
+function getMovies(numMovies, zipCode, radius, date, callback) {
 
     // this is how the date comes in from the form from looking at wireframe mockup
     // 10/31/2017
@@ -31,16 +31,16 @@ function getMovies(zipCode, radius, date, callback) {
     var month = date.split("/")[0];
     var year = date.split("/")[2];
 
+    var queryURL = "http://data.tmsapi.com/v1.1/movies/showings?startDate=2017-11-03&zip=03839&radius=5&api_key=rb8hzag4f93j2f86dbqbcrn5";
 
-
-    var queryURL = "http://data.tmsapi.com/v1.1/movies/showings";
-    queryURL += '?' + $.param({
-        'startDate': year + '-' + month + '-' + day,
-        'zip': zipCode,
-        'radius': radius,
-        'units': "mi",
-        'api_key': "rb8hzag4f93j2f86dbqbcrn5"
-    });
+    // var queryURL = "http://data.tmsapi.com/v1.1/movies/showings";
+    // queryURL += '?' + $.param({
+    //     'startDate': year + '-' + month + '-' + day,
+    //     'zip': zipCode,
+    //     'radius': radius,
+    //     'units': "mi",
+    //     'api_key': "rb8hzag4f93j2f86dbqbcrn5"
+    // });
 
     console.log(queryURL);
 
@@ -52,14 +52,18 @@ function getMovies(zipCode, radius, date, callback) {
             var movies = res.map(function (movie) {
                 var obj = {};
                 obj.title = movie.title;
+                // obj.genres = movie.genres;  
                 obj.theatre = movie.showtimes[0].theatre.name;
                 obj.date = movie.showtimes[0].dateTime.split('T')[0];
-                obj.time = movie.showtimes[0].dateTime.split('T')[1];
+                //this only lists 1 showtime per movie
+                // obj.time = movie.showtimes[0].dateTime.split('T')[1];
+                // this creates an array of showtimes for each movie
+                obj.times = movie.showtimes.map(convertDateTimeToTimes);
                 obj.ticketURI = movie.showtimes[0].ticketURI;
                 return obj;
             });
             // this variable returns 3 movies
-            var moviesInfo= movies.slice(0,3);
+            var moviesInfo= movies.slice(0, numMovies);
             // console.log(moviesInfo);
 
             // this is the callback, it returns the movies object from above
@@ -71,4 +75,9 @@ function getMovies(zipCode, radius, date, callback) {
             console.log(err);
         }
     });
+}
+// this is what it looks like when a showtime.dateTime key gets pulled in
+// {theatre: {…}, dateTime: "2017-11-03T12:45", barg: false, ticketURI: "http://www.fandango.com/tms.asp?t=AAVTP&m=157889&d=2017-11-03"}
+function convertDateTimeToTimes(showTime){
+    return showTime.dateTime.split('T')[1];
 }

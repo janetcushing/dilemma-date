@@ -52,6 +52,7 @@ function getMovies(numMovies, zipCode, radius, date, callback) {
             var movies = res.map(function (movie) {
                 var obj = {};
                 obj.title = movie.title;
+                // obj.genres = movie.genres;  
                 obj.theatre = movie.showtimes[0].theatre.name;
                 obj.date = movie.showtimes[0].dateTime.split('T')[0];
                 obj.time = movie.showtimes[0].dateTime.split('T')[1];

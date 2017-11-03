@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" type="assets/png" href="assets/images/favicon.png"/>
+    <title>Date Night Dilemma</title>
+    <!-- Bootstrap CSS -->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/style.css">
+  </head>
+  <body>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+    <div class="py-5" style="background-image: url(&quot;assets/images/dd-bg-1024px.png&quot;);">
+        <div class="container">
+            <div class="row">
+                <div class="align-self-center col-md-6 text-white">
+                    <h3 class="text-center text-md-left display-3">Book Your Perfect Date</h3>
+                    <p class="lead">Compare your results with others in your area.</p>
+                </div>
+                <div class="col-md-6" id="book">
+                    <div class="card">
+                        <div class="card-body p-5">
+                            <h4 class="pb-3">When, Where and How?</h4>
+                            <form>
+                                <div class="form-group"> <label>Where?</label>
+                                    <input class="form-control" placeholder="your zip code"> </div>
+                                <div class="form-group"> <label>Date</label>
+                                    <input type="date" class="form-control"> </div>
+
+                                <!-- RESTAURANT DROPDOWN -->
+                                <div class="form-group">
+                                    <label class="control-label" for="rolename">Food</label>
+                                    <div class="col-md-12">
+                                        <select id="dates-field2" class="multiselect-ui form-control" multiple="multiple">
+                                            <option value="cheese">Italian</option>
+                                            <option value="tomatoes">French</option>
+                                            <option value="mozarella">American</option>
+                                            <option value="mushrooms">Indian</option>
+                                            <option value="pepperoni">British</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- MOVIE DROPDOWN -->
+                                <div class="form-group">
+                                    <label class="control-label" for="rolename">Movie</label>
+                                    <div class="col-md-12">
+                                        <select id="dates-field2" class="multiselect-ui form-control" multiple="multiple">
+                                            <option value="cheese">Romance</option>
+                                            <option value="tomatoes">Horror</option>
+                                            <option value="mozarella">Action</option>
+                                            <option value="mushrooms">Comedy</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn mt-2 btn-outline-dark">Search!</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

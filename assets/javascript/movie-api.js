@@ -55,7 +55,10 @@ function getMovies(numMovies, zipCode, radius, date, callback) {
                 // obj.genres = movie.genres;  
                 obj.theatre = movie.showtimes[0].theatre.name;
                 obj.date = movie.showtimes[0].dateTime.split('T')[0];
-                obj.time = movie.showtimes[0].dateTime.split('T')[1];
+                //this only lists 1 showtime per movie
+                // obj.time = movie.showtimes[0].dateTime.split('T')[1];
+                // this creates an array of showtimes for each movie
+                obj.times = movie.showtimes.map(convertDateTimeToTimes);
                 obj.ticketURI = movie.showtimes[0].ticketURI;
                 return obj;
             });
@@ -72,4 +75,9 @@ function getMovies(numMovies, zipCode, radius, date, callback) {
             console.log(err);
         }
     });
+}
+// this is what it looks like when a showtime.dateTime key gets pulled in
+// {theatre: {…}, dateTime: "2017-11-03T12:45", barg: false, ticketURI: "http://www.fandango.com/tms.asp?t=AAVTP&m=157889&d=2017-11-03"}
+function convertDateTimeToTimes(showTime){
+    return showTime.dateTime.split('T')[1];
 }

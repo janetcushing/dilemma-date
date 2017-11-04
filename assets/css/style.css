@@ -1,1 +1,23 @@
-/* css code for style for dilemma date */
+/* google fonts */
+
+/*
+font-family: 'Vidaloka', serif;
+font-family: 'Cantata One', serif;
+font-family: 'Sanchez', serif;
+font-family: 'Podkova', serif;
+font-family: 'Kadwa', serif;
+font-family: 'Sree Krushnadevaraya', serif;
+*/
+
+@import url('https://fonts.googleapis.com/css?family=Cantata+One|Kadwa|Podkova|Sanchez|Sree+Krushnadevaraya|Vidaloka');
+
+
+.ddn-modal-head,
+.ddn-modal-lead {
+  font-family: 'Vidaloka', serif;
+}
+
+/* modal background */
+.ddn-modal {
+  border-radius: 10px;
+}

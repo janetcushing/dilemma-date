@@ -31,16 +31,15 @@ function getMovies(numMovies, zipCode, radius, date, callback) {
     var month = date.split("/")[0];
     var year = date.split("/")[2];
 
-    var queryURL = "http://data.tmsapi.com/v1.1/movies/showings?startDate=2017-11-03&zip=03839&radius=5&api_key=rb8hzag4f93j2f86dbqbcrn5";
-
-    // var queryURL = "http://data.tmsapi.com/v1.1/movies/showings";
-    // queryURL += '?' + $.param({
-    //     'startDate': year + '-' + month + '-' + day,
-    //     'zip': zipCode,
-    //     'radius': radius,
-    //     'units': "mi",
-    //     'api_key': "rb8hzag4f93j2f86dbqbcrn5"
-    // });
+ 
+    var queryURL = "http://data.tmsapi.com/v1.1/movies/showings";
+    queryURL += '?' + $.param({
+        'startDate': year + '-' + month + '-' + day,
+        'zip': zipCode,
+        'radius': radius,
+        'units': "mi",
+        'api_key': "rb8hzag4f93j2f86dbqbcrn5"
+    });
 
     console.log(queryURL);
 
@@ -57,8 +56,8 @@ function getMovies(numMovies, zipCode, radius, date, callback) {
                 obj.date = movie.showtimes[0].dateTime.split('T')[0];
                 //this only lists 1 showtime per movie
                 // obj.time = movie.showtimes[0].dateTime.split('T')[1];
-                // this creates an array of showtimes for each movie
-                obj.times = movie.showtimes.map(convertDateTimeToTimes);
+                // this creates an array of showtimes for each movie, only showing 3 times
+                obj.times = movie.showtimes.slice(0,3).map(convertDateTimeToTimes);
                 obj.ticketURI = movie.showtimes[0].ticketURI;
                 return obj;
             });

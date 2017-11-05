@@ -16,10 +16,14 @@ var obj = {};
 
 // this calls the whole getMovies function, which includes api call & creates the movieInfo array of objects
 // this should be moved into biz logic file & attached to the onclick for the form submit button
+//-----------------------------------------------//
+// jbc I commented out the below code 
+// from movie-api.js.  i added this code to frontend.js
 // getMovies(numMovies, zipCode, radius, date, function (moviesInfo) {
-    // add all the jquery outputs for movie info here > movie title / theater & show times
-    // console.log(moviesInfo);
+// add all the jquery outputs for movie info here > movie title / theater & show times
+// console.log(moviesInfo);
 // });
+//-----------------------------------------------//
 //////////////////////////////////////////////This is for testing only //////////////////////////////////////////////
 
 // this function passes in the variable data for zipCode, radius & date, which is pulled from input fields on form
@@ -45,7 +49,7 @@ function getMovies(numMovies, zipCode, radius, date, callback) {
         'api_key': "rb8hzag4f93j2f86dbqbcrn5"
     });
 
-    // console.log(queryURL);
+    console.log(queryURL);
 
 
     $.ajax({
@@ -85,5 +89,3 @@ function getMovies(numMovies, zipCode, radius, date, callback) {
 function convertDateTimeToTimes(showTime) {
     return showTime.dateTime.split('T')[1];
 }
-
-

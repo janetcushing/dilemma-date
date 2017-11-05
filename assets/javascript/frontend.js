@@ -18,9 +18,29 @@ function getSelectedGenres() {
     return selected;
 }
 
+
+function writeMovieToOutput(obj) {
+    console.log("im in writeMovieToOutput");
+    console.log("obj3: " + JSON.stringify(obj));
+    console.log("name: " + obj.title);
+    console.log("name: " + obj.theatre);
+    console.log("name: " + obj.ticketURI);
+    // $("#dnd-output-movie-time").text(obj.times[0]);
+    $("#dnd-output-movie-time").text("8 PM");
+    $("#dnd-output-movie-name").text(obj.title);
+    $("#dnd-output-movie-venue").text(obj.theatre);
+    $("#dnd-output-movie-url").text(obj.ticketURI);
+    
+    $("#search").hide();
+    $("#results").show();
+}
+
+
+
 // page load
 $(document).ready(function() {
 
+    $("#results").hide();
     // supress default form action
     $('.btn').on('click', function(event) {
         event.preventDefault();
@@ -37,5 +57,22 @@ $(document).ready(function() {
 
         console.log('# cuisines: ' + selectedCuisines);
         console.log('# genres:   ' + selectedGenres);
+        console.log("dnd-btn-search has been clicked");
+      
+      
+        numMovies = 1;
+        radius = 10;
+        callback = '';
+        //  getMovies(numMovies, userZipCode, radius, userSelectedData, callback);
+        
+        getMovies(numMovies, userZipCode, radius, date, function (moviesInfo) {
+            // add all the jquery outputs for movie info here > movie title / theater & show times
+            console.log("about to go into writeMoviesToOutput");
+            console.log("obj: " + JSON.stringify(obj));
+            writeMovieToOutput(obj);
+        });
+        // console.log("obj2: " + JSON.stringify(obj));
+        
+      
     });
 });

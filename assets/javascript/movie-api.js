@@ -5,6 +5,8 @@ var numMovies = 3;
 var zipCode = "03867";
 var radius = 20;
 var date = "11/09/2017";
+var obj = {};
+
 // IMPORTANT: the date must be within 6 days from current day, else returns an error.
 
 // if we want to remove the date field from the form & only allow searches for the current day, use this instead
@@ -14,10 +16,10 @@ var date = "11/09/2017";
 
 // this calls the whole getMovies function, which includes api call & creates the movieInfo array of objects
 // this should be moved into biz logic file & attached to the onclick for the form submit button
-getMovies(numMovies, zipCode, radius, date, function (moviesInfo) {
+// getMovies(numMovies, zipCode, radius, date, function (moviesInfo) {
     // add all the jquery outputs for movie info here > movie title / theater & show times
-    console.log(moviesInfo);
-});
+    // console.log(moviesInfo);
+// });
 //////////////////////////////////////////////This is for testing only //////////////////////////////////////////////
 
 // this function passes in the variable data for zipCode, radius & date, which is pulled from input fields on form
@@ -33,7 +35,7 @@ function getMovies(numMovies, zipCode, radius, date, callback) {
     var month = date.split("/")[0];
     var year = date.split("/")[2];
 
- 
+
     var queryURL = "http://data.tmsapi.com/v1.1/movies/showings";
     queryURL += '?' + $.param({
         'startDate': year + '-' + month + '-' + day,
@@ -43,7 +45,7 @@ function getMovies(numMovies, zipCode, radius, date, callback) {
         'api_key': "rb8hzag4f93j2f86dbqbcrn5"
     });
 
-    console.log(queryURL);
+    // console.log(queryURL);
 
 
     $.ajax({
@@ -51,7 +53,7 @@ function getMovies(numMovies, zipCode, radius, date, callback) {
         method: 'GET',
         success: function (res) {
             var movies = res.map(function (movie) {
-                var obj = {};
+                // var obj = {};
                 obj.title = movie.title;
                 // obj.genres = movie.genres;  
                 obj.theatre = movie.showtimes[0].theatre.name;
@@ -59,13 +61,14 @@ function getMovies(numMovies, zipCode, radius, date, callback) {
                 //this only lists 1 showtime per movie
                 // obj.time = movie.showtimes[0].dateTime.split('T')[1];
                 // this creates an array of showtimes for each movie, only showing 3 times
-                obj.times = movie.showtimes.slice(0,3).map(convertDateTimeToTimes);
+                obj.times = movie.showtimes.slice(0, 3).map(convertDateTimeToTimes);
                 obj.ticketURI = movie.showtimes[0].ticketURI;
+                // console.log("obj: " + JSON.stringify(obj));
                 return obj;
             });
             // this variable returns 3 movies
-            var moviesInfo= movies.slice(0, numMovies);
-            // console.log(moviesInfo);
+            var moviesInfo = movies.slice(0, numMovies);
+            console.log(moviesInfo);
 
             // this is the callback, it returns the movies object from above
             callback(moviesInfo);
@@ -79,6 +82,8 @@ function getMovies(numMovies, zipCode, radius, date, callback) {
 }
 // this is what it looks like when a showtime.dateTime key gets pulled in
 // {theatre: {…}, dateTime: "2017-11-03T12:45", barg: false, ticketURI: "http://www.fandango.com/tms.asp?t=AAVTP&m=157889&d=2017-11-03"}
-function convertDateTimeToTimes(showTime){
+function convertDateTimeToTimes(showTime) {
     return showTime.dateTime.split('T')[1];
 }
+
+

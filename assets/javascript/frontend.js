@@ -29,8 +29,21 @@ $(document).ready(function() {
     // search button clicked
     $('body').on('click', '#dnd-btn-search', function() {
 
-        let userZipCode = $('#dnd-input-zipcode').val().trim();
-        let userSelectedData = Date($('#dnd-input-date').val().trim());
+        var numMovies = 1;
+        var radius = 20;
+        var date = $('#dnd-input-date').val();
+        // IMPORTANT: the date must be within 6 days from current day, else returns an error.
+        console.log(date);
+
+        let zipCode = $('#dnd-input-zipcode').val().trim();
+        var date = $('#dnd-input-date').val().trim();
+        // let userSelectedData = Date($('#dnd-input-date').val().trim());
+
+        getMovies(numMovies, zipCode, radius, date, function (moviesInfo) {
+            console.log(moviesInfo);
+        });
+
+     
 
         let selectedCuisines = getSelectedCuisines();
         let selectedGenres = getSelectedGenres();

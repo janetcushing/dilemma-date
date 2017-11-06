@@ -23,14 +23,17 @@ function writeMovieToOutput(obj) {
     console.log("im in writeMovieToOutput");
     console.log("obj3: " + JSON.stringify(obj));
     console.log("name: " + obj.title);
-    console.log("name: " + obj.theatre);
-    console.log("name: " + obj.ticketURI);
+    console.log("theatre: " + obj.theatre);
+    console.log("ticketURI: " + obj.ticketURI);
     // $("#dnd-output-movie-time").text(obj.times[0]);
     $("#dnd-output-movie-time").text("8 PM");
     $("#dnd-output-movie-name").text(obj.title);
     $("#dnd-output-movie-venue").text(obj.theatre);
-    $("#dnd-output-movie-url").text(obj.ticketURI);
-    
+    if ( typeof obj.ticketURI ===  "undefined") {
+        $("#dnd-output-movie-url").text("https://www.fandango.com/");
+    } else {
+        $("#dnd-output-movie-url").text(obj.ticketURI);
+    }
 
     $("#search").hide();
     $("#results").show();
@@ -44,6 +47,7 @@ $(document).ready(function () {
     //-----------------------------------------------//
     // jbc I added the below code to frontend.js
     $("#results").hide();
+    $("#priorResults").hide();
     //-----------------------------------------------//
 
 
@@ -81,4 +85,31 @@ $(document).ready(function () {
     });
     //-----------------------------------------------//
 
+
+    // prior result button clicked
+    $('body').on('click', '#dnd-output-priors', function () {
+        console.log('get prior dates button clicked ');
+        // get 3 prior rows
+        $("#results").hide();
+        $("#priorResults").show();
+        // call database and display 3 rows
+       
+    });
+
+    // back to search button clicked
+    $('body').on('click', '#dnd-output-back-to-search', function () {
+        console.log('back to search button clicked ');
+        // go back to the search page 
+        $("#priorResults").hide();
+        $("#search").show();
+       
+    });
+
+    // back to results button clicked
+    $('body').on('click', '#dnd-output-back-to-result', function () {
+        console.log('back to date result button clicked ');
+        // go back to the date results page 
+        $("#priorResults").hide();
+        $("#results").show();
+    });
 });

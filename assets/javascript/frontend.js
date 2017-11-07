@@ -45,7 +45,6 @@ function writeRestaurantToOutput(restaurants) {
     console.log("name: " + restaurants[0].name);
     console.log("venue: " + restaurants[0].location);
     console.log("url: " + restaurants[0].url);
-    // $("#dnd-output-movie-time").text(obj.times[0]);
     $("#dnd-output-dinner-time").text("6 PM");
     $("#dnd-output-dinner-venue").text(restaurants[0].location);
     $("#dnd-output-dinner-name").text(restaurants[0].name);
@@ -110,20 +109,17 @@ $(document).ready(function () {
 
         //-----------------------------------------------//
         // jbc I added the below code to frontend.js
-        
+
         //  getMovies(numMovies, zipCode, radius, userSelectedData, callback);
 
-        // getMovies(numMovies, zipCode, radius, date, function (moviesInfo) {
-        //     // add all the jquery outputs for movie info here > movie title / theater & show times
-        //     console.log("about to go into writeMoviesToOutput");
-        //     console.log("obj: " + JSON.stringify(obj));
-        //     writeMovieToOutput(obj);
-        //     console.log("about to go into updateDateHistoryDatabase");
-        // updateMoviesInDateHistoryJsonObject(obj)
-        //     updateDateHistoryDatabase(obj);
-        // });
+        getMovies(numMovies, zipCode, radius, date, function (moviesInfo) {
+            // add all the jquery outputs for movie info here > movie title / theater & show times
+            writeMovieToOutput(obj);
+            updateMoviesInDateHistoryJsonObject(obj)
+            updateDateHistoryDatabase(obj);
+        });
 
-        
+
     });
     //-----------------------------------------------//
 

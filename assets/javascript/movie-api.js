@@ -38,7 +38,7 @@ function getMovies(numMovies, zipCode, radius, date, callback) {
         // var year = date.split("/")[2];
     
         
-        var queryURL = "http://data.tmsapi.com/v1.1/movies/showings";
+        var queryURL = "https://data.tmsapi.com/v1.1/movies/showings";
         queryURL += '?' + $.param({
             // 'startDate': year + '-' + month + '-' + day,
             'startDate': date,

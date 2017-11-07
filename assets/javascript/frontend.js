@@ -89,15 +89,15 @@ $(document).ready(function () {
         numMovies = 1;
         radius = 10;
         callback = '';
-        //  getMovies(numMovies, userZipCode, radius, userSelectedData, callback);
+        //  getMovies(numMovies, zipCode, radius, userSelectedData, callback);
 
-        getMovies(numMovies, userZipCode, radius, date, function (moviesInfo) {
+        getMovies(numMovies, zipCode, radius, date, function (moviesInfo) {
             // add all the jquery outputs for movie info here > movie title / theater & show times
             console.log("about to go into writeMoviesToOutput");
             console.log("obj: " + JSON.stringify(obj));
             writeMovieToOutput(obj);
             console.log("about to go into updateDateHistoryDatabase");
-            updateDateHistoryDatabase(userZipCode, radius, obj);
+            updateDateHistoryDatabase(zipCode, radius, obj);
         });
     });
     //-----------------------------------------------//

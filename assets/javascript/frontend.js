@@ -61,9 +61,22 @@ $(document).ready(function () {
     // search button clicked
     $('body').on('click', '#dnd-btn-search', function () {
 
+        var numMovies = 1;
+        var radius = 20;
+        var date = $('#dnd-input-date').val();
+        // IMPORTANT: the date must be within 6 days from current day, else returns an error.
+        console.log(date);
+
         let zipCode = $('#dnd-input-zipcode').val().trim();
-        // let date = Date($('#dnd-input-date').val().trim());
-        let date = $('#dnd-input-date').val().trim();
+        var date = $('#dnd-input-date').val().trim();
+        // let userSelectedData = Date($('#dnd-input-date').val().trim());
+
+        getMovies(numMovies, zipCode, radius, date, function (moviesInfo) {
+            console.log(moviesInfo);
+        });
+
+     
+
         let selectedCuisines = getSelectedCuisines();
         let selectedGenres = getSelectedGenres();
 
@@ -76,21 +89,15 @@ $(document).ready(function () {
         numMovies = 1;
         radius = 10;
         callback = '';
-        //  getMovies(numMovies, zipCode, radius, userSelectedData, callback);
-        console.log("date: " + date);
-        // console.log("date2: " + date2);
+        //  getMovies(numMovies, userZipCode, radius, userSelectedData, callback);
 
-       
-
-        
-        console.log
-        getMovies(numMovies, zipCode, radius, date, function (moviesInfo) {
+        getMovies(numMovies, userZipCode, radius, date, function (moviesInfo) {
             // add all the jquery outputs for movie info here > movie title / theater & show times
             console.log("about to go into writeMoviesToOutput");
             console.log("obj: " + JSON.stringify(obj));
             writeMovieToOutput(obj);
             console.log("about to go into updateDateHistoryDatabase");
-            updateDateHistoryDatabase(zipCode, radius, obj);
+            updateDateHistoryDatabase(userZipCode, radius, obj);
         });
     });
     //-----------------------------------------------//

@@ -29,15 +29,17 @@ function writeMovieToOutput(obj) {
     $("#dnd-output-movie-time").text("8 PM");
     $("#dnd-output-movie-name").text(obj.title);
     $("#dnd-output-movie-venue").text(obj.theatre);
-    if ( typeof obj.ticketURI ===  "undefined") {
-        $("#dnd-output-movie-url").text("https://www.fandango.com/");
-    } else {
-        $("#dnd-output-movie-url").text(obj.ticketURI);
+    if (typeof obj.ticketURI === "undefined") {
+        obj.ticketURI = "https://www.fandango.com/";
+        // $("#dnd-output-movie-url").text("https://www.fandango.com/");
+        // } else 
     }
+    $("#dnd-output-movie-url").text(obj.ticketURI);
 
     $("#search").hide();
     $("#results").show();
 }
+
 //-----------------------------------------------//
 
 
@@ -81,6 +83,8 @@ $(document).ready(function () {
             console.log("about to go into writeMoviesToOutput");
             console.log("obj: " + JSON.stringify(obj));
             writeMovieToOutput(obj);
+            console.log("about to go into updateDateHistoryDatabase");
+            updateDateHistoryDatabase(userZipCode, radius, obj);
         });
     });
     //-----------------------------------------------//
@@ -93,7 +97,7 @@ $(document).ready(function () {
         $("#results").hide();
         $("#priorResults").show();
         // call database and display 3 rows
-       
+        getOutputFromDateHistoryDatabase();
     });
 
     // back to search button clicked
@@ -102,7 +106,7 @@ $(document).ready(function () {
         // go back to the search page 
         $("#priorResults").hide();
         $("#search").show();
-       
+
     });
 
     // back to results button clicked

@@ -19,22 +19,68 @@ var dateHistoryRef = database.ref("/dateHistory");
 var dateHistoryQuery = database.ref("dateHistory").orderByChild("zipCode").limitToFirst(3);
 
 
-function updateDateHistoryDatabase(zipCode, radius, obj) {
+dateHistoryData = {
+    "zipCode": '',
+    "radius": '',
+    "date": '',
+    "movieTitle": '',
+    "theatre": '',
+    "time": '',
+    "theatreUrl": '',
+    "restaurantTime": '',
+    "restaurantName": '',
+    "restaurantLocation": '',
+    "restaurantUrl": '',
+    "dateRating": ''
+};
+
+function updateInputInDateHistoryJsonObject(zipCode, radius, date) {
+    dateHistoryData.zipCode =  zipCode;
+    dateHistoryData.radius = radius;
+    dateHistoryData.date = date;
+    dateHistoryData.dateRating = '';
+}
+
+function updateMoviesInDateHistoryJsonObject(obj) {
+    dateHistoryData.movieTitle = obj.title;
+    dateHistoryData.theatre = obj.theatre;
+    dateHistoryData.time = obj.times[0];
+    dateHistoryData.theatreUrl = obj.ticketURI;
+}
+
+function updateRestaurantInDateHistoryJsonObject(restaurants) {
+    dateHistoryData.restaurantTime = "7:00 PM";
+    dateHistoryData.restaurantName = restaurants[0].name;
+    dateHistoryData.restaurantLocation = restaurants[0].location;
+      // dateHistoryData.restaurantUrl = restaurants[0].url;
+    dateHistoryData.restaurantUrl = restaurants[0].url;
+    console.log("dateHistoryData " + JSON.stringify(dateHistoryData));
+}
+
+
+function updateDateHistoryDatabase(dateHistoryData) {
     console.log("im in updateDateHistoryDatabase");
-    // for (i = 0; i < Object.keys(obj).length; i++) {
-    // console.log("length of json: " + Object.keys(obj).length);
+    console.log("the json object " + JSON.stringify(dateHistoryData));
+   
+    console.log("zip " + dateHistoryData.zipCode);
+    console.log("zip " + dateHistoryData.radius);
+    console.log("zip " + dateHistoryData.restaurantTime);
+    console.log("zip " + dateHistoryData.restaurantLocation);
+    console.log("zip " + dateHistoryData.restaurantName);
+    console.log("zip " + dateHistoryData.restaurantUrl);
     dateHistoryRef.push({
-        zipCode: zipCode,
-        radius: radius,
-        movieTitle: obj.title,
-        theatre: obj.theatre,
-        date: obj.date,
-        movieTime: obj.times[0],
-        theatreUrl: obj.ticketURI
-        // restaurantName: dateData[i].restaurantName,
-        // restaurantAddress: dateData[i].restaurantAddress,
-        // restaurantUrl: dateData[i].restaurantUrl,
-        // dateRating: dateData[i].dateRating
+        zipCode: dateHistoryData.zipCode,
+        radius: dateHistoryData.radius,
+        movieTitle: dateHistoryData.movieTitle,
+        theatre: dateHistoryData.theatre,
+        date: dateHistoryData.date,
+        movieTime: dateHistoryData.time,
+        theatreUrl: dateHistoryData.theatreUrl,
+        restaurantTime: dateHistoryData.restaurantTime,
+        restaurantName: dateHistoryData.restaurantName,
+        restaurantLocation: dateHistoryData.restaurantLocation,
+        restaurantUrl: dateHistoryData.restaurantUrl
+        // dateRating: dateDataHistory.dateRating
 
     });
     // }
@@ -66,20 +112,21 @@ function getOutputFromDateHistoryDatabase() {
         movieTr.append(tdTitle);
         movieTr.append(tdTheatreUrl);
         $("#dnd-output-prior-results").append(movieTr);
+
         console.log("i just appended to #dnd-output-priors");
         var dinnerTr = $("<tr>");
         var tdDinnerTime = $("<td>");
         tdDinnerTime.attr("id", "dnd-output-prior-dinner-time-" + i);
-        tdDinnerTime.text("7:00 PM");
+        tdDinnerTime.text(snapshot.val().restaurantTime);
         var tdDinnerVenue = $("<td>");
         tdDinnerVenue.attr("id", "dnd-output-prior-dinner-venue-" + i);
-        tdDinnerVenue.text("Downtown Dover");
+        tdDinnerVenue.text(snapshot.val().restaurantLocation);
         var tdDinnerName = $("<td>");
         tdDinnerName.attr("id", "dnd-output-prior-dinner-name-" + i);
-        tdDinnerName.text("The Thirsty Moose");
+        tdDinnerName.text(snapshot.val().restaurantName);
         var tdDinnerUrl = $("<td>");
         tdDinnerUrl.attr("id", "dnd-output-prior-dinner-time-" + i);
-        tdDinnerUrl.text("www.thirstymoose.com");
+        tdDinnerUrl.text(snapshot.val().restaurantUrl);
         dinnerTr.append(tdDinnerTime);
         dinnerTr.append(tdDinnerVenue);
         dinnerTr.append(tdDinnerName);

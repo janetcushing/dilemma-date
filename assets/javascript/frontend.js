@@ -61,9 +61,9 @@ $(document).ready(function () {
     // search button clicked
     $('body').on('click', '#dnd-btn-search', function () {
 
-        let userZipCode = $('#dnd-input-zipcode').val().trim();
-        let userSelectedData = Date($('#dnd-input-date').val().trim());
-
+        let zipCode = $('#dnd-input-zipcode').val().trim();
+        // let date = Date($('#dnd-input-date').val().trim());
+        let date = $('#dnd-input-date').val().trim();
         let selectedCuisines = getSelectedCuisines();
         let selectedGenres = getSelectedGenres();
 
@@ -76,15 +76,21 @@ $(document).ready(function () {
         numMovies = 1;
         radius = 10;
         callback = '';
-        //  getMovies(numMovies, userZipCode, radius, userSelectedData, callback);
+        //  getMovies(numMovies, zipCode, radius, userSelectedData, callback);
+        console.log("date: " + date);
+        // console.log("date2: " + date2);
 
-        getMovies(numMovies, userZipCode, radius, date, function (moviesInfo) {
+       
+
+        
+        console.log
+        getMovies(numMovies, zipCode, radius, date, function (moviesInfo) {
             // add all the jquery outputs for movie info here > movie title / theater & show times
             console.log("about to go into writeMoviesToOutput");
             console.log("obj: " + JSON.stringify(obj));
             writeMovieToOutput(obj);
             console.log("about to go into updateDateHistoryDatabase");
-            updateDateHistoryDatabase(userZipCode, radius, obj);
+            updateDateHistoryDatabase(zipCode, radius, obj);
         });
     });
     //-----------------------------------------------//

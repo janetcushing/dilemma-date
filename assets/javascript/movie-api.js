@@ -39,10 +39,13 @@ function getMovies(numMovies, zipCode, radius, date, callback) {
     var month = date.split("/")[0];
     var year = date.split("/")[2];
 
+    // console.log("year + '-' + month + '-' + day," + year + '-' + month + '-' + day);
 
+console.log("dateformatted: " + year + '-' + month + '-' + day);
     var queryURL = "http://data.tmsapi.com/v1.1/movies/showings";
     queryURL += '?' + $.param({
-        'startDate': year + '-' + month + '-' + day,
+        // 'startDate': year + '-' + month + '-' + day,
+        'startDate': date,
         'zip': zipCode,
         'radius': radius,
         'units': "mi",

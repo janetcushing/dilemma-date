@@ -248,7 +248,7 @@ tr:last-child td:last-child { border-bottom-right-radius: 10px; }
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
     text-align: center;
-    color: #a3e823;
+    color: #EAFF87;
     /*text-transform: uppercase;*/
     font-size: 0.8125rem;
     font-weight: bold;
@@ -271,5 +271,5 @@ tr:last-child td:last-child { border-bottom-right-radius: 10px; }
     top: 2px;
     font-weight: bold;
     font-size: 0.875rem;
-    color: #a3e823;
+    color: #EAFF87;
 }

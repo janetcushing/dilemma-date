@@ -18,7 +18,7 @@
     <script src="assets/javascript/movie-api.js" type="text/javascript"></script>
     <script src="assets/javascript/main.js"></script>
 
-    <div class="grid-container top-container">
+    <div class="grid-container dnd-container">
 
         <div class="grid-x grid-padding-x align-center-middle">
             <div class="card">
@@ -98,15 +98,21 @@
     <div class="reveal" id="dnd-settings-modal" data-reveal>
         <h3>Settings</h3>
         <hr>
-        <input type="radio" name="option1" value="" id="dnd-settings-opt1"><label for="dnd-settings-opt1">Option 1</label>
-        <input type="radio" name="option1" value="" id="dnd-settings-opt2"><label for="dnd-settings-opt2">Option 2</label>
+        <label>Preferred Zip Code
+            <input id="dnd-settings-input-zipcode" placeholder="your zip code" type="number" value="">
+        </label>
+        <label>Default Search Radius
+            <input id="dnd-settings-input-miles" placeholder="10" type="number" value="">
+        </label>
+        <input type="checkbox" name="option1" value="" id="dnd-settings-store-searches"><label for="dnd-settings-store">Store Previous Searchs</label>
+        <input type="checkbox" name="option2" value="" id="dnd-settings-store-favorites"><label for="dnd-settings-store-favorites">Store Favorite Categories</label>
         <button class="close-button" data-close aria-label="Close modal" type="button">
             <span aria-hidden="true">&times;</span>
         </button>
         <hr>
-        <div class="small button-group text-right">
+        <div class="button-group align-right">
           <a class="button">Save</a>
-          <a class="button secondary">Close</a>
+          <a class="button secondary" data-close aria-label="Close modal">Close</a>
         </div>
     </div>
 

@@ -112,7 +112,7 @@ $(document).ready(function () {
 
         //  getMovies(numMovies, zipCode, radius, userSelectedData, callback);
 
-        getMovies(numMovies, zipCode, radius, date, function (moviesInfo) {
+        getMovies(numMovies, zipCode, radius, date, selectedGenres, function (moviesInfo) {
             // add all the jquery outputs for movie info here > movie title / theater & show times
             writeMovieToOutput(obj);
             updateMoviesInDateHistoryJsonObject(obj)

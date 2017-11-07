@@ -2,6 +2,7 @@
 // javascript code for writing to and reading from the firebase database
 //--------------------------------------------------------------------------//
 
+
 // Initialize Firebase
 var config = {
     apiKey: "AIzaSyA1xGXNJrGt5WMHcopz8FXpkCEG5fcVdDQ",

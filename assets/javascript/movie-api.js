@@ -20,6 +20,7 @@
 //     console.log(moviesInfo);
 // });
 
+
 //////////////////////////////////////////////This is for testing only //////////////////////////////////////////////
 
 // this function passes in the variable data for zipCode, radius & date, which is pulled from input fields on form

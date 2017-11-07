@@ -36,8 +36,23 @@ function writeMovieToOutput(obj) {
     }
     $("#dnd-output-movie-url").text(obj.ticketURI);
 
-    $("#search").hide();
-    $("#results").show();
+
+}
+
+function writeRestaurantToOutput(restaurants) {
+    console.log("im in writeRestaurantToOutput");
+    console.log("restaurants: " + JSON.stringify(restaurants));
+    console.log("name: " + restaurants[0].name);
+    console.log("venue: " + restaurants[0].location);
+    console.log("url: " + restaurants[0].url);
+    $("#dnd-output-dinner-time").text("6 PM");
+    $("#dnd-output-dinner-venue").text(restaurants[0].location);
+    $("#dnd-output-dinner-name").text(restaurants[0].name);
+    if (typeof restaurants[0].url === "undefined") {
+        restaurants[0].url = "https://www.zomato.com/";
+    }
+    $("#dnd-output-dinner-url").text(restaurants[0].url);
+
 }
 
 //-----------------------------------------------//
@@ -60,25 +75,33 @@ $(document).ready(function () {
 
     // search button clicked
     $('body').on('click', '#dnd-btn-search', function () {
-
+        $("#search").hide();
+        $("#results").show();
         var numMovies = 1;
         var radius = 20;
-        var date = $('#dnd-input-date').val();
+        // var date = $('#dnd-input-date').val();
         // IMPORTANT: the date must be within 6 days from current day, else returns an error.
         console.log(date);
 
-        let zipCode = $('#dnd-input-zipcode').val().trim();
-        var date = $('#dnd-input-date').val().trim();
-        // let userSelectedData = Date($('#dnd-input-date').val().trim());
-
-        getMovies(numMovies, zipCode, radius, date, function (moviesInfo) {
-            console.log(moviesInfo);
-        });
-
-     
 
         let selectedCuisines = getSelectedCuisines();
         let selectedGenres = getSelectedGenres();
+
+        let zipCode = $('#dnd-input-zipcode').val().trim();
+        var date = $('#dnd-input-date').val().trim();
+        numMovies = 1;
+        radius = 10;
+        callback = '';
+
+        updateInputInDateHistoryJsonObject(zipCode, radius, date)
+        // let userSelectedData = Date($('#dnd-input-date').val().trim());
+        getLocation(zipCode, radius, selectedCuisines);
+
+        // getMovies(numMovies, zipCode, radius, date, function (moviesInfo) {
+        //     console.log(moviesInfo);
+        //     console.log("about to go into getLocation");
+
+        // });
 
         console.log('# cuisines: ' + selectedCuisines);
         console.log('# genres:   ' + selectedGenres);
@@ -86,19 +109,17 @@ $(document).ready(function () {
 
         //-----------------------------------------------//
         // jbc I added the below code to frontend.js
-        numMovies = 1;
-        radius = 10;
-        callback = '';
+
         //  getMovies(numMovies, zipCode, radius, userSelectedData, callback);
 
         getMovies(numMovies, zipCode, radius, date, function (moviesInfo) {
             // add all the jquery outputs for movie info here > movie title / theater & show times
-            console.log("about to go into writeMoviesToOutput");
-            console.log("obj: " + JSON.stringify(obj));
             writeMovieToOutput(obj);
-            console.log("about to go into updateDateHistoryDatabase");
-            updateDateHistoryDatabase(zipCode, radius, obj);
+            updateMoviesInDateHistoryJsonObject(obj)
+            updateDateHistoryDatabase(obj);
         });
+
+
     });
     //-----------------------------------------------//
 
@@ -110,6 +131,7 @@ $(document).ready(function () {
         $("#results").hide();
         $("#priorResults").show();
         // call database and display 3 rows
+        updateDateHistoryDatabase(dateHistoryData);
         getOutputFromDateHistoryDatabase();
     });
 

@@ -1,23 +1,275 @@
-/* google fonts */
-
 /*
+font-family: 'Oswald', sans-serif;
+font-family: 'Anton', sans-serif;
+font-family: 'Passion One', cursive;
+font-family: 'BenchNine', sans-serif;
+font-family: 'Paytone One', sans-serif;
+
+// serif
+font-family: 'Roboto Slab', serif;
 font-family: 'Vidaloka', serif;
-font-family: 'Cantata One', serif;
-font-family: 'Sanchez', serif;
-font-family: 'Podkova', serif;
-font-family: 'Kadwa', serif;
-font-family: 'Sree Krushnadevaraya', serif;
 */
 
-@import url('https://fonts.googleapis.com/css?family=Cantata+One|Kadwa|Podkova|Sanchez|Sree+Krushnadevaraya|Vidaloka');
+@import url('https://fonts.googleapis.com/css?family=Anton|BenchNine|Oswald|Passion+One|Paytone+One|Roboto+Slab|Vidaloka');
+body {
+    /* global font style */
+    font-family: 'Roboto Slab', serif;
+    background-color: #540045;
+    background-image: url("../images/dd-bg-1024px.png");
+    background-repeat: repeat-x;
+}
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto Slab', serif;
+}
 
-.ddn-modal-head,
-.ddn-modal-lead {
-  font-family: 'Vidaloka', serif;
+thead {
+    border-radius: 12px;
+}
+
+/* Foundation 6 Overrides */
+
+.button {
+    border-radius: 8px;
+    text-shadow: 1px 1px 0 #1b1b1b;
+}
+
+.button.large {}
+
+.top-container {
+    margin-top: 10vh;
+}
+
+.dnd-container {
+    padding: 8px;
+}
+
+.card {
+    border-radius: 8px;
+}
+
+/* Foundation Tabs */
+
+/* focused tab */
+
+.tabs-title>a:focus, .tabs-title>a[aria-selected=true] {
+    /*background-color: #85bff5;*/
+}
+
+/* unfocused tab */
+
+.tabs-title>a {
+    /*background-color: #e0dc79;*/
+}
+
+/* Application */
+
+.ddn-modal-head, .ddn-modal-lead {
+    font-family: 'Vidaloka', serif;
 }
 
 /* modal background */
+
 .ddn-modal {
-  border-radius: 10px;
+    border-radius: 10px;
+}
+
+/* inverted headers */
+
+.dnd-h-white {
+    color: #fff;
+}
+
+/* date result table */
+
+table.dnd-date-result {
+    border-radius: 12px;
+}
+
+/* table parent div */
+
+.dnd-date-panel {
+    margin: 5px;
+    border: 1px solid #cfcfcf;
+    border-radius: 12px;
+    padding: 0.5rem;
+}
+
+.dnd-results-card-section {
+    padding: 8px 8px 8px 8px;
+}
+
+/*results tab header*/
+
+.dnd-result-tabs {
+    border-right-style: none;
+    border-top-style: none;
+    border-top-left-radius: 8px;
+}
+
+/* tab page content */
+
+.dnd-results-tab-content {
+    /*border: 1px solid #000;*/
+    border-top: 1px none #e1e1e1;
+    border-right-style: none;
+    border-bottom-style: none;
+    border-left-style: none;
+}
+
+thead.dnd-date-panel {
+    background-color: #e858be;
+}
+
+table thead {
+    background: rgba(255, 255, 255, 0);
+    color: #0a0a0a;
+}
+
+table tbody, table tfoot, table thead {
+    border-style: none;
+}
+
+/*
+table { border-collapse: separate; }
+td { border: solid 1px #000; }
+tr:first-child td:first-child { border-top-left-radius: 10px; }
+tr:first-child td:last-child { border-top-right-radius: 10px; }
+tr:last-child td:first-child { border-bottom-left-radius: 10px; }
+tr:last-child td:last-child { border-bottom-right-radius: 10px; }
+*/
+
+.responsive-card-table {
+    border-collapse: collapse;
+}
+
+.responsive-card-table.unstriped tbody {
+    background-color: transparent;
+}
+
+.responsive-card-table th {
+    background-color: #e6e6e6;
+}
+
+.responsive-card-table th:first-child {
+    border-top-left-radius: 10px;
+}
+
+.responsive-card-table th:last-child {
+    border-top-right-radius: 10px;
+}
+
+.responsive-card-table th {
+    background-color: #e6e6e6;
+}
+
+.responsive-card-table tr, .responsive-card-table th, .responsive-card-table td {
+    /*border: 1px solid #0a0a0a;*/
+}
+
+@media screen and (max-width: 640px) {
+    .responsive-card-table {}
+    .responsive-card-table thead tr {
+        position: absolute;
+        top: -9999em;
+        left: -9999em;
+    }
+    .responsive-card-table tr {
+        /*border: 1px solid #0a0a0a;*/
+        display: block;
+    }
+    .responsive-card-table tr+tr {
+        margin-top: 1.5rem;
+    }
+    .responsive-card-table td {
+        border: none;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-justify-content: flex-start;
+        -ms-flex-pack: start;
+        justify-content: flex-start;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+        /*border-bottom: 1px solid #0a0a0a;*/
+        padding-left: 50%;
+        position: relative;
+    }
+    .responsive-card-table td::before:first-child {
+        content: none;
+    }
+    .responsive-card-table td:before {
+        content: attr(data-label);
+        display: inline-block;
+        font-weight: bold;
+        line-height: 1.5;
+        margin-left: -100%;
+        width: 100%;
+        position: relative;
+        z-index: 1;
+    }
+    .responsive-card-table td:after {
+        content: '';
+        position: absolute;
+        background: #e6e6e6;
+        width: 45%;
+        height: 95%;
+        left: 1px;
+        top: 1px;
+        z-index: 0;
+    }
+    .responsive-card-table td::before:first-child {
+        background: #ccc;
+    }
+}
+
+/* Mobile Footer  */
+
+.mobile-bottom-bar {
+    width: 100%;
+    height: 3.778rem;
+    background: #ff6807;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    /*display: flex;*/
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    position: absolute;
+    bottom: 0px;
+}
+
+.mobile-bottom-bar .footer-link {
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    text-align: center;
+    color: #a3e823;
+    /*text-transform: uppercase;*/
+    font-size: 0.8125rem;
+    font-weight: bold;
+    padding: 0.907rem 1rem;
+}
+
+.mobile-bottom-bar .footer-link i.fa {
+    opacity: 0.8;
+    margin-right: 0.625rem;
+    font-size: 1.5rem;
+    vertical-align: middle;
+}
+
+.mobile-bottom-bar .footer-link:focus, .mobile-bottom-bar .footer-link:active {
+    color: #0c3e5f;
+}
+
+.mobile-bottom-bar .footer-text {
+    position: relative;
+    top: 2px;
+    font-weight: bold;
+    font-size: 0.875rem;
+    color: #a3e823;
 }

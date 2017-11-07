@@ -1,3 +1,33 @@
+
+// globals
+// genres from: http://www.imdb.com/genre/
+var movieGenres = {"0":"romance","1":"comedy","2":"action","3":"family","4":"musical","5":"western","6":"sci-fi","7":"mystery","8":"drama"};
+var restaurantCuisines = {"0":"italian","1":"french","2":"american","3":"indian","4":"british","5":"asian","6":"sushi"};
+
+// build the restaurant cuisine list
+function buildRestaurantCuinsineList() {
+    var cuisineList = $('#dnd-cuisine-menu');
+    cuisineList.empty();
+    for (key in Object.keys(restaurantCuisines)) {
+        let cuisineName = restaurantCuisines[key];
+        // console.log('adding cuisine: "' + cuisineName + '" for index: ' + key);
+        cuisineList.append('<option value="' + key + '">' + cuisineName + '</option>');
+    }
+}
+
+
+// build the movie genre list
+function buildMovieGenresList() {
+    var movieGenreList = $('#dnd-genre-menu');
+    movieGenreList.empty();
+    for (key in Object.keys(movieGenres)) {
+        let genreName = movieGenres[key];
+        // console.log('adding genre: "' + genreName + '" for index: ' + key);
+        movieGenreList.append('<option value="' + key + '">' + genreName + '</option>');
+    }
+}
+
+
 // Return currently selected restaurant cuisines
 function getSelectedCuisines() {
     var selected = [];
@@ -17,8 +47,7 @@ function getSelectedGenres() {
 }
 
 
-//-----------------------------------------------//
-// jbc I added the below code to frontend.js
+// jbc I added the below code to main.js
 function writeMovieToOutput(obj) {
     console.log("im in writeMovieToOutput");
     console.log("obj3: " + JSON.stringify(obj));
@@ -32,7 +61,7 @@ function writeMovieToOutput(obj) {
     if (typeof obj.ticketURI === "undefined") {
         obj.ticketURI = "https://www.fandango.com/";
         // $("#dnd-output-movie-url").text("https://www.fandango.com/");
-        // } else 
+        // } else
     }
     $("#dnd-output-movie-url").text(obj.ticketURI);
 
@@ -40,18 +69,18 @@ function writeMovieToOutput(obj) {
     $("#results").show();
 }
 
-//-----------------------------------------------//
-
 
 // page load
 $(document).ready(function () {
 
-    //-----------------------------------------------//
-    // jbc I added the below code to frontend.js
+
+    // jbc I added the below code to main.js
     $("#results").hide();
     $("#priorResults").hide();
-    //-----------------------------------------------//
 
+    // build the ui elements
+    buildMovieGenresList();
+    buildRestaurantCuinsineList();
 
     // supress default form action
     $('.btn').on('click', function (event) {
@@ -75,17 +104,16 @@ $(document).ready(function () {
             console.log(moviesInfo);
         });
 
-     
+
 
         let selectedCuisines = getSelectedCuisines();
         let selectedGenres = getSelectedGenres();
 
         console.log('# cuisines: ' + selectedCuisines);
         console.log('# genres:   ' + selectedGenres);
-        console.log("dnd-btn-search has been clicked");
 
         //-----------------------------------------------//
-        // jbc I added the below code to frontend.js
+        // jbc I added the below code to main.js
         numMovies = 1;
         radius = 10;
         callback = '';
@@ -116,7 +144,7 @@ $(document).ready(function () {
     // back to search button clicked
     $('body').on('click', '#dnd-output-back-to-search', function () {
         console.log('back to search button clicked ');
-        // go back to the search page 
+        // go back to the search page
         $("#priorResults").hide();
         $("#search").show();
 
@@ -125,7 +153,7 @@ $(document).ready(function () {
     // back to results button clicked
     $('body').on('click', '#dnd-output-back-to-result', function () {
         console.log('back to date result button clicked ');
-        // go back to the date results page 
+        // go back to the date results page
         $("#priorResults").hide();
         $("#results").show();
     });

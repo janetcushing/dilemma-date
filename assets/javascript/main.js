@@ -66,7 +66,7 @@ function writeMovieToOutput(obj) {
         // $("#dnd-output-movie-url").text("https://www.fandango.com/");
         // } else
     }
-    $("#dnd-output-movie-url").text(obj.ticketURI);
+    // $("#dnd-output-movie-url").text(obj.ticketURI);
 
 
     var tr = $('<tr>');
@@ -87,13 +87,22 @@ function writeRestaurantToOutput(restaurants) {
     console.log("name: " + restaurants[0].name);
     console.log("venue: " + restaurants[0].location);
     console.log("url: " + restaurants[0].url);
-    $("#dnd-output-dinner-time").text("6 PM");
-    $("#dnd-output-dinner-venue").text(restaurants[0].location);
-    $("#dnd-output-dinner-name").text(restaurants[0].name);
+    // $("#dnd-output-dinner-time").text("6 PM");
+    // $("#dnd-output-dinner-venue").text(restaurants[0].location);
+    // $("#dnd-output-dinner-name").text(restaurants[0].name);
     if (typeof restaurants[0].url === "undefined") {
         restaurants[0].url = "https://www.zomato.com/";
     }
-    $("#dnd-output-dinner-url").text(restaurants[0].url);
+    // $("#dnd-output-dinner-url").text(restaurants[0].url);
+
+    var tr = $('<tr>');
+    tr.append('<td class="fa fa-cutlery" aria-hidden="true"></td>');
+    tr.append(`<td>${"8 PM"}</td>`);
+    tr.append(`<td>${restaurants[0].name}</td>`);
+    tr.append(`<td>${restaurants[0].location}</td>`);
+    tr.append(`<td>${restaurants[0].url}</td>`);
+
+    $('#dnd-user-results-tbody').append(tr);
 }
 
 // Returns the date & time from the search form

@@ -11,7 +11,7 @@ function buildRestaurantCuinsineList() {
     let restaurantKeys = Object.keys(restaurantCuisines);
     restaurantKeys.forEach(function(key) {
         let cuisineName = restaurantCuisines[key];
-        console.log('adding cuisine: "' + cuisineName + '" for index: ' + key);
+        // console.log('adding cuisine: "' + cuisineName + '" for index: ' + key);
         cuisineList.append('<option value="' + key + '">' + cuisineName + '</option>');
     });
 }
@@ -83,6 +83,47 @@ function writeRestaurantToOutput(restaurants) {
     $("#dnd-output-dinner-url").text(restaurants[0].url);
 }
 
+// Returns the date & time from the search form
+function getDateTime() {
+    if (!$('#dnd-input-date').val() || !$('#dnd-input-time').val()) {
+        // return Date();
+    }
+
+    var currentDate = $('#dnd-input-date').val().trim();
+    var currentTime = $('#dnd-input-time').val().trim();
+    // return Date(date + ':' + time);
+    return (currentDate + ':' + currentTime);
+}
+
+/**
+ Validate the search form fields. Not finished, don't use!!
+
+ - returns  `Bool` all form fields are correctly filled.
+ */
+function validateSearchForm() {
+    var result = true;
+    // let allInputs = $('form').find('input', 'select');
+    let inputs = $('form').find('input');
+    let selects = $('form').find('select');
+    for (var key in Object.keys(inputs)) {
+        let element = $(inputs[key]);
+        element.removeClass('is-invalid-input');
+        if (!element.value) {
+            result = false;
+            element.addClass('is-invalid-input');
+        }
+    }
+    for (var key in Object.keys(selects)) {
+        let element = $(selects[key]);
+        element.removeClass('is-invalid-input');
+        var selected = element.find('option:selected');
+        if (selected.length === 0) {
+            result = false;
+            element.addClass('is-invalid-input');
+        }
+    }
+    return result;
+}
 
 // page load
 $(document).ready(function () {
@@ -102,9 +143,11 @@ $(document).ready(function () {
     // search button clicked
     $('body').on('click', '#dnd-btn-search', function () {
 
-        $("#search-pane").hide();
-        $("#results-pane").show();
-        // $("#prior-results-pane").show();
+        $('#search-pane').hide();
+        $('#results-pane').show();
+
+        var today = new Date().toISOString().slice(0, 10);
+        $('#dnd-input-date').text(today);
 
         var numMovies = 1;
         var radius = 20;

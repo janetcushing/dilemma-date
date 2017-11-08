@@ -86,10 +86,9 @@ function writeRestaurantToOutput(restaurants) {
 
 // page load
 $(document).ready(function () {
-    console.log('starting up...');
     // jbc I added the below code to main.js
-    $("#results").hide();
-    $("#priorResults").hide();
+    $("#results-pane").hide();
+    $("#prior-results-pane").hide();
 
     // build the ui elements
     buildMovieGenresList();
@@ -103,8 +102,9 @@ $(document).ready(function () {
     // search button clicked
     $('body').on('click', '#dnd-btn-search', function () {
 
-        $("#search").hide();
-        $("#results").show();
+        $("#search-pane").hide();
+        $("#results-pane").show();
+        // $("#prior-results-pane").show();
 
         var numMovies = 1;
         var radius = 20;
@@ -157,27 +157,34 @@ $(document).ready(function () {
     $('body').on('click', '#dnd-output-priors', function () {
         console.log('get prior dates button clicked ');
         // get 3 prior rows
-        $("#results").hide();
-        $("#priorResults").show();
+        $("#results-pane").hide();
+        $("#prior-results-pane").show();
         // call database and display 3 rows
         updateDateHistoryDatabase(dateHistoryData);
         getOutputFromDateHistoryDatabase();
     });
 
-    // back to search button clicked
-    $('body').on('click', '#dnd-output-back-to-search', function () {
-        console.log('back to search button clicked ');
-        // go back to the search page
-        $("#priorResults").hide();
-        $("#search").show();
-
+    // home link clicked
+    $('body').on('click', '#dnd-breadcumb-home', function () {
+        $("#prior-results-pane").hide();
+        $("#results-pane").hide();
+        $("#search-pane").show();
     });
 
-    // back to results button clicked
-    $('body').on('click', '#dnd-output-back-to-result', function () {
-        console.log('back to date result button clicked ');
-        // go back to the date results page
-        $("#priorResults").hide();
-        $("#results").show();
+    // results link clicked
+    $('body').on('click', '#dnd-breadcumb-results', function () {
+        $("#prior-results-pane").hide();
+        $("#results-pane").show();
+        $("#search-pane").hide();
+    });
+
+    // other results link clicked
+    $('body').on('click', '#dnd-breadcumb-prior-results', function () {
+        $("#prior-results-pane").show();
+        $("#results-pane").hide();
+        $("#search-pane").hide();
+
+        updateDateHistoryDatabase(dateHistoryData);
+        getOutputFromDateHistoryDatabase();
     });
 });

@@ -46,7 +46,7 @@ function getMovies(numMovies, zipCode, radius, date, selectedGenres, callback) {
         'zip': zipCode,
         'radius': radius,
         'units': "mi",
-        'api_key': "86jv9kybwh7kkkaeprm5hez9"
+        'api_key': "addqr69eghub8vq4g8fw476d"
     });
 
     console.log(queryURL);
@@ -58,8 +58,8 @@ function getMovies(numMovies, zipCode, radius, date, selectedGenres, callback) {
             console.log("res: ");
             console.log(res);
             var movies = res
-                .filter(hasGenre)
-                .filter(checkGenre)
+                // .filter(hasGenre)
+                // .filter(checkGenre)
                 .map(function (movie) {
                     var obj = {};
                     obj.title = movie.title;
@@ -71,31 +71,31 @@ function getMovies(numMovies, zipCode, radius, date, selectedGenres, callback) {
                     // this creates an array of showtimes for each movie, only showing 3 times
                     obj.times = movie.showtimes.slice(0, 3).map(convertDateTimeToTimes);
                     obj.ticketURI = movie.showtimes[0].ticketURI;
-                    // console.log("obj: " + JSON.stringify(obj));
+                    console.log("obj inside ajax call, about to return it: " + JSON.stringify(obj));
                     return obj;
                 });
                 console.log("movies starts here");
                 console.log(movies);
 
-            function hasGenre(movie) {
+            // function hasGenre(movie) {
 
-                if (movie.genres) {
-                    return true;
-                }
-            }
+            //     if (movie.genres) {
+            //         return true;
+            //     }
+            // }
 
-            function checkGenre(movie) {
-                //genre is an ARRAY!
-                if (movie.genres.includes(selectedGenres[0])) {
-                    return true;
-                }
+            // function checkGenre(movie) {
+            //     //genre is an ARRAY!
+            //     if (movie.genres.includes(selectedGenres[0])) {
+            //         return true;
+            //     }
 
-            }
+            // }
 
 
             // this variable returns a certain amount of movies from array (numMovies)
             var moviesInfo = movies.slice(0, numMovies);
-            // console.log(moviesInfo);
+            console.log("moviesInfo: " + moviesInfo);
 
             // this is the callback, it returns the movies object from above
             callback(moviesInfo);

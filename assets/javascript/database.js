@@ -51,10 +51,8 @@ function updateMoviesInDateHistoryJsonObject(obj) {
 }
 
 function updateRestaurantInDateHistoryJsonObject(restaurants) {
-    dateHistoryData.restaurantTime = "7:00 PM";
     dateHistoryData.restaurantName = restaurants[0].name;
     dateHistoryData.restaurantLocation = restaurants[0].location;
-    // dateHistoryData.restaurantUrl = restaurants[0].url;
     dateHistoryData.restaurantUrl = restaurants[0].url;
     console.log("dateHistoryData " + JSON.stringify(dateHistoryData));
 }

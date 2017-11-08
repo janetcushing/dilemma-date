@@ -1,7 +1,7 @@
 
 // globals
 // genres from: http://www.imdb.com/genre/
-var movieGenres = {"0":"romance","1":"comedy","2":"action","3":"family","4":"musical","5":"western","6":"sci-fi","7":"mystery","8":"drama"};
+var movieGenres = {"0":"Romance","1":"Comedy","2":"Action","3":"Family","4":"Musical","5":"Western","6":"Science Fiction","7":"Mystery","8":"Drama"};
 var restaurantCuisines = {"55":"italian","25":"chinese","1":"american","148":"indian","60":"japanese","82":"pizza","83":"seafood"};
 
 // build the restaurant cuisine list
@@ -56,15 +56,28 @@ function writeMovieToOutput(obj) {
     console.log("theatre: " + obj.theatre);
     console.log("ticketURI: " + obj.ticketURI);
     // $("#dnd-output-movie-time").text(obj.times[0]);
-    $("#dnd-output-movie-time").text("8 PM");
-    $("#dnd-output-movie-name").text(obj.title);
-    $("#dnd-output-movie-venue").text(obj.theatre);
+
+
+    // $("#dnd-output-movie-time").html("8 PM");
+    // $("#dnd-output-movie-name").html(obj.title);
+    // $("#dnd-output-movie-venue").html(obj.theatre);
     if (typeof obj.ticketURI === "undefined") {
         obj.ticketURI = "https://www.fandango.com/";
         // $("#dnd-output-movie-url").text("https://www.fandango.com/");
         // } else
     }
     $("#dnd-output-movie-url").text(obj.ticketURI);
+
+
+    var tr = $('<tr>');
+    tr.append('<td class="fa fa-film" aria-hidden="true"></td>');
+    tr.append(`<td>${"8 PM"}</td>`);
+    tr.append(`<td>${obj.title}</td>`);
+    tr.append(`<td>${obj.theatre}</td>`);
+    tr.append(`<td>${obj.ticketURI}</td>`);
+
+    $('#dnd-user-results-tbody').append(tr);
+
 }
 
 
@@ -143,6 +156,10 @@ $(document).ready(function () {
 
         getMovies(numMovies, zipCode, radius, date, selectedGenres, function (moviesInfo) {
             // add all the jquery outputs for movie info here > movie title / theater & show times
+          var obj = moviesInfo[0];
+            console.log("movie returns control to program");
+           console.log(obj);
+           console.log(moviesInfo);
             writeMovieToOutput(obj);
             updateMoviesInDateHistoryJsonObject(obj)
             updateDateHistoryDatabase(obj);

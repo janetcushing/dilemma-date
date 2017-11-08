@@ -4,10 +4,7 @@
 var restaurants = {};
 
 function getLocation(zipCode, radius, selectedCuisines) {
-    console.log("im in getLocation()");
     var geocoder = new google.maps.Geocoder();
-    var address = document.getElementById("dnd-input-zipcode").value;
-    var cuisinePref = document.getElementById("dnd-cuisine-menu").value;
     // var restaurants;
     geocoder.geocode({
         // 'address': address
@@ -22,7 +19,7 @@ function getLocation(zipCode, radius, selectedCuisines) {
             $.get(
                 "https://developers.zomato.com/api/v2.1/search?count=5&sort=cost&order=asc&lat=" + latitude + "&lon=" +
                 longitude +
-                "&radius=25000&cuisines=" + cuisinePref +
+                "&radius=25000&cuisines=" + selectedCuisines +
                 // "&radius=" + radius +
                 // "&cuisines=" + selectedCuisines +
                 "&apikey=5c1a7ed52d0f6e28f3b6a0cbadd9284b",

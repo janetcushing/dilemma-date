@@ -26,7 +26,7 @@
 // this function passes in the variable data for zipCode, radius & date, which is pulled from input fields on form
 // the callback returns the moviesInfo object
 
-var obj = {};
+// var obj = {};
 
 function getMovies(numMovies, zipCode, radius, date, selectedGenres, callback) {
 
@@ -55,11 +55,13 @@ function getMovies(numMovies, zipCode, radius, date, selectedGenres, callback) {
         url: queryURL,
         method: 'GET',
         success: function (res) {
+            console.log("res: ");
+            console.log(res);
             var movies = res
                 .filter(hasGenre)
                 .filter(checkGenre)
                 .map(function (movie) {
-                    // var obj = {};
+                    var obj = {};
                     obj.title = movie.title;
                     obj.genres = movie.genres;
                     obj.theatre = movie.showtimes[0].theatre.name;
@@ -72,6 +74,8 @@ function getMovies(numMovies, zipCode, radius, date, selectedGenres, callback) {
                     // console.log("obj: " + JSON.stringify(obj));
                     return obj;
                 });
+                console.log("movies starts here");
+                console.log(movies);
 
             function hasGenre(movie) {
 

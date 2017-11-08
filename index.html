@@ -21,7 +21,8 @@
     <script src="assets/javascript/restaurant-api.js" type="text/javascript"></script>
     <script src="assets/javascript/main.js" type="text/javascript"></script>
 
-    <div class="container dnd-container">
+    <!-- SEARCH PAGE -->
+    <div id="search-pane" class="container dnd-container">
         <div class="grid-x grid-padding-x align-center-middle">
             <!-- COLUMN 1 -->
             <div class="medium-6 large-4 cell align-self-middle">
@@ -34,6 +35,8 @@
                 <div class="card">
                     <!-- adds padding -->
                     <div class="card-section">
+
+                        <!-- SEARCH PANE -->
                         <div class="small-12 medium-12 large-12 columns">
                             <h6>When, Where and How?</h6>
 
@@ -46,14 +49,25 @@
                             <div class="tabs-content" data-tabs-content="dnd-search-tabs">
 
                                 <div class="tabs-panel is-active" id="dnd-custom-search">
-                                    <form>
+                                    <form data-abide novalidate>
                                         <label>Where?
                                             <input id="dnd-input-zipcode" placeholder="your zip code" type="number" value="">
+                                            <span class="form-error" data-form-error-for="dnd-input-zipcode">zip code is required.</span>
+
                                         </label>
 
-                                        <label>Date
-                                            <input id="dnd-input-date" placeholder="your zip code" type="date" value="">
-                                        </label>
+                                        <!-- DATE & TIME -->
+                                        <div class="grid-x grid-padding-x">
+                                          <div class="small-6 large-6 medium-6 cell">
+                                            <label>Date</label>
+                                            <input id="dnd-input-date" placeholder="your zip code" type="date" value="2017-11-08">
+                                          </div>
+
+                                          <div class="small-6 large-6 medium-6 cell">
+                                            <label>Time</label>
+                                            <input id="dnd-input-time" placeholder="07:00 PM" type="time" value="19:00">
+                                          </div>
+                                        </div>
 
                                         <!-- RESTAURANT DROPDOWN -->
                                         <label>Food
@@ -80,6 +94,140 @@
             </div>
         </div>
     </div>
+    <!-- END SEARCH PAGE -->
+
+    <!-- RESULTS PANE -->
+    <div id="results-pane" class="container dnd-container">
+        <div class="grid-x grid-padding-x align-center-middle">
+            <!-- COLUMN 1 -->
+            <div class="medium-12 large-12 cell align-self-middle">
+                <h1 class="dnd-h-white">Book Your Perfect Date</h1>
+                <h5 class="dnd-h-white">Compare your results with others in your area.</h5>
+            </div>
+
+            <!-- COLUMN 2 -->
+            <div class="medium-12 large-12 cell">
+                <div class="card">
+                    <!-- adds padding -->
+                    <div class="card-section">
+
+                        <div class="small-12 medium-12 large-12 columns">
+                            <h3>Search Results</h3>
+                            <div class="medium-9 large-9 cell">
+
+                                <!-- NAVIGATION -->
+                                <nav aria-label="You are here:" role="navigation">
+                                    <ul class="breadcrumbs">
+                                        <li><a id="dnd-breadcumb-home" href="#">Home</a></li>
+                                        <li>
+                                            <span class="show-for-sr">Current: </span> Results
+                                        </li>
+                                        <li><a id="dnd-breadcumb-prior-results" href="#">Other Results</a></li>
+                                    </ul>
+                                </nav>
+
+
+                                <table class="responsive-card-table unstriped dnd-date-result">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Time</th>
+                                            <th>Venue</th>
+                                            <th>Name</th>
+                                            <th>URL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dnd-user-results-tbody">
+                                        <!-- <tr>
+                                            <td class="fa fa-film" aria-hidden="true">
+                                                <td id="#dnd-output-movie-time" data-label="time">9:00 PM</td>
+                                                <td id="#dnd-output-movie-name" data-label="venus">Barnz Barrington</td>
+                                                <td id="#dnd-output-movie-venue" data-label="name">The Godfather</td>
+                                                <td id="#dnd-output-movie-url" data-label="url">www.barnz.com</td>
+                                        </tr> -->
+                                        <!-- <tr>
+                                            <td class="fa fa-cutlery" aria-hidden="true"></td>
+                                            <td data-label="time">7:00 PM</td>
+                                            <td data-label="venus">The Thirsty Moose</td>
+                                            <td data-label="name"></td>
+                                            <td data-label="url">www.thirstymoose.com</td>
+                                        </tr> -->
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END RESULTS PANE -->
+
+    <!-- PRIOR RESULTS PANE -->
+    <div id="prior-results-pane" class="container dnd-container">
+        <div class="grid-x grid-padding-x align-center-middle">
+            <!-- COLUMN 1 -->
+            <div class="medium-12 large-12 cell align-self-middle">
+                <h1 class="dnd-h-white">Book Your Perfect Date</h1>
+                <h5 class="dnd-h-white">Compare your results with others in your area.</h5>
+            </div>
+
+            <!-- COLUMN 2 -->
+            <div class="medium-12 large-12 cell">
+                <div class="card">
+                    <!-- adds padding -->
+                    <div class="card-section">
+
+                        <div class="small-12 medium-12 large-12 columns">
+                            <h3>Here are Prior Results</h3>
+                            <div class="medium-9 large-9 cell">
+
+                                <!-- NAVIGATION -->
+                                <nav aria-label="You are here:" role="navigation">
+                                    <ul class="breadcrumbs">
+                                        <li><a id="dnd-breadcumb-home" href="#">Home</a></li>
+                                        <li><a id="dnd-breadcumb-results" href="#">Results</a></li>
+                                        <li>
+                                            <span class="show-for-sr">Current: </span> Other Results
+                                        </li>
+                                    </ul>
+                                </nav>
+
+                                <table class="responsive-card-table unstriped dnd-date-result">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Time</th>
+                                            <th>Venue</th>
+                                            <th>Name</th>
+                                            <th>URL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dnd-user-results-tbody">
+                                        <tr>
+                                            <td class="fa fa-film" aria-hidden="true">
+                                                <td data-label="time">9:00 PM</td>
+                                                <td data-label="venus">Barnz Barrington</td>
+                                                <td data-label="name">The Godfather</td>
+                                                <td data-label="url">www.barnz.com</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fa fa-cutlery" aria-hidden="true"></td>
+                                            <td data-label="time">7:00 PM</td>
+                                            <td data-label="venus">The Thirsty Moose</td>
+                                            <td data-label="name"></td>
+                                            <td data-label="url">www.thirstymoose.com</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- FOOTER -->
     <div class="mobile-bottom-bar">
@@ -90,6 +238,14 @@
             <i class="fa fa-cog"></i> <span class='footer-text'>Settings</span>
         </a>
     </div>
+
+    <!-- FOOTER FIX? -->
+    <!-- <div class="off-canvas-wrapper">
+        <div id="off-canvas" class="off-canvas position-left" data-off-canvas>My Off-Canvas</div>
+        <div class="off-canvas-content" data-off-canvas-content>
+            <footer>My Footer</footer>
+        </div>
+    </div> -->
 
 
     <!-- MODALS -->
@@ -109,8 +265,8 @@
         </button>
         <hr>
         <div class="button-group align-right">
-          <a class="button">Save</a>
-          <a class="button secondary" data-close aria-label="Close modal">Close</a>
+            <a class="button">Save</a>
+            <a class="button secondary" data-close aria-label="Close modal">Close</a>
         </div>
     </div>
 

@@ -3,6 +3,12 @@
 
 var restaurants = {};
 
+/**
+ Run a query for the given search params..
+ - parameter zipCode: `String` zip code.
+ - parameter radius: `Int` search radius (miles).
+ - parameter selectedCuisines: `String` comma-separated string of restaurant codes.
+ */
 function getLocation(zipCode, radius, selectedCuisines) {
     var geocoder = new google.maps.Geocoder();
     // var restaurants;

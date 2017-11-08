@@ -1,30 +1,8 @@
 // globals
 // genres from: http://www.imdb.com/genre/
-<<<<<<< HEAD
-var movieGenres = {
-    "0": "romance",
-    "1": "comedy",
-    "2": "action",
-    "3": "family",
-    "4": "musical",
-    "5": "western",
-    "6": "sci-fi",
-    "7": "mystery",
-    "8": "drama"
-};
-var restaurantCuisines = {
-    "0": "italian",
-    "1": "french",
-    "2": "american",
-    "3": "indian",
-    "4": "british",
-    // "5": "asian",
-    "6": "sushi"
-};
-=======
+
 var movieGenres = {"0":"romance","1":"comedy","2":"action","3":"family","4":"musical","5":"western","6":"sci-fi","7":"mystery","8":"drama"};
 var restaurantCuisines = {"55":"italian","25":"chinese","1":"american","148":"indian","60":"japanese","82":"pizza","83":"seafood"};
->>>>>>> 35900ce7b1cd09704aa34bc15742a8d5aa6650cf
 
 // build the restaurant cuisine list
 function buildRestaurantCuinsineList() {

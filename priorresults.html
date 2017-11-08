@@ -1,0 +1,95 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <meta class="foundation-mq">
+    <link rel="shortcut icon" type="assets/png" href="assets/images/favicon.png" />
+    <title>Date Night Dilemma</title>
+</head>
+
+<body>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApxgL2mMoiMcWrEvui6tLwqs6zD6T_E7Y"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js" crossorigin="anonymous"></script>
+
+    <script src="assets/javascript/database.js" type="text/javascript"></script>
+    <script src="assets/javascript/movie-api.js" type="text/javascript"></script>
+    <script src="assets/javascript/restaurant-api.js" type="text/javascript"></script>
+    <script src="assets/javascript/main.js" type="text/javascript"></script>
+
+
+    <div id="priorResults" class="py-5" style="background-image: url(&quot;assets/images/dd-bg-1024px.png&quot;);">
+        <div class="container">
+            <div class="row">
+                <div class="align-self-center col-md-6 text-white">
+                    <h3 class="text-center text-md-left display-3">Book Your Perfect Date</h3>
+                    <p class="lead">Compare your results with others in your area.</p>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+
+                        <div class="card-body p-5">
+                            <h4 class="pb-3">Here are prior Dates:</h4>
+                            <div id="dnd-output-prior-data"></div>
+                            <div class="panel-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Time</th>
+                                            <th scope="col">Venue</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">URL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dnd-output-prior-results">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FORM -->
+                    <br>
+                    <form>
+                        <div class="form-group">
+                            <button id="dnd-output-back-to-search" type="submit" class="btn form-control">Back to Search</button>
+                            <br>
+                            <button id="dnd-output-back-to-result" type="submit" class="btn form-control">Back to Date Night Result</button>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function initMap() {
+            var myLatLng = {
+                lat: 43.07,
+                lng: -70.75
+            };
+            // Create a map object and specify the DOM element for display.
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: myLatLng,
+                zoom: 16
+            });
+
+            // Create a marker and set its position.
+            var marker = new google.maps.Marker({
+                map: map,
+                position: myLatLng,
+                title: 'Local Date Favorites!'
+            });
+        }
+
+        $(function() {
+            $(document).foundation();
+        });
+    </script>
+</body>
+
+</html>

@@ -2,7 +2,8 @@
 // globals
 // genres from: http://www.imdb.com/genre/
 var movieGenres = {"0":"Romance","1":"Comedy","2":"Action","3":"Family","4":"Musical","5":"Western","6":"Science Fiction","7":"Mystery","8":"Drama"};
-var restaurantCuisines = {"55":"italian","25":"chinese","1":"american","148":"indian","60":"japanese","82":"pizza","83":"seafood"};
+var restaurantCuisines = {"1":{"name":"American","romance":3},"3":{"name":"Asian","romance":3},"25":{"name":"Chinese","romance":2},"55":{"name":"Italian","romance":5},"60":{"name":"Japanese","romance":3},"82":{"name":"Pizza","romance":2},"83":{"name":"Seafood","romance":5},"148":{"name":"Indian","romance":1},"168":{"name":"Burger","romance":1}}
+
 
 // build the restaurant cuisine list
 function buildRestaurantCuinsineList() {
@@ -10,9 +11,9 @@ function buildRestaurantCuinsineList() {
     cuisineList.empty();
     let restaurantKeys = Object.keys(restaurantCuisines);
     restaurantKeys.forEach(function(key) {
-        let cuisineName = restaurantCuisines[key];
+        let cuisineData = restaurantCuisines[key];
         // console.log('adding cuisine: "' + cuisineName + '" for index: ' + key);
-        cuisineList.append('<option value="' + key + '">' + cuisineName + '</option>');
+        cuisineList.append('<option value="' + key + '" romance="' + cuisineData.romance + '">' + cuisineData.name + '</option>');
     });
 }
 
@@ -48,16 +49,10 @@ function getSelectedGenres() {
 }
 
 
-// jbc I added the below code to main.js
+// write movie result to results
 function writeMovieToOutput(obj) {
-    console.log("im in writeMovieToOutput");
-    console.log("obj3: " + JSON.stringify(obj));
-    console.log("name: " + obj.title);
-    console.log("theatre: " + obj.theatre);
-    console.log("ticketURI: " + obj.ticketURI);
+    console.log(obj);
     // $("#dnd-output-movie-time").text(obj.times[0]);
-
-
     // $("#dnd-output-movie-time").html("8 PM");
     // $("#dnd-output-movie-name").html(obj.title);
     // $("#dnd-output-movie-venue").html(obj.theatre);
@@ -82,18 +77,10 @@ function writeMovieToOutput(obj) {
 
 
 function writeRestaurantToOutput(restaurants) {
-    console.log("im in writeRestaurantToOutput");
-    console.log("restaurants: " + JSON.stringify(restaurants));
-    console.log("name: " + restaurants[0].name);
-    console.log("venue: " + restaurants[0].location);
-    console.log("url: " + restaurants[0].url);
-    // $("#dnd-output-dinner-time").text("6 PM");
-    // $("#dnd-output-dinner-venue").text(restaurants[0].location);
-    // $("#dnd-output-dinner-name").text(restaurants[0].name);
+    console.log(restaurants);
     if (typeof restaurants[0].url === "undefined") {
         restaurants[0].url = "https://www.zomato.com/";
     }
-    // $("#dnd-output-dinner-url").text(restaurants[0].url);
 
     var tr = $('<tr>');
     tr.append('<td class="fa fa-cutlery" aria-hidden="true"></td>');
@@ -101,7 +88,6 @@ function writeRestaurantToOutput(restaurants) {
     tr.append(`<td>${restaurants[0].name}</td>`);
     tr.append(`<td>${restaurants[0].location}</td>`);
     tr.append(`<td>${restaurants[0].url}</td>`);
-
     $('#dnd-user-results-tbody').append(tr);
 }
 

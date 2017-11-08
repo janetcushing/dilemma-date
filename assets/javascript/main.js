@@ -64,9 +64,8 @@ function writeMovieToOutput(obj) {
         // } else
     }
     $("#dnd-output-movie-url").text(obj.ticketURI);
-
-
 }
+
 
 function writeRestaurantToOutput(restaurants) {
     console.log("im in writeRestaurantToOutput");
@@ -81,13 +80,12 @@ function writeRestaurantToOutput(restaurants) {
         restaurants[0].url = "https://www.zomato.com/";
     }
     $("#dnd-output-dinner-url").text(restaurants[0].url);
-
 }
 
 
 // page load
 $(document).ready(function () {
-
+    console.log('starting up...');
     // jbc I added the below code to main.js
     $("#results").hide();
     $("#priorResults").hide();
@@ -97,7 +95,7 @@ $(document).ready(function () {
     buildRestaurantCuinsineList();
 
     // supress default form action
-    $('.btn').on('click', function (event) {
+    $('.btn-search').on('click', function (event) {
         event.preventDefault();
     });
 

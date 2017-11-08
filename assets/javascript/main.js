@@ -1,6 +1,6 @@
-
 // globals
 // genres from: http://www.imdb.com/genre/
+
 var movieGenres = {"0":"romance","1":"comedy","2":"action","3":"family","4":"musical","5":"western","6":"sci-fi","7":"mystery","8":"drama"};
 var restaurantCuisines = {"55":"italian","25":"chinese","1":"american","148":"indian","60":"japanese","82":"pizza","83":"seafood"};
 
@@ -48,7 +48,7 @@ function getSelectedGenres() {
 }
 
 
-// jbc I added the below code to main.js
+// Write the movie output to the results page
 function writeMovieToOutput(obj) {
     console.log("im in writeMovieToOutput");
     console.log("obj3: " + JSON.stringify(obj));
@@ -56,7 +56,7 @@ function writeMovieToOutput(obj) {
     console.log("theatre: " + obj.theatre);
     console.log("ticketURI: " + obj.ticketURI);
     // $("#dnd-output-movie-time").text(obj.times[0]);
-    $("#dnd-output-movie-time").text("8 PM");
+    // $("#dnd-output-movie-time").text("8 PM");
     $("#dnd-output-movie-name").text(obj.title);
     $("#dnd-output-movie-venue").text(obj.theatre);
     if (typeof obj.ticketURI === "undefined") {
@@ -65,6 +65,28 @@ function writeMovieToOutput(obj) {
         // } else
     }
     $("#dnd-output-movie-url").text(obj.ticketURI);
+
+    //calculate dinner time based on movie time
+    // and write it to the results page
+    let dinnerTime = subractTwoHourFromDate(obj.times[0]);
+    $("#dnd-output-dinner-time").text(dinnerTime);
+}
+
+//subtact 2 hours from a time in the format of "00:00 PM"
+function subractTwoHourFromDate(origTime) {
+    console.log("origTime" + origTime);
+    var origHour = origTime.split(":")[0];
+    var origMinutes = origTime.split(":")[1];
+    console.log("origHour" + origHour);
+    console.log("origMinutes" + origMinutes);
+    // calculate the dinner time based on movie time
+    var earlierHour = parseInt(origHour) - 2;
+    var earlierMinutes = origMinutes;
+    console.log("earlierHour" + earlierHour);
+    console.log("earlierMinutes" + earlierMinutes);
+    var earlierTime = earlierHour + ":" + earlierMinutes;
+    console.log("earlierTime" + earlierTime);
+    return earlierTime;
 }
 
 
@@ -74,7 +96,7 @@ function writeRestaurantToOutput(restaurants) {
     console.log("name: " + restaurants[0].name);
     console.log("venue: " + restaurants[0].location);
     console.log("url: " + restaurants[0].url);
-    $("#dnd-output-dinner-time").text("6 PM");
+    // $("#dnd-output-dinner-time").text("6 PM");
     $("#dnd-output-dinner-venue").text(restaurants[0].location);
     $("#dnd-output-dinner-name").text(restaurants[0].name);
     if (typeof restaurants[0].url === "undefined") {
@@ -148,9 +170,7 @@ $(document).ready(function () {
             updateDateHistoryDatabase(obj);
         });
 
-
     });
-    //-----------------------------------------------//
 
 
     // prior result button clicked

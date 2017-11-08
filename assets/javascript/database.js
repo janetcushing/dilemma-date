@@ -35,7 +35,7 @@ dateHistoryData = {
 };
 
 function updateInputInDateHistoryJsonObject(zipCode, radius, date) {
-    dateHistoryData.zipCode =  zipCode;
+    dateHistoryData.zipCode = zipCode;
     dateHistoryData.radius = radius;
     dateHistoryData.date = date;
     dateHistoryData.dateRating = '';
@@ -46,13 +46,15 @@ function updateMoviesInDateHistoryJsonObject(obj) {
     dateHistoryData.theatre = obj.theatre;
     dateHistoryData.time = obj.times[0];
     dateHistoryData.theatreUrl = obj.ticketURI;
+    // also insert the dinner time into the json object based on the movie time
+    dateHistoryData.restaurantTime = subractTwoHourFromDate(obj.times[0]);
 }
 
 function updateRestaurantInDateHistoryJsonObject(restaurants) {
     dateHistoryData.restaurantTime = "7:00 PM";
     dateHistoryData.restaurantName = restaurants[0].name;
     dateHistoryData.restaurantLocation = restaurants[0].location;
-      // dateHistoryData.restaurantUrl = restaurants[0].url;
+    // dateHistoryData.restaurantUrl = restaurants[0].url;
     dateHistoryData.restaurantUrl = restaurants[0].url;
     console.log("dateHistoryData " + JSON.stringify(dateHistoryData));
 }
@@ -61,7 +63,7 @@ function updateRestaurantInDateHistoryJsonObject(restaurants) {
 function updateDateHistoryDatabase(dateHistoryData) {
     console.log("im in updateDateHistoryDatabase");
     console.log("the json object " + JSON.stringify(dateHistoryData));
-   
+
     console.log("zip " + dateHistoryData.zipCode);
     console.log("zip " + dateHistoryData.radius);
     console.log("zip " + dateHistoryData.restaurantTime);

@@ -46,7 +46,7 @@ function getMovies(numMovies, zipCode, radius, date, selectedGenres, callback) {
         'zip': zipCode,
         'radius': radius,
         'units': "mi",
-        'api_key': "86jv9kybwh7kkkaeprm5hez9"
+        'api_key': "addqr69eghub8vq4g8fw476d"
     });
 
     console.log(queryURL);

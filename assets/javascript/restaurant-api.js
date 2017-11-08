@@ -46,6 +46,7 @@ function getLocation(zipCode, radius, selectedCuisines) {
                     console.log("restaurants inside getRestaurant: " + JSON.stringify(restaurants));
                     writeRestaurantToOutput(restaurants);
                     updateRestaurantInDateHistoryJsonObject(restaurants);
+                    console.log("updating restaurant in json object " + JSON.stringify(dateHistoryData));
                 });
         } else {
             console.log("Request failed.")

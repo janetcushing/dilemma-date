@@ -51,7 +51,6 @@ function getMovies(numMovies, zipCode, radius, date, selectedGenres, callback) {
 
     console.log(queryURL);
 
-
     $.ajax({
         url: queryURL,
         method: 'GET',

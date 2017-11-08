@@ -17,15 +17,55 @@ body {
     background-color: #540045;
     background-image: url("../images/dd-bg-1024px.png");
     background-repeat: repeat-x;
+    /*font-size: 1rem;*/
+    /*line-height: 1.5;*/
 }
 
-h1, h2, h3, h4, h5, h6 {
+[type=color],
+[type=date],
+[type=datetime-local],
+[type=datetime],
+[type=email],
+[type=month],
+[type=number],
+[type=password],
+[type=search],
+[type=tel],
+[type=text],
+[type=time],
+[type=url],
+[type=week],
+textarea {
+    font-size: 0.7rem;
+    line-height: 1;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: 'Roboto Slab', serif;
+}
+
+label {
+    /* font-size: .875rem; */
+    /* line-height: 1.8; */
+    /* font-size: 0.5rem; */
+    /* line-height: 1.2; */
+    font-weight: 400;
+}
+
+select {
+    /* font-size: 0.7rem; */
+    /* line-height: 1; */
 }
 
 thead {
     border-radius: 12px;
 }
+
 
 /* Foundation 6 Overrides */
 
@@ -48,13 +88,17 @@ thead {
     border-radius: 8px;
 }
 
+
 /* Foundation Tabs */
+
 
 /* focused tab */
 
-.tabs-title>a:focus, .tabs-title>a[aria-selected=true] {
+.tabs-title>a:focus,
+.tabs-title>a[aria-selected=true] {
     /*background-color: #85bff5;*/
 }
+
 
 /* unfocused tab */
 
@@ -62,11 +106,14 @@ thead {
     /*background-color: #e0dc79;*/
 }
 
+
 /* Application */
 
-.ddn-modal-head, .ddn-modal-lead {
+.ddn-modal-head,
+.ddn-modal-lead {
     font-family: 'Vidaloka', serif;
 }
+
 
 /* modal background */
 
@@ -74,17 +121,20 @@ thead {
     border-radius: 10px;
 }
 
+
 /* inverted headers */
 
 .dnd-h-white {
     color: #fff;
 }
 
+
 /* date result table */
 
 table.dnd-date-result {
     border-radius: 12px;
 }
+
 
 /* table parent div */
 
@@ -99,6 +149,7 @@ table.dnd-date-result {
     padding: 8px 8px 8px 8px;
 }
 
+
 /*results tab header*/
 
 .dnd-result-tabs {
@@ -106,6 +157,7 @@ table.dnd-date-result {
     border-top-style: none;
     border-top-left-radius: 8px;
 }
+
 
 /* tab page content */
 
@@ -126,9 +178,12 @@ table thead {
     color: #0a0a0a;
 }
 
-table tbody, table tfoot, table thead {
+table tbody,
+table tfoot,
+table thead {
     border-style: none;
 }
+
 
 /*
 table { border-collapse: separate; }
@@ -163,7 +218,9 @@ tr:last-child td:last-child { border-bottom-right-radius: 10px; }
     background-color: #e6e6e6;
 }
 
-.responsive-card-table tr, .responsive-card-table th, .responsive-card-table td {
+.responsive-card-table tr,
+.responsive-card-table th,
+.responsive-card-table td {
     /*border: 1px solid #0a0a0a;*/
 }
 
@@ -224,6 +281,7 @@ tr:last-child td:last-child { border-bottom-right-radius: 10px; }
     }
 }
 
+
 /* Mobile Footer  */
 
 .mobile-bottom-bar {
@@ -262,7 +320,8 @@ tr:last-child td:last-child { border-bottom-right-radius: 10px; }
     vertical-align: middle;
 }
 
-.mobile-bottom-bar .footer-link:focus, .mobile-bottom-bar .footer-link:active {
+.mobile-bottom-bar .footer-link:focus,
+.mobile-bottom-bar .footer-link:active {
     color: #0c3e5f;
 }
 
@@ -272,4 +331,25 @@ tr:last-child td:last-child { border-bottom-right-radius: 10px; }
     font-weight: bold;
     font-size: 0.875rem;
     color: #EAFF87;
+}
+
+.off-canvas-wrapper {
+    overflow: visible;
+}
+
+.off-canvas-content {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header,
+nav,
+footer {
+    flex-shrink: 0;
+}
+
+main {
+    flex: 1 0 auto;
+    /* Use 1 0 auto instead of just 1 for backwards compatibility with other browsers */
 }

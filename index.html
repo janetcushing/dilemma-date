@@ -49,14 +49,25 @@
                             <div class="tabs-content" data-tabs-content="dnd-search-tabs">
 
                                 <div class="tabs-panel is-active" id="dnd-custom-search">
-                                    <form>
+                                    <form data-abide novalidate>
                                         <label>Where?
                                             <input id="dnd-input-zipcode" placeholder="your zip code" type="number" value="">
+                                            <span class="form-error" data-form-error-for="dnd-input-zipcode">zip code is required.</span>
+
                                         </label>
 
-                                        <label>Date
-                                            <input id="dnd-input-date" placeholder="your zip code" type="date" value="">
-                                        </label>
+                                        <!-- DATE & TIME -->
+                                        <div class="grid-x grid-padding-x">
+                                          <div class="small-6 large-6 medium-6 cell">
+                                            <label>Date</label>
+                                            <input id="dnd-input-date" placeholder="your zip code" type="date" value="2017-11-08">
+                                          </div>
+
+                                          <div class="small-6 large-6 medium-6 cell">
+                                            <label>Time</label>
+                                            <input id="dnd-input-time" placeholder="07:00 PM" type="time" value="19:00">
+                                          </div>
+                                        </div>
 
                                         <!-- RESTAURANT DROPDOWN -->
                                         <label>Food
@@ -227,6 +238,14 @@
             <i class="fa fa-cog"></i> <span class='footer-text'>Settings</span>
         </a>
     </div>
+
+    <!-- FOOTER FIX? -->
+    <!-- <div class="off-canvas-wrapper">
+        <div id="off-canvas" class="off-canvas position-left" data-off-canvas>My Off-Canvas</div>
+        <div class="off-canvas-content" data-off-canvas-content>
+            <footer>My Footer</footer>
+        </div>
+    </div> -->
 
 
     <!-- MODALS -->

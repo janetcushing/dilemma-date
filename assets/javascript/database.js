@@ -16,7 +16,7 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 var dateHistoryRef = database.ref("/dateHistory");
-var dateHistoryQuery = database.ref("dateHistory").orderByChild("zipCode").limitToFirst(3);
+var dateHistoryQuery = database.ref("dateHistory").orderByChild("zipCode").limitToLast(3);
 
 
 dateHistoryData = {
@@ -65,7 +65,9 @@ function updateRestaurantInDateHistoryJsonObject(restaurants) {
 function updateDateHistoryDatabase(dateHistoryData) {
     console.log("im in updateDateHistoryDatabase");
     console.log("the json object " + JSON.stringify(dateHistoryData));
+    let timeStamp = (new Date()).getTime();
     dateHistoryRef.push({
+        timeStamp: timeStamp,
         zipCode: dateHistoryData.zipCode,
         radius: dateHistoryData.radius,
         date: dateHistoryData.date,
@@ -90,6 +92,9 @@ function getOutputFromDateHistoryDatabase() {
 
     var i = 0;
     dateHistoryQuery.on("child_added", function (snapshot) {
+   // dateHistoryQuery.once("child_added", function (snap) {
+        // snap.forEach(function (snapshot) {
+  
         console.log("snapshot.val().movieTime1 " + snapshot.val().movieTime);
         console.log("snapshot.val().movieTime2 " + snapshot.val().movieTime.toString());
         let dinnerTr = $("<tr>");

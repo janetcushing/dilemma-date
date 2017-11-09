@@ -108,10 +108,13 @@ thead {
 
 
 /* Application */
-
 .ddn-modal-head,
 .ddn-modal-lead {
     font-family: 'Vidaloka', serif;
+}
+
+.dnd-modal-title {
+    font-size: 1.25rem;
 }
 
 

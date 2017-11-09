@@ -31,15 +31,6 @@ function getRomanceFactorForRestaurant(cuisines) {
     return (sumOfScores / uniqueScores.length);
 }
 
-/*
-
-let scores = [0, 3, 2, 0, 0, 0, 0, 0, 0]
-var uniqueScores = scores.filter(function(item, pos) {
-    return scores.indexOf(item) == pos;
-})
-var sumOfScores = uniqueScores.reduce((a, b) => a + b, 0);
-return (sumOfScores / uniqueScores.length);
-*/
 
 /**
  Run a query for the given search params..
@@ -85,7 +76,7 @@ function getLocation(zipCode, radius, selectedCuisines) {
                         // console.log(restaurantDetails);
 
                     });
-                    
+
                     writeRestaurantToOutput(restaurants);
                     updateRestaurantInDateHistoryJsonObject(restaurants);
                 });

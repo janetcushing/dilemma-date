@@ -2,6 +2,16 @@
 // javascript code for writing to and reading from the firebase database
 //--------------------------------------------------------------------------//
 
+// generate unique id
+function guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+}
 
 // Initialize Firebase
 var config = {
@@ -33,7 +43,9 @@ dateHistoryData = {
     "restaurantLocation": '',
     "restaurantUrl": '',
     "restaurantCuisine": '',
-    "dateRating": ''
+    "dateRating": '',
+    "romanceLevel": 0
+
 };
 
 function updateInputInDateHistoryJsonObject(zipCode, radius, date, selectedCuisines, selectedGenres) {
@@ -58,6 +70,7 @@ function updateRestaurantInDateHistoryJsonObject(restaurants) {
     dateHistoryData.restaurantName = restaurants[0].name;
     dateHistoryData.restaurantLocation = restaurants[0].location;
     dateHistoryData.restaurantUrl = restaurants[0].url;
+    dateHistoryData.restaurantID = restaurants[0].id;
     console.log("dateHistoryData " + JSON.stringify(dateHistoryData));
 }
 
@@ -80,7 +93,9 @@ function updateDateHistoryDatabase(dateHistoryData) {
         restaurantName: dateHistoryData.restaurantName,
         restaurantLocation: dateHistoryData.restaurantLocation,
         restaurantUrl: dateHistoryData.restaurantUrl,
-        restaurantCuisine: dateHistoryData.restaurantCuisine
+        restaurantCuisine: dateHistoryData.restaurantCuisine,
+        restaurantID: dateHistoryData.restaurantID,
+        romanceLevel: dateHistoryData.romanceLevel
         // dateRating: dateDataHistory.dateRating
 
     });
@@ -94,7 +109,7 @@ function getOutputFromDateHistoryDatabase() {
     dateHistoryQuery.on("child_added", function (snapshot) {
    // dateHistoryQuery.once("child_added", function (snap) {
         // snap.forEach(function (snapshot) {
-  
+
         console.log("snapshot.val().movieTime1 " + snapshot.val().movieTime);
         console.log("snapshot.val().movieTime2 " + snapshot.val().movieTime.toString());
         let dinnerTr = $("<tr>");

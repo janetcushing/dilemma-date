@@ -64,6 +64,7 @@ function getLocation(zipCode, radius, selectedCuisines) {
                     var restaurants = data.restaurants.slice(0, 10).map(function (restaurantInfo) {
                         var restaurantDetails = {};
                         // console.log(restaurantInfo.restaurant);
+                        restaurantDetails.id = restaurantInfo.restaurant.id;
                         restaurantDetails.name = restaurantInfo.restaurant.name;
                         restaurantDetails.location = restaurantInfo.restaurant.location.address;
                         restaurantDetails.url = restaurantInfo.restaurant.url;

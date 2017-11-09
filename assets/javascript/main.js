@@ -6,16 +6,7 @@ var movieGenres = {"0":{"name":"Romance","romance":8},"1":{"name":"Comedy","roma
                    "6":{"name":"Science Fiction","romance":2},"7":{"name":"Mystery","romance":3},
                    "8":{"name":"Drama","romance":4}};
 
-// generate unique id
-function guid() {
-    function s4() {
-        return Math.floor((1 + Math.random()) * 0x10000)
-            .toString(16)
-            .substring(1);
-    }
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-        s4() + '-' + s4() + s4() + s4();
-}
+
 
 var holdDinnerTime = "";
 
@@ -162,9 +153,7 @@ function togglePaneElement(named) {
 
 // populate inital form values
 function populateSearchForm() {
-    // set the default date value to today's data
-    var today = new Date().toISOString().slice(0, 10);
-    $('#dnd-input-date').val(today);
+    $('#dnd-input-date').val(moment().startOf('day').add(1, 'day').format('YYYY-MM-DD'));
     $('#dnd-input-time').val(currentUser.movieStart);
     $('#dnd-input-zipcode').val(currentUser.zipCode);
 }
@@ -186,7 +175,8 @@ function populateSettingsForm(modal) {
     modal.find('#dnd-settings-input-movie-start').val(currentUser.movieStart);
 }
 
-function openStatusModal(text, title='Alert', duration=1500) {
+// opens a progress modal
+function openProgressModal(text, title='Alert', duration=1500) {
     $('#dnd-progress-modal').foundation('open');
     $('#dnd-progress-modal-title').text(title);
     $('#dnd-progress-modal-body').text(text);
@@ -195,7 +185,7 @@ function openStatusModal(text, title='Alert', duration=1500) {
     }
 }
 
-
+// opens an alert modal
 function openAlertModal(text, duration=1500) {
     $('#dnd-alert-modal').foundation('open');
     $('#dnd-alert-modal-title').text('Error');
@@ -281,7 +271,7 @@ $(document).on("submit", function(ev) {
 
     console.log('# Searching...');
 
-    openStatusModal('querying database...', title='Searching...');
+    openProgressModal('querying database...', title='Searching...');
     togglePaneElement('results');
 
     var numMovies = 1;
@@ -385,13 +375,5 @@ $(document).ready(function() {
         console.log("updating firebase-2, json object is " + JSON.stringify(dateHistoryData));
         updateDateHistoryDatabase(dateHistoryData);
         getOutputFromDateHistoryDatabase();
-    });
-
-    // force time input to validate
-    $('body').on('change', '#dnd-input-time', function() {
-        let hours = hoursUntilUserTime();
-        if (hours < 3.0) {
-            console.log('Not enough time to plan your date.');
-        }
     });
 });

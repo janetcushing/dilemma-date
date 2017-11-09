@@ -92,53 +92,49 @@ function getOutputFromDateHistoryDatabase() {
 
     var i = 0;
     dateHistoryQuery.on("child_added", function (snapshot) {
-
-    // dateHistoryQuery.once("child_added", function (snap) {
+   // dateHistoryQuery.once("child_added", function (snap) {
         // snap.forEach(function (snapshot) {
+  
+        console.log("snapshot.val().movieTime1 " + snapshot.val().movieTime);
+        console.log("snapshot.val().movieTime2 " + snapshot.val().movieTime.toString());
+        let dinnerTr = $("<tr>");
+        let tdDinnerTime = $("<td>");
+        tdDinnerTime.attr("id", "dnd-output-prior-dinner-time-" + i);
+        tdDinnerTime.text(snapshot.val().restaurantTime);
+        let tdDinnerVenue = $("<td>");
+        tdDinnerVenue.attr("id", "dnd-output-prior-dinner-venue-" + i);
+        tdDinnerVenue.text(snapshot.val().restaurantLocation);
+        let tdDinnerName = $("<td>");
+        tdDinnerName.attr("id", "dnd-output-prior-dinner-name-" + i);
+        tdDinnerName.text(snapshot.val().restaurantName);
+        let tdDinnerUrl = $('<td><a href="' + snapshot.val().restaurantUrl + '">Link</a>');
+        tdDinnerUrl.attr("id", "dnd-output-prior-dinner-url-" + i);
+        dinnerTr.append(tdDinnerTime);
+        dinnerTr.append(tdDinnerName);
+        dinnerTr.append(tdDinnerVenue);
+        dinnerTr.append(tdDinnerUrl);
+        $("#dnd-prior-results-tbody").append(dinnerTr);
 
+        let movieTr = $("<tr>");
+        let tdMovieTime = $("<td>");
+        tdMovieTime.attr("id", "dnd-output-prior-movie-time-" + i);
+        tdMovieTime.text(snapshot.val().movieTime);
+        let tdMovieTitle = $("<td>");
+        tdMovieTitle.attr("id", "dnd-output-prior-movie-title-" + i);
+        tdMovieTitle.text(snapshot.val().movieTitle);
+        let tdMovieVenue = $("<td>");
+        tdMovieVenue.attr("id", "dnd-output-prior-movie-venue-" + i);
+        tdMovieVenue.text(snapshot.val().movieTheatre);
+        let tdMovieTheatreUrl = $('<td><a href="' + snapshot.val().movieTheatreUrl + '">Link</a>');
+        tdMovieTheatreUrl.attr("id", "dnd-output-prior-movie-url-" + i);
 
-            console.log("snapshot.val().movieTime1 " + snapshot.val().movieTime);
-            console.log("snapshot.val().movieTime2 " + snapshot.val().movieTime.toString());
-            let dinnerTr = $("<tr>");
-            let tdDinnerTime = $("<td>");
-            tdDinnerTime.attr("id", "dnd-output-prior-dinner-time-" + i);
-            tdDinnerTime.text(snapshot.val().restaurantTime);
-            let tdDinnerVenue = $("<td>");
-            tdDinnerVenue.attr("id", "dnd-output-prior-dinner-venue-" + i);
-            tdDinnerVenue.text(snapshot.val().restaurantLocation);
-            let tdDinnerName = $("<td>");
-            tdDinnerName.attr("id", "dnd-output-prior-dinner-name-" + i);
-            tdDinnerName.text(snapshot.val().restaurantName);
-            let tdDinnerUrl = $("<td>");
-            tdDinnerUrl.attr("id", "dnd-output-prior-dinner-url-" + i);
-            tdDinnerUrl.text(snapshot.val().restaurantUrl);
-            dinnerTr.append(tdDinnerTime);
-            dinnerTr.append(tdDinnerName);
-            dinnerTr.append(tdDinnerVenue);
-            dinnerTr.append(tdDinnerUrl);
-            $("#dnd-prior-results-tbody").append(dinnerTr);
+        movieTr.append(tdMovieTime);
+        movieTr.append(tdMovieTitle);
+        movieTr.append(tdMovieVenue);
+        movieTr.append(tdMovieTheatreUrl);
+        $("#dnd-prior-results-tbody").append(movieTr);
 
-            let movieTr = $("<tr>");
-            let tdMovieTime = $("<td>");
-            tdMovieTime.attr("id", "dnd-output-prior-movie-time-" + i);
-            tdMovieTime.text(snapshot.val().movieTime);
-            let tdMovieTitle = $("<td>");
-            tdMovieTitle.attr("id", "dnd-output-prior-movie-title-" + i);
-            tdMovieTitle.text(snapshot.val().movieTitle);
-            let tdMovieVenue = $("<td>");
-            tdMovieVenue.attr("id", "dnd-output-prior-movie-venue-" + i);
-            tdMovieVenue.text(snapshot.val().movieTheatre);
-            let tdMovieTheatreUrl = $("<td>");
-            tdMovieTheatreUrl.attr("id", "dnd-output-prior-movie-url-" + i);
-            tdMovieTheatreUrl.text(snapshot.val().movieTheatreUrl);
-            movieTr.append(tdMovieTime);
-            movieTr.append(tdMovieTitle);
-            movieTr.append(tdMovieVenue);
-            movieTr.append(tdMovieTheatreUrl);
-            $("#dnd-prior-results-tbody").append(movieTr);
-
-            i++;
-        });
-    // });
+        i++;
+    });
 
 }

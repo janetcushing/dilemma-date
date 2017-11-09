@@ -1,26 +1,21 @@
 // globals
 // genres from: http://www.imdb.com/genre/
+var movieGenres = {"0":{"name":"Romance","romance":8},"1":{"name":"Comedy","romance":4},
+                   "2":{"name":"Action","romance":1},"3":{"name":"Family","romance":4},
+                   "4":{"name":"Musical","romance":3},"5":{"name":"Western","romance":-2},
+                   "6":{"name":"Science Fiction","romance":2},"7":{"name":"Mystery","romance":3},
+                   "8":{"name":"Drama","romance":4}};
 
-var movieGenres = {
-    "0": "Romance",
-    "1": "Comedy",
-    "2": "Action",
-    "3": "Family",
-    "4": "Musical",
-    "5": "Western",
-    "6": "Science Fiction",
-    "7": "Mystery",
-    "8": "Drama"
-};
-var restaurantCuisines = {
-    "55": "italian",
-    "25": "chinese",
-    "1": "american",
-    "148": "indian",
-    "60": "japanese",
-    "82": "pizza",
-    "83": "seafood"
-};
+// generate unique id
+function guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+}
 
 var holdDinnerTime = "";
 
@@ -29,10 +24,10 @@ function buildRestaurantCuinsineList() {
     var cuisineList = $('#dnd-cuisine-menu');
     cuisineList.empty();
     let restaurantKeys = Object.keys(restaurantCuisines);
-    restaurantKeys.forEach(function (key) {
-        let cuisineName = restaurantCuisines[key];
+    restaurantKeys.forEach(function(key) {
+        let cuisineData = restaurantCuisines[key];
         // console.log('adding cuisine: "' + cuisineName + '" for index: ' + key);
-        cuisineList.append('<option value="' + key + '">' + cuisineName + '</option>');
+        cuisineList.append('<option value="' + key + '" romance="' + cuisineData.romance + '">' + cuisineData.name + '</option>');
     });
 }
 
@@ -42,9 +37,9 @@ function buildMovieGenresList() {
     var movieGenreList = $('#dnd-genre-menu');
     movieGenreList.empty();
     for (key in Object.keys(movieGenres)) {
-        let genreName = movieGenres[key];
+        let genreData = movieGenres[key];
         // console.log('adding genre: "' + genreName + '" for index: ' + key);
-        movieGenreList.append('<option value="' + key + '">' + genreName + '</option>');
+        movieGenreList.append('<option value="' + key + '" romance="' + genreData.romance + '">' + genreData.name + '</option>');
     }
 }
 
@@ -52,21 +47,21 @@ function buildMovieGenresList() {
 // Return currently selected restaurant cuisines
 function getSelectedCuisines() {
     var selected = [];
-    $('select#dnd-cuisine-menu').find('option:selected').each(function () {
+    $('select#dnd-cuisine-menu').find('option:selected').each(function() {
         selected.push(parseInt($(this).attr('value')));
     });
     return selected;
 }
 
+
 // Return currently selected movie genres
 function getSelectedGenres() {
     var selected = [];
-    $('select#dnd-genre-menu').find('option:selected').each(function () {
+    $('select#dnd-genre-menu').find('option:selected').each(function() {
         selected.push($(this).text());
     });
     return selected;
 }
-
 
 // Write the movie output to the results page
 function writeMovieToOutput(movieObj) {
@@ -81,12 +76,13 @@ function writeMovieToOutput(movieObj) {
         movieObj.ticketURI = "https://www.fandango.com/";
     }
 
+
     var tr = $('<tr>');
     tr.append('<td class="fa fa-film" aria-hidden="true"></td>');
-    tr.append(`<td>${movieObj.times[0]}</td>`);
+    tr.append(`<td>${movieObj.time}</td>`);
     tr.append(`<td>${movieObj.title}</td>`);
     tr.append(`<td>${movieObj.theatre}</td>`);
-    tr.append(`<td>${movieObj.ticketURI}</td>`);
+    tr.append(`<td><a href="${movieObj.ticketURI}">Link</a></td>`);
 
     $('#dnd-user-results-tbody').prepend(tr);
     //calculate dinner time based on movie time
@@ -123,12 +119,13 @@ function writeRestaurantToOutput(restaurants) {
         restaurants[0].url = "https://www.zomato.com/";
     }
 
+
     var tr = $('<tr>');
     tr.append('<td class="fa fa-cutlery" aria-hidden="true"></td>');
     tr.append(`<td>${holdDinnerTime}</td>`);
     tr.append(`<td>${restaurants[0].name}</td>`);
     tr.append(`<td>${restaurants[0].location}</td>`);
-    tr.append(`<td>${restaurants[0].url}</td>`);
+    tr.append(`<td><a href="${restaurants[0].url}">Link</a></td>`);
 
     $('#dnd-user-results-tbody').prepend(tr);
 }
@@ -145,132 +142,231 @@ function getDateTime() {
     return (currentDate + ':' + currentTime);
 }
 
-/**
- Validate the search form fields. Not finished, don't use!!
+// UI
 
- - returns  `Bool` all form fields are correctly filled.
- */
-function validateSearchForm() {
-    var result = true;
-    // let allInputs = $('form').find('input', 'select');
-    let inputs = $('form').find('input');
-    let selects = $('form').find('select');
-    for (var key in Object.keys(inputs)) {
-        let element = $(inputs[key]);
-        element.removeClass('is-invalid-input');
-        if (!element.value) {
-            result = false;
-            element.addClass('is-invalid-input');
-        }
+// toggle interface panes
+function togglePaneElement(named) {
+    let searchPane = $('#search-pane');
+    let resultsPane = $('#results-pane');
+    let priorsPane = $('#prior-results-pane');
+
+    if (named === "search") {
+        searchPane.show();
+        resultsPane.hide();
+        priorsPane.hide();
+    } else if (named === "results") {
+        resultsPane.show();
+        searchPane.hide();
+        priorsPane.hide();
+    } else {
+        priorsPane.show();
+        searchPane.hide();
+        resultsPane.hide();
     }
-    for (var key in Object.keys(selects)) {
-        let element = $(selects[key]);
-        element.removeClass('is-invalid-input');
-        var selected = element.find('option:selected');
-        if (selected.length === 0) {
-            result = false;
-            element.addClass('is-invalid-input');
-        }
-    }
-    return result;
 }
 
+// populate inital form values
+function populateSearchForm() {
+    // set the default date value to today's data
+    var today = new Date().toISOString().slice(0, 10);
+    $('#dnd-input-date').val(today);
+    $('#dnd-input-time').val(currentUser.movieStart);
+    $('#dnd-input-zipcode').val(currentUser.zipCode);
+}
+
+// when modal is opened, populate the form values
+function populateSettingsForm(modal) {
+    modal.find('#dnd-settings-input-zipcode').val(currentUser.zipCode);
+    modal.find('#dnd-settings-input-radius').val(currentUser.radius);
+    modal.find('#dnd-settings-input-movie-start').val(currentUser.movieStart);
+}
+
+function openStatusModal(text, title='Alert', duration=1500) {
+    $('#dnd-alert-modal').foundation('open');
+    $('#dnd-alert-modal-title').text(title);
+    $('#dnd-alert-modal-body').text(text);
+    setTimeout(() => {  $('#dnd-alert-modal').foundation('close');}, duration);
+}
+
+// USER PREFS
+
+function saveUserDataToLocal(data = {}) {
+    for (var k in data) currentUser[k] = data[k];
+    currentUser.saveLocalData();
+}
+
+
+function getUserDataFromLocal() {
+    if (localStorage.hasOwnProperty('dnd-user-prefs')) {
+        return JSON.parse(localStorage.getItem('dnd-user-prefs'));
+    }
+    return {};
+}
+
+
+// user prefs
+var currentUser = {
+    'uuid': guid(),
+    'zipCode': '',
+    'radius': 10,
+    'latLng': {
+        'lat': 0,
+        'lng': 0
+    },
+    'movieStart': '19:00',
+    saveLocalData() {
+        localStorage.setItem('dnd-user-prefs', JSON.stringify(this));
+        console.log('Saving user data...');
+    },
+    loadDataFromLocal() {
+        var savedData = getUserDataFromLocal();
+        for (var k in savedData) this[k] = savedData[k];
+    }
+};
+
+
+// Foundation initialize
+$(function() {
+    $(document).foundation();
+});
+
+
+// Foundation Modal Listeners
+$(document).on('open.zf.reveal', '[data-reveal]', function() {
+    var modal = $(this);
+    let modalid = modal.attr('id');
+
+    if (modalid == 'dnd-settings-modal') {
+        populateSettingsForm(modal);
+    }
+});
+
+
+// form validation failed
+$(document).on("forminvalid.zf.abide", function(ev, frm) {
+    // console.log('# form id "' + ev.target.id + '" is invalid');
+})
+
+
+// search form submitted...
+$(document).on("submit", function(ev) {
+    ev.preventDefault();
+
+    console.log('# Searching...');
+
+    openStatusModal('querying database...', title='Searching...');
+    togglePaneElement('results');
+
+    var numMovies = 1;
+    var radius = 20;
+
+    // get selection data from menus
+    let selectedCuisines = getSelectedCuisines();
+    let selectedGenres = getSelectedGenres();
+
+    let zipCode = $('#dnd-input-zipcode').val().trim();
+    var date = $('#dnd-input-date').val().trim();
+    var time = $('#dnd-input-time').val().trim();
+
+    // save data to local storage
+    saveUserDataToLocal(zipCode, radius);
+
+    numMovies = 1;
+    radius = 10;
+    callback = '';
+
+    updateInputInDateHistoryJsonObject(zipCode, radius, date, selectedCuisines.toString(), selectedGenres);
+    console.log("zipcode updated in json object " + JSON.stringify(dateHistoryData));
+
+    getMovies(numMovies, zipCode, radius, date, time, selectedGenres, function (moviesInfo) {
+      // add all the jquery outputs for movie info here > movie title / theater & show times
+      var movieObj = moviesInfo[0];
+      console.log("movie returns control to program");
+      console.log(movieObj);
+      console.log(moviesInfo);
+      writeMovieToOutput(movieObj);
+      updateMoviesInDateHistoryJsonObject(movieObj);
+      console.log("updating movies in json object " + JSON.stringify(dateHistoryData));
+      // updateDateHistoryDatabase(dateHistoryData);
+    });
+
+    getLocation(zipCode, radius, selectedCuisines.toString());
+
+});
+
+
 // page load
-$(document).ready(function () {
-    // jbc I added the below code to main.js
-    $("#results-pane").hide();
-    $("#prior-results-pane").hide();
+$(document).ready(function() {
+    // show the search pane
+    togglePaneElement('search');
+
+    // load data from local storage
+    currentUser.loadDataFromLocal();
 
     // build the ui elements
     buildMovieGenresList();
     buildRestaurantCuinsineList();
 
-    // supress default form action
-    $('.btn-search').on('click', function (event) {
-        event.preventDefault();
+    // populate the form with default values
+    populateSearchForm();
+
+
+    // FOOTER
+    // link to home page
+    $('body').on('click', '#dnd-btn-home', function() {
+        togglePaneElement('search');
     });
 
-    // search button clicked
-    $('body').on('click', '#dnd-btn-search', function () {
-
-        $('#search-pane').hide();
-        $('#results-pane').show();
-
-        var today = new Date().toISOString().slice(0, 10);
-        $('#dnd-input-date').text(today);
-
-        var numMovies = 1;
-        var radius = 20;
-        // var date = $('#dnd-input-date').val();
-        // IMPORTANT: the date must be within 6 days from current day, else returns an error.
-        console.log(date);
-
-
-        let selectedCuisines = getSelectedCuisines();
-        let selectedGenres = getSelectedGenres();
-
-        let zipCode = $('#dnd-input-zipcode').val().trim();
-        var date = $('#dnd-input-date').val().trim();
-        numMovies = 1;
-        radius = 10;
-        callback = '';
-
-        updateInputInDateHistoryJsonObject(zipCode, radius, date, selectedCuisines.toString(), selectedGenres);
-        console.log("zipcode updated in json object " + JSON.stringify(dateHistoryData));
-
-        console.log('# cuisines: ' + selectedCuisines);
-        console.log('# genres:   ' + selectedGenres);
-
-        getMovies(numMovies, zipCode, radius, date, selectedGenres, function (moviesInfo) {
-            // add all the jquery outputs for movie info here > movie title / theater & show times
-            var movieObj = moviesInfo[0];
-            console.log("movie returns control to program");
-            console.log(movieObj);
-            console.log(moviesInfo);
-            writeMovieToOutput(movieObj);
-            updateMoviesInDateHistoryJsonObject(movieObj);
-            console.log("updating movies in json object " + JSON.stringify(dateHistoryData));
-            // updateDateHistoryDatabase(dateHistoryData);
-        });
-
-        getLocation(zipCode, radius, selectedCuisines.toString());
-
+    // user preferences modal
+    $('body').on('click', '#dnd-btn-settings', function() {
+        $('#dnd-settings-modal').foundation('open');
     });
 
 
-    // // prior result button clicked
-    // $('body').on('click', '#dnd-output-priors', function () {
-    //     console.log('get prior dates button clicked ');
-    //     // get 3 prior rows
-    //     $("#results-pane").hide();
-    //     $("#prior-results-pane").show();
-    //     // call database and display 3 rows
-    //     console.log("updating firebase1, json object is " + JSON.stringify(dateHistoryData));
-    //     updateDateHistoryDatabase(dateHistoryData); 
-    //     getOutputFromDateHistoryDatabase();
-    // });
+    // link to home page
+    $('body').on('click', '#dnd-btn-suggestions', function() {
+        getOutputFromDateHistoryDatabase();
+        togglePaneElement('prior');
+    });
+
+    // user preferences modal submitted
+    $('body').on('click', '#dnd-settings-save', function() {
+        let saveButton = $(this);
+        let modal = saveButton.parents().find('#dnd-settings-modal');
+        currentUser.zipCode = modal.find('#dnd-settings-input-zipcode').val();
+        currentUser.radius = modal.find('#dnd-settings-input-radius').val();
+        currentUser.movieStart = modal.find('#dnd-settings-input-movie-start').val();
+        currentUser.saveLocalData();
+        $('#dnd-settings-modal').foundation('close');
+    });
+
+    // NAVIGATION LINKS
 
     // home link clicked
-    $('body').on('click', '#dnd-breadcumb-home', function () {
-        $("#prior-results-pane").hide();
-        $("#results-pane").hide();
-        $("#search-pane").show();
+    $('body').on('click', '#dnd-breadcumb-home', function() {
+        togglePaneElement('search');
     });
 
     // results link clicked
-    $('body').on('click', '#dnd-breadcumb-results', function () {
-        $("#prior-results-pane").hide();
-        $("#results-pane").show();
-        $("#search-pane").hide();
+    $('body').on('click', '#dnd-breadcumb-results', function() {
+        togglePaneElement('results');
     });
 
     // other results link clicked
-    $('body').on('click', '#dnd-breadcumb-prior-results', function () {
-        $("#prior-results-pane").show();
-        $("#results-pane").hide();
-        $("#search-pane").hide();
+    $('body').on('click', '#dnd-breadcumb-prior-results', function() {
+        togglePaneElement('prior');
         console.log("updating firebase-2, json object is " + JSON.stringify(dateHistoryData));
         updateDateHistoryDatabase(dateHistoryData);
         getOutputFromDateHistoryDatabase();
+    });
+
+    // force time input to validate
+    $('body').on('change', '#dnd-input-time', function() {
+        var timeInput = $(this);
+        let currentValue = timeInput.val();
+        if (timeInput.attr('class') == 'is-invalid-input') {
+            timeInput.removeClass('is-invalid-input');
+            // timeInput.val(currentValue + ':00');
+        }
     });
 });

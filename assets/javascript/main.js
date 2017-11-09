@@ -71,7 +71,7 @@ function writeMovieToOutput(obj) {
 
     var tr = $('<tr>');
     tr.append('<td class="fa fa-film" aria-hidden="true"></td>');
-    tr.append(`<td>${"8 PM"}</td>`);
+    tr.append(`<td>${obj.time}</td>`);
     tr.append(`<td>${obj.title}</td>`);
     tr.append(`<td>${obj.theatre}</td>`);
     tr.append(`<td>${obj.ticketURI}</td>`);
@@ -183,6 +183,7 @@ $(document).ready(function () {
 
         let zipCode = $('#dnd-input-zipcode').val().trim();
         var date = $('#dnd-input-date').val().trim();
+        var time = $('#dnd-input-time').val().trim();
         numMovies = 1;
         radius = 10;
         callback = '';
@@ -206,7 +207,7 @@ $(document).ready(function () {
 
         //  getMovies(numMovies, zipCode, radius, userSelectedData, callback);
 
-        getMovies(numMovies, zipCode, radius, date, selectedGenres, function (moviesInfo) {
+        getMovies(numMovies, zipCode, radius, date, time, selectedGenres, function (moviesInfo) {
             // add all the jquery outputs for movie info here > movie title / theater & show times
           var obj = moviesInfo[0];
             console.log("movie returns control to program");

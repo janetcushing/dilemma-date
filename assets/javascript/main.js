@@ -73,6 +73,7 @@ function writeMovieToOutput(movieObj) {
     console.log("ticketURI: " + movieObj.times[0]);
 
     if (typeof movieObj.ticketURI === "undefined") {
+        obj.ticketURI = "https://www.fandango.com/";
         movieObj.ticketURI = "https://www.fandango.com/";
     }
 
@@ -108,17 +109,12 @@ function subtractTwoHourFromDate(origTime) {
     return earlierTime;
 }
 
-function writeRestaurantToOutput(restaurants) {
-    console.log("im in writeRestaurantToOutput");
-    console.log("restaurants: " + JSON.stringify(restaurants));
-    console.log("name: " + restaurants[0].name);
-    console.log("venue: " + restaurants[0].location);
-    console.log("url: " + restaurants[0].url);
 
+function writeRestaurantToOutput(restaurants) {
+    console.log(restaurants);
     if (typeof restaurants[0].url === "undefined") {
         restaurants[0].url = "https://www.zomato.com/";
     }
-
 
     var tr = $('<tr>');
     tr.append('<td class="fa fa-cutlery" aria-hidden="true"></td>');
@@ -126,7 +122,6 @@ function writeRestaurantToOutput(restaurants) {
     tr.append(`<td>${restaurants[0].name}</td>`);
     tr.append(`<td>${restaurants[0].location}</td>`);
     tr.append(`<td><a href="${restaurants[0].url}">Link</a></td>`);
-
     $('#dnd-user-results-tbody').prepend(tr);
 }
 

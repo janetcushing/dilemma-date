@@ -35,7 +35,7 @@
 
             <!-- COLUMN 2 -->
             <div class="small-12 medium-12 large-5 cell">
-                <div class="card">
+                <div class="card dnd-card">
                     <!-- adds padding -->
                     <div class="card-section">
 
@@ -60,18 +60,18 @@
 
                                         <!-- DATE & TIME -->
                                         <div class="grid-x grid-padding-x">
-                                          <div class="small-6 large-6 medium-6 cell">
-                                            <label>Date</label>
-                                            <input id="dnd-input-date" required type="date">
-                                            <span class="form-error" data-form-error-for="dnd-input-date">Date is required.</span>
+                                            <div class="small-6 large-6 medium-6 cell">
+                                                <label>Date</label>
+                                                <input id="dnd-input-date" required type="date">
+                                                <span class="form-error" data-form-error-for="dnd-input-date">Date is required.</span>
 
-                                          </div>
+                                            </div>
 
-                                          <div class="small-6 large-6 medium-6 cell">
-                                            <label>Time</label>
-                                            <input id="dnd-input-time" type="time" required pattern="time">
-                                            <span class="form-error" data-form-error-for="dnd-input-time">Please enter a valid time.</span>
-                                          </div>
+                                            <div class="small-6 large-6 medium-6 cell">
+                                                <label>Time</label>
+                                                <input id="dnd-input-time" type="time" required pattern="time">
+                                                <span class="form-error" data-form-error-for="dnd-input-time">Please enter a valid time.</span>
+                                            </div>
                                         </div>
 
                                         <!-- RESTAURANT DROPDOWN -->
@@ -85,8 +85,7 @@
                                             <select multiple id="dnd-genre-menu" required></select>
                                             <span class="form-error" data-form-error-for="dnd-genre-menu">Please select at least movie genre.</span>
                                         </label>
-
-                                        <button class="button medium btn-search" type="submit" value="Submit">Search!</button>
+                                        <button id="dnd-btn-search" class="button medium dnd-button" type="submit" value="Submit">Search!</button>
                                     </form>
                                 </div>
 
@@ -94,6 +93,7 @@
                                     <p>Users in your Area</p>
                                     <div id="map" style="width:400px;height:400px;"></div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -107,14 +107,14 @@
     <div id="results-pane" class="container dnd-container">
         <div class="grid-x grid-padding-x align-center-middle">
             <!-- COLUMN 1 -->
-            <div class="medium-12 large-8 cell align-self-middle">
+            <div class="medium-12 large-10 cell align-self-middle">
                 <h1 class="dnd-h-white">Book Your Perfect Date</h1>
                 <h5 class="dnd-h-white">Compare your results with others in your area.</h5>
             </div>
 
             <!-- COLUMN 2 -->
-            <div class="medium-12 large-8 cell">
-                <div class="card">
+            <div class="medium-12 large-10 cell">
+                <div class="card dnd-card">
                     <!-- adds padding -->
                     <div class="card-section">
 
@@ -160,14 +160,14 @@
     <div id="prior-results-pane" class="container dnd-container">
         <div class="grid-x grid-padding-x align-center-middle">
             <!-- COLUMN 1 -->
-            <div class="medium-12 large-8 cell align-self-middle">
+            <div class="medium-12 large-10 cell align-self-middle">
                 <h1 class="dnd-h-white">Book Your Perfect Date</h1>
                 <h5 class="dnd-h-white">Compare your results with others in your area.</h5>
             </div>
 
             <!-- COLUMN 2 -->
-            <div class="medium-12 large-8 cell">
-                <div class="card">
+            <div class="medium-12 large-10 cell">
+                <div class="card dnd-card">
                     <!-- adds padding -->
                     <div class="card-section">
 
@@ -208,61 +208,113 @@
         </div>
     </div>
 
-    <!-- FOOTER -->
-    <div id="dnd-footer" class="mobile-bottom-bar">
-        <a href="#" id="dnd-btn-home" class="footer-link">
-            <i class="fa fa-home"></i> <span class='footer-text'>Home</span>
-        </a>
-        <a href="#" id="dnd-btn-suggestions" class="footer-link">
-            <i class="fa fa-gratipay"></i> <span class='footer-text'>Suggested</span>
-        </a>
-        <a href="#" id="dnd-btn-settings" data-open="dnd-settings-modal" class="footer-link">
-            <i class="fa fa-cog"></i> <span class='footer-text'>Preferences</span>
-        </a>
-    </div>
-
 
     <!-- MODALS -->
-    <div class="reveal" id="dnd-settings-modal" data-reveal>
-        <h3>Preferences</h3>
-        <hr>
-
-        <!-- ZIPCODE & RADIUS -->
-        <div class="grid-x grid-padding-x">
-            <div class="small-4 large-4 medium-4 cell">
-                <label>Preferred Zip Code</label>
-                <input name="my-zipcode" id="dnd-settings-input-zipcode" placeholder="your zip code" type="number" value="">
+    <div class="reveal dnd-reveal dnd-reveal-settings" id="dnd-settings-modal" data-reveal>
+        <div class="grid-x align-center-top text-center">
+            <!-- LEFT COLUMN -->
+            <div class="cell dnd-alert-icon-cell">
+                <!-- this centers the icon -->
+                <div class="text-center">
+                    <i class="fa fa-cogs" aria-hidden="true"></i>
+                </div>
             </div>
 
-            <div class="small-4 large-4 medium-4 cell">
-                <label>Default Search Radius</label>
-                <input name="my-radius" id="dnd-settings-input-radius" placeholder="10" type="number" value="">
-            </div>
+            <!-- RIGHT COLUMN (BODY) -->
+            <div class="auto cell dnd-alert-body-cell text-left">
 
-            <div class="small-4 large-4 medium-4 cell">
-                <label>Preferred Movie Time</label>
-                <input name="my-moviestart" id="dnd-settings-input-movie-start" required type="time" pattern="/(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}/">
+                <div class="grid-y align-top-right">
+
+                    <!-- ROW 1 -->
+                    <div class="cell">
+                        <h5 class="dnd-alert-title">Preferences</h5>
+                    </div>
+
+                    <!-- ROW 2 -->
+                    <div class="cell">
+                        <div class="grid-x grid-margin-x">
+                            <div class="auto cell">
+                                <label>Zip Code</label>
+                                <input name="my-zipcode" id="dnd-settings-input-zipcode" placeholder="your zip code" type="number" value="">
+                            </div>
+
+                            <div class="auto cell">
+                                <label>Search Radius</label>
+                                <input name="my-radius" id="dnd-settings-input-radius" placeholder="10" type="number" value="">
+                            </div>
+
+                            <div class="auto cell">
+                                <label>Preferred Time</label>
+                                <input name="my-moviestart" id="dnd-settings-input-movie-start" required type="time" pattern="/(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}/">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ROW 3 -->
+                    <div class="cell text-right dnd-alert-control-cell">
+                        <div class="button-group align-right">
+                            <a class="button medium dnd-button-medium" id="dnd-settings-save">Save</a>
+                            <a class="button medium secondary dnd-button-medium" data-close aria-label="Close modal">Close</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <button class="close-button" data-close aria-label="Close modal" type="button">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <hr>
-        <div class="button-group align-right">
-            <a id="dnd-settings-save" class="button">Save</a>
-            <a class="button secondary" data-close aria-label="Close modal">Close</a>
         </div>
     </div>
 
 
-    <!-- ALERT MODAL -->
-    <div class="tiny reveal" id="dnd-alert-modal" data-reveal data-animation-in="zoom-in">
-        <i class="fa fa-refresh fa-spin fa-fw"></i><span class="dnd-modal-title" id="dnd-alert-modal-title">Status</span><br>
-        <hr>
-        <p id="dnd-alert-modal-body"></p>
-        <button class="close-button" data-close aria-label="Close modal" type="button">
-            <span aria-hidden="true">&times;</span>
-        </button>
+
+    <!-- PROGRESS MODAL -->
+    <div class="reveal dnd-reveal dnd-reveal-progress" id="dnd-alert-modal" data-reveal>
+        <!-- was `align-center-middle` -->
+        <div class="grid-x align-center-top text-center">
+            <!-- LEFT COLUMN -->
+            <div class="cell dnd-alert-icon-cell">
+                <!-- this centers the icon -->
+                <div class="text-center">
+                    <i class="fa fa-refresh fa-spin fa-fw" aria-hidden="true"></i>
+                </div>
+            </div>
+            <!-- BODY -->
+            <div class="auto cell dnd-alert-body-cell text-left">
+                <div class="grid-y">
+                    <div class="cell">
+                        <span id="dnd-alert-modal-title" class="dnd-alert-title">Someone Messaged You</span>
+                    </div>
+                    <div class="cell">
+                        <span id="dnd-alert-modal-body" class="dnd-alert-body">This is a typical notification. You have been notified.</span>
+                    </div>
+                    <div class="cell text-right dnd-alert-control-cell">
+                        <button class="button small dnd-button dnd-button-small" data-close type="button" name="button">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- FOOTER -->
+    <div id="dnd-footer" class="mobile-bottom-bar">
+
+        <div class="grid-x grid-padding-x align-center-middle">
+            <div class="small-4  cell">
+                <a href="#" id="dnd-btn-home" class="footer-link">
+                    <i class="fa fa-home"></i> <span class='footer-text'>Home</span>
+                </a>
+            </div>
+            <div class="small-4 cell">
+                <a href="#" id="dnd-btn-suggestions" class="footer-link">
+                    <i class="fa fa-gratipay"></i> <span class='footer-text'>Suggested</span>
+                </a>
+            </div>
+            <div class="small-4 cell">
+                <a href="#" id="dnd-btn-settings" data-open="dnd-settings-modal" class="footer-link">
+                    <i class="fa fa-cog"></i> <span class='footer-text'>Preferences</span>
+                </a>
+            </div>
+        </div>
+
     </div>
 
 </body>

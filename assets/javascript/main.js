@@ -82,7 +82,7 @@ function writeMovieToOutput(movieObj) {
     tr.append(`<td>${movieObj.time}</td>`);
     tr.append(`<td>${movieObj.title}</td>`);
     tr.append(`<td>${movieObj.theatre}</td>`);
-    tr.append(`<td>${movieObj.ticketURI}</td>`);
+    tr.append(`<td><a href="${movieObj.ticketURI}">Link</a></td>`);
 
     $('#dnd-user-results-tbody').prepend(tr);
     //calculate dinner time based on movie time
@@ -119,12 +119,13 @@ function writeRestaurantToOutput(restaurants) {
         restaurants[0].url = "https://www.zomato.com/";
     }
 
+
     var tr = $('<tr>');
     tr.append('<td class="fa fa-cutlery" aria-hidden="true"></td>');
     tr.append(`<td>${holdDinnerTime}</td>`);
     tr.append(`<td>${restaurants[0].name}</td>`);
     tr.append(`<td>${restaurants[0].location}</td>`);
-    tr.append(`<td>${restaurants[0].url}</td>`);
+    tr.append(`<td><a href="${restaurants[0].url}">Link</a></td>`);
 
     $('#dnd-user-results-tbody').prepend(tr);
 }
@@ -250,7 +251,8 @@ $(document).on("forminvalid.zf.abide", function(ev, frm) {
 // search form submitted...
 $(document).on("submit", function(ev) {
     ev.preventDefault();
-    console.log('# form id "'+ ev.target.id + '" submitted...');
+
+    console.log('# Searching...');
 
     openStatusModal('querying database...', title='Searching...');
     togglePaneElement('results');
@@ -309,11 +311,22 @@ $(document).ready(function() {
     populateSearchForm();
 
 
-    // MODALS
+    // FOOTER
+    // link to home page
+    $('body').on('click', '#dnd-btn-home', function() {
+        togglePaneElement('search');
+    });
 
     // user preferences modal
     $('body').on('click', '#dnd-btn-settings', function() {
         $('#dnd-settings-modal').foundation('open');
+    });
+
+
+    // link to home page
+    $('body').on('click', '#dnd-btn-suggestions', function() {
+        getOutputFromDateHistoryDatabase();
+        togglePaneElement('prior');
     });
 
     // user preferences modal submitted
@@ -353,8 +366,7 @@ $(document).ready(function() {
         let currentValue = timeInput.val();
         if (timeInput.attr('class') == 'is-invalid-input') {
             timeInput.removeClass('is-invalid-input');
-            timeInput.val(currentValue + ':00');
+            // timeInput.val(currentValue + ':00');
         }
     });
-
 });

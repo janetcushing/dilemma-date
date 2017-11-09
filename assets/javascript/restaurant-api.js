@@ -74,6 +74,7 @@ function getLocation(zipCode, radius, selectedCuisines) {
 
                         // this returns your restaurantDetails object & stuffs it into restaurants variable
                         // console.log(restaurantDetails);
+                        return restaurantDetails;
 
                     });
 

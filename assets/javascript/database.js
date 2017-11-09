@@ -87,7 +87,7 @@ function updateDateHistoryDatabase(dateHistoryData) {
 
 function getOutputFromDateHistoryDatabase() {
     console.log("im in getOutputFromDatabase ");
-   
+
     var i = 0;
     dateHistoryQuery.on("child_added", function (snapshot) {
         console.log("snapshot.val().movieTime1 " + snapshot.val().movieTime);
@@ -102,9 +102,8 @@ function getOutputFromDateHistoryDatabase() {
         let tdDinnerName = $("<td>");
         tdDinnerName.attr("id", "dnd-output-prior-dinner-name-" + i);
         tdDinnerName.text(snapshot.val().restaurantName);
-        let tdDinnerUrl = $("<td>");
+        let tdDinnerUrl = $('<td><a href="' + snapshot.val().restaurantUrl + '">Link</a>');
         tdDinnerUrl.attr("id", "dnd-output-prior-dinner-url-" + i);
-        tdDinnerUrl.text(snapshot.val().restaurantUrl);
         dinnerTr.append(tdDinnerTime);
         dinnerTr.append(tdDinnerName);
         dinnerTr.append(tdDinnerVenue);
@@ -121,9 +120,9 @@ function getOutputFromDateHistoryDatabase() {
         let tdMovieVenue = $("<td>");
         tdMovieVenue.attr("id", "dnd-output-prior-movie-venue-" + i);
         tdMovieVenue.text(snapshot.val().movieTheatre);
-        let tdMovieTheatreUrl = $("<td>");
+        let tdMovieTheatreUrl = $('<td><a href="' + snapshot.val().movieTheatreUrl + '">Link</a>');
         tdMovieTheatreUrl.attr("id", "dnd-output-prior-movie-url-" + i);
-        tdMovieTheatreUrl.text(snapshot.val().movieTheatreUrl);
+
         movieTr.append(tdMovieTime);
         movieTr.append(tdMovieTitle);
         movieTr.append(tdMovieVenue);

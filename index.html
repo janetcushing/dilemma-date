@@ -86,7 +86,6 @@
                                             <span class="form-error" data-form-error-for="dnd-genre-menu">Please select at least movie genre.</span>
                                         </label>
 
-                                        <!-- <button id="dnd-btn-search" class="button medium btn-search" type="submit" value="Submit">Search!</button> -->
                                         <button class="button medium btn-search" type="submit" value="Submit">Search!</button>
                                     </form>
                                 </div>
@@ -108,13 +107,13 @@
     <div id="results-pane" class="container dnd-container">
         <div class="grid-x grid-padding-x align-center-middle">
             <!-- COLUMN 1 -->
-            <div class="medium-12 large-12 cell align-self-middle">
+            <div class="medium-12 large-8 cell align-self-middle">
                 <h1 class="dnd-h-white">Book Your Perfect Date</h1>
                 <h5 class="dnd-h-white">Compare your results with others in your area.</h5>
             </div>
 
             <!-- COLUMN 2 -->
-            <div class="medium-12 large-12 cell">
+            <div class="medium-12 large-8 cell">
                 <div class="card">
                     <!-- adds padding -->
                     <div class="card-section">
@@ -161,13 +160,13 @@
     <div id="prior-results-pane" class="container dnd-container">
         <div class="grid-x grid-padding-x align-center-middle">
             <!-- COLUMN 1 -->
-            <div class="medium-12 large-12 cell align-self-middle">
+            <div class="medium-12 large-8 cell align-self-middle">
                 <h1 class="dnd-h-white">Book Your Perfect Date</h1>
                 <h5 class="dnd-h-white">Compare your results with others in your area.</h5>
             </div>
 
             <!-- COLUMN 2 -->
-            <div class="medium-12 large-12 cell">
+            <div class="medium-12 large-8 cell">
                 <div class="card">
                     <!-- adds padding -->
                     <div class="card-section">
@@ -191,9 +190,8 @@
                                     <thead>
                                         <tr>
                                             <th></th>
-                                            <th>Time</th>
-                                            <th>Name</th>
-                                            <th>Venue</th>
+                                            <th>Venus</th>
+                                            <th>Address</th>
                                             <th>URL</th>
                                         </tr>
                                     </thead>
@@ -211,9 +209,12 @@
     </div>
 
     <!-- FOOTER -->
-    <div class="mobile-bottom-bar">
-        <a href="index.html" class="footer-link">
+    <div id="dnd-footer" class="mobile-bottom-bar">
+        <a href="#" id="dnd-btn-home" class="footer-link">
             <i class="fa fa-home"></i> <span class='footer-text'>Home</span>
+        </a>
+        <a href="#" id="dnd-btn-suggestions" class="footer-link">
+            <i class="fa fa-gratipay"></i> <span class='footer-text'>Suggested</span>
         </a>
         <a href="#" id="dnd-btn-settings" data-open="dnd-settings-modal" class="footer-link">
             <i class="fa fa-cog"></i> <span class='footer-text'>Preferences</span>

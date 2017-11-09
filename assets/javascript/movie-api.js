@@ -36,7 +36,7 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
         'zip': zipCode,
         'radius': radius,
         'units': "mi",
-        'api_key': "rb8hzag4f93j2f86dbqbcrn5"
+        'api_key': "addqr69eghub8vq4g8fw476d"
     });
 
     console.log(queryURL);
@@ -48,8 +48,8 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
             console.log("res: ");
             console.log(res);
             var movies = res
-                .filter(hasGenre)
-                .filter(checkGenre)
+                // .filter(hasGenre)
+                // .filter(checkGenre)
                 .map(function (movie) {
                     var obj = {};
                     obj.title = movie.title;
@@ -72,31 +72,31 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
                     }
 
                     obj.ticketURI = movie.showtimes[0].ticketURI;
-                    // console.log("obj: " + JSON.stringify(obj));
+                    console.log("obj inside ajax call, about to return it: " + JSON.stringify(obj));
                     return obj;
                 });
             console.log("movies starts here");
             console.log(movies);
 
-            function hasGenre(movie) {
+            // function hasGenre(movie) {
 
-                if (movie.genres) {
-                    return true;
-                }
-            }
+            //     if (movie.genres) {
+            //         return true;
+            //     }
+            // }
 
-            function checkGenre(movie) {
-                //genre is an ARRAY!
-                if (movie.genres.includes(selectedGenres[0])) {
-                    return true;
-                }
+            // function checkGenre(movie) {
+            //     //genre is an ARRAY!
+            //     if (movie.genres.includes(selectedGenres[0])) {
+            //         return true;
+            //     }
 
-            }
+            // }
 
 
             // this variable returns a certain amount of movies from array (numMovies)
             var moviesInfo = movies.slice(0, numMovies);
-            // console.log(moviesInfo);
+            console.log("moviesInfo: " + moviesInfo);
 
             // this is the callback, it returns the movies object from above
             callback(moviesInfo);

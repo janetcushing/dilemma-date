@@ -24,35 +24,39 @@ dateHistoryData = {
     "radius": '',
     "date": '',
     "movieTitle": '',
-    "theatre": '',
-    "time": '',
-    "theatreUrl": '',
+    "movieTheatre": '',
+    "movieTime": '',
+    "movieTheatreUrl": '',
+    "movieGenre": "",
     "restaurantTime": '',
     "restaurantName": '',
     "restaurantLocation": '',
     "restaurantUrl": '',
+    "restaurantCuisine": '',
     "dateRating": ''
 };
 
-function updateInputInDateHistoryJsonObject(zipCode, radius, date) {
-    dateHistoryData.zipCode =  zipCode;
+function updateInputInDateHistoryJsonObject(zipCode, radius, date, selectedCuisines, selectedGenres) {
+    dateHistoryData.zipCode = zipCode;
     dateHistoryData.radius = radius;
     dateHistoryData.date = date;
+    dateHistoryData.movieGenre = selectedGenres.toString();
+    dateHistoryData.restaurantCuisine = selectedCuisines;
     dateHistoryData.dateRating = '';
 }
 
-function updateMoviesInDateHistoryJsonObject(obj) {
-    dateHistoryData.movieTitle = obj.title;
-    dateHistoryData.theatre = obj.theatre;
-    dateHistoryData.time = obj.times[0];
-    dateHistoryData.theatreUrl = obj.ticketURI;
+function updateMoviesInDateHistoryJsonObject(movieObj) {
+    dateHistoryData.movieTitle = movieObj.title;
+    dateHistoryData.movieTheatre = movieObj.theatre;
+    dateHistoryData.movieTime = movieObj.times[0];
+    dateHistoryData.movieTheatreUrl = movieObj.ticketURI;
+    // also insert the dinner time into the json object based on the movie time
+    dateHistoryData.restaurantTime = subtractTwoHourFromDate(movieObj.times[0]);
 }
 
 function updateRestaurantInDateHistoryJsonObject(restaurants) {
-    dateHistoryData.restaurantTime = "7:00 PM";
     dateHistoryData.restaurantName = restaurants[0].name;
     dateHistoryData.restaurantLocation = restaurants[0].location;
-      // dateHistoryData.restaurantUrl = restaurants[0].url;
     dateHistoryData.restaurantUrl = restaurants[0].url;
     console.log("dateHistoryData " + JSON.stringify(dateHistoryData));
 }
@@ -61,77 +65,71 @@ function updateRestaurantInDateHistoryJsonObject(restaurants) {
 function updateDateHistoryDatabase(dateHistoryData) {
     console.log("im in updateDateHistoryDatabase");
     console.log("the json object " + JSON.stringify(dateHistoryData));
-   
-    console.log("zip " + dateHistoryData.zipCode);
-    console.log("zip " + dateHistoryData.radius);
-    console.log("zip " + dateHistoryData.restaurantTime);
-    console.log("zip " + dateHistoryData.restaurantLocation);
-    console.log("zip " + dateHistoryData.restaurantName);
-    console.log("zip " + dateHistoryData.restaurantUrl);
     dateHistoryRef.push({
         zipCode: dateHistoryData.zipCode,
         radius: dateHistoryData.radius,
-        movieTitle: dateHistoryData.movieTitle,
-        theatre: dateHistoryData.theatre,
         date: dateHistoryData.date,
-        movieTime: dateHistoryData.time,
-        theatreUrl: dateHistoryData.theatreUrl,
+        movieTitle: dateHistoryData.movieTitle,
+        movieTheatre: dateHistoryData.movieTheatre,
+        movieTime: dateHistoryData.movieTime,
+        movieTheatreUrl: dateHistoryData.movieTheatreUrl,
+        movieGenre: dateHistoryData.movieGenre,
         restaurantTime: dateHistoryData.restaurantTime,
         restaurantName: dateHistoryData.restaurantName,
         restaurantLocation: dateHistoryData.restaurantLocation,
-        restaurantUrl: dateHistoryData.restaurantUrl
+        restaurantUrl: dateHistoryData.restaurantUrl,
+        restaurantCuisine: dateHistoryData.restaurantCuisine
         // dateRating: dateDataHistory.dateRating
 
     });
-    // }
 
 }
 
 function getOutputFromDateHistoryDatabase() {
     console.log("im in getOutputFromDatabase ");
-    // $("#pastDates").empty();
+   
     var i = 0;
     dateHistoryQuery.on("child_added", function (snapshot) {
-        console.log(snapshot.val().movieTime);
-        var movieTr = $("<tr>");
-        var tdTime = $("<td>");
-        tdTime.attr("id", "dnd-output-prior-movie-time-" + i);
-        tdTime.text(snapshot.val().movieTime);
-        var tdTitle = $("<td>");
-        tdTitle.attr("id", "dnd-output-prior-movie-title-" + i);
-        tdTitle.text(snapshot.val().movieTitle);
-        var tdVenue = $("<td>");
-        tdVenue.attr("id", "dnd-output-prior-movie-venue-" + i);
-        tdVenue.text(snapshot.val().theatre);
-        var tdTheatreUrl = $("<td>");
-        tdTheatreUrl.attr("id", "dnd-output-prior-movie-url-" + i);
-        tdTheatreUrl.text(snapshot.val().theatreUrl);
-
-        movieTr.append(tdTime);
-        movieTr.append(tdVenue);
-        movieTr.append(tdTitle);
-        movieTr.append(tdTheatreUrl);
-        $("#dnd-output-prior-results").append(movieTr);
-
-        console.log("i just appended to #dnd-output-priors");
-        var dinnerTr = $("<tr>");
-        var tdDinnerTime = $("<td>");
+        console.log("snapshot.val().movieTime1 " + snapshot.val().movieTime);
+        console.log("snapshot.val().movieTime2 " + snapshot.val().movieTime.toString());
+        let dinnerTr = $("<tr>");
+        let tdDinnerTime = $("<td>");
         tdDinnerTime.attr("id", "dnd-output-prior-dinner-time-" + i);
         tdDinnerTime.text(snapshot.val().restaurantTime);
-        var tdDinnerVenue = $("<td>");
+        let tdDinnerVenue = $("<td>");
         tdDinnerVenue.attr("id", "dnd-output-prior-dinner-venue-" + i);
         tdDinnerVenue.text(snapshot.val().restaurantLocation);
-        var tdDinnerName = $("<td>");
+        let tdDinnerName = $("<td>");
         tdDinnerName.attr("id", "dnd-output-prior-dinner-name-" + i);
         tdDinnerName.text(snapshot.val().restaurantName);
-        var tdDinnerUrl = $("<td>");
-        tdDinnerUrl.attr("id", "dnd-output-prior-dinner-time-" + i);
+        let tdDinnerUrl = $("<td>");
+        tdDinnerUrl.attr("id", "dnd-output-prior-dinner-url-" + i);
         tdDinnerUrl.text(snapshot.val().restaurantUrl);
         dinnerTr.append(tdDinnerTime);
-        dinnerTr.append(tdDinnerVenue);
         dinnerTr.append(tdDinnerName);
+        dinnerTr.append(tdDinnerVenue);
         dinnerTr.append(tdDinnerUrl);
-        $("#dnd-output-prior-results").append(dinnerTr);
+        $("#dnd-prior-results-tbody").append(dinnerTr);
+
+        let movieTr = $("<tr>");
+        let tdMovieTime = $("<td>");
+        tdMovieTime.attr("id", "dnd-output-prior-movie-time-" + i);
+        tdMovieTime.text(snapshot.val().movieTime);
+        let tdMovieTitle = $("<td>");
+        tdMovieTitle.attr("id", "dnd-output-prior-movie-title-" + i);
+        tdMovieTitle.text(snapshot.val().movieTitle);
+        let tdMovieVenue = $("<td>");
+        tdMovieVenue.attr("id", "dnd-output-prior-movie-venue-" + i);
+        tdMovieVenue.text(snapshot.val().movieTheatre);
+        let tdMovieTheatreUrl = $("<td>");
+        tdMovieTheatreUrl.attr("id", "dnd-output-prior-movie-url-" + i);
+        tdMovieTheatreUrl.text(snapshot.val().movieTheatreUrl);
+        movieTr.append(tdMovieTime);
+        movieTr.append(tdMovieTitle);
+        movieTr.append(tdMovieVenue);
+        movieTr.append(tdMovieTheatreUrl);
+        $("#dnd-prior-results-tbody").append(movieTr);
+
         i++;
     });
 

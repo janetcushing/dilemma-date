@@ -83,7 +83,7 @@ function writeMovieToOutput(movieObj) {
 
     var tr = $('<tr>');
     tr.append('<td class="fa fa-film" aria-hidden="true"></td>');
-    tr.append(`<td>${movieObj.times[0]}</td>`);
+    tr.append(`<td>${movieObj.time}</td>`);
     tr.append(`<td>${movieObj.title}</td>`);
     tr.append(`<td>${movieObj.theatre}</td>`);
     tr.append(`<td>${movieObj.ticketURI}</td>`);
@@ -211,6 +211,7 @@ $(document).ready(function () {
 
         let zipCode = $('#dnd-input-zipcode').val().trim();
         var date = $('#dnd-input-date').val().trim();
+        var time = $('#dnd-input-time').val().trim();
         numMovies = 1;
         radius = 10;
         callback = '';
@@ -221,7 +222,12 @@ $(document).ready(function () {
         console.log('# cuisines: ' + selectedCuisines);
         console.log('# genres:   ' + selectedGenres);
 
-        getMovies(numMovies, zipCode, radius, date, selectedGenres, function (moviesInfo) {
+        //-----------------------------------------------//
+        // jbc I added the below code to main.js
+
+        //  getMovies(numMovies, zipCode, radius, userSelectedData, callback);
+
+        getMovies(numMovies, zipCode, radius, date, time, selectedGenres, function (moviesInfo) {
             // add all the jquery outputs for movie info here > movie title / theater & show times
             var movieObj = moviesInfo[0];
             console.log("movie returns control to program");

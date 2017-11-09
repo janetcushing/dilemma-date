@@ -28,20 +28,10 @@
 
 // var obj = {};
 
-function getMovies(numMovies, zipCode, radius, date, selectedGenres, callback) {
-
-
-    // this is how the date comes in from the form from looking at wireframe mockup
-    // 10/31/2017
-    // needs to be formated 2017-10-31
-    // var day = date.split("/")[1];
-    // var month = date.split("/")[0];
-    // var year = date.split("/")[2];
-
+function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callback) {
 
     var queryURL = "https://data.tmsapi.com/v1.1/movies/showings";
     queryURL += '?' + $.param({
-        // 'startDate': year + '-' + month + '-' + day,
         'startDate': date,
         'zip': zipCode,
         'radius': radius,
@@ -69,13 +59,24 @@ function getMovies(numMovies, zipCode, radius, date, selectedGenres, callback) {
                     //this only lists 1 showtime per movie
                     // obj.time = movie.showtimes[0].dateTime.split('T')[1];
                     // this creates an array of showtimes for each movie, only showing 3 times
-                    obj.times = movie.showtimes.slice(0, 3).map(convertDateTimeToTimes);
+                    // obj.times = movie.showtimes.map(convertDateTimeToTimes);
+                    // take movie showtimes array and run this filter function, which a boolean response
+                    // collects true responses in if block and then returns the first showtime
+                    // else, no showtimes that match, returns string
+                    obj.times = movie.showtimes.filter(findTimesAfterFormTime);
+                    if (obj.times[0]) {
+                        console.log("look for this: " + obj.times[0].dateTime);
+                        obj.time = convertMilitaryToStandard(obj.times[0].dateTime.split('T')[1]);
+                    } else {
+                        obj.time = 'No showtimes this late'
+                    }
+
                     obj.ticketURI = movie.showtimes[0].ticketURI;
                     console.log("obj inside ajax call, about to return it: " + JSON.stringify(obj));
                     return obj;
                 });
-                console.log("movies starts here");
-                console.log(movies);
+            console.log("movies starts here");
+            console.log(movies);
 
             // function hasGenre(movie) {
 
@@ -106,9 +107,59 @@ function getMovies(numMovies, zipCode, radius, date, selectedGenres, callback) {
             console.log(err);
         }
     });
+
+
+
+    function findTimesAfterFormTime(showTime) {
+        // if time from form >= showTime return
+        // split time from dateTime 
+        var timeFromApi = showTime.dateTime.split('T')[1];
+        //add seconds to make js date datatype object to work
+        var userTime = new Date(date + " " + time + ":00");
+        // console.log("userTime variable: " + userTime);
+        // console.log("this is time: " + time);
+        // console.log("this is date: " + date);
+
+        var movieTime = new Date(date + " " + timeFromApi + ":00");
+        // console.log("movieTime variable: " + movieTime);
+        // console.log("this is time: " + timeFromApi);
+        // console.log("this is date: " + date);
+        if (userTime < movieTime) {
+            console.log("this is a valid movie time");
+        }
+        // if the movie showtime is later than the user inputted time, return that time.
+        return movieTime > userTime;
+    }
+
 }
 // this is what it looks like when a showtime.dateTime key gets pulled in
 // {theatre: {…}, dateTime: "2017-11-03T12:45", barg: false, ticketURI: "http://www.fandango.com/tms.asp?t=AAVTP&m=157889&d=2017-11-03"}
-function convertDateTimeToTimes(showTime) {
-    return showTime.dateTime.split('T')[1];
+// function convertDateTimeToTimes(showTime) {
+//     return showTime.dateTime.split('T')[1];
+// }
+
+// converts military to regular time for output on results page
+function convertMilitaryToStandard(militaryTime) {
+
+    var time = militaryTime.split(':'); // convert to array
+
+    // fetch
+    var hours = Number(time[0]);
+    var minutes = Number(time[1]);
+
+    // calculate
+    var timeValue;
+
+    if (hours > 0 && hours <= 12) {
+        timeValue = "" + hours;
+    } else if (hours > 12) {
+        timeValue = "" + (hours - 12);
+    } else if (hours == 0) {
+        timeValue = "12";
+    }
+
+    timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes; // get minutes
+    timeValue += (hours >= 12) ? " P.M." : " A.M."; // get AM/PM
+
+    return timeValue;
 }

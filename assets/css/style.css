@@ -438,7 +438,16 @@ main {
     padding-right: 1em;
 }
 
-/*[class^="icon-"], [class*=" icon-"] {
-    display: inline-block;
-    width: 100%;
-}*/
+.dnd-date-detail-container {
+    background-color: #2f3081;
+	border: 1px solid #e49a36;
+    border-radius: 8px;
+}
+
+.dnd-date-detail-title {
+    color: #e7e272;
+    font-weight: 700px;
+    position: relative;
+    top: -1.2rem;
+    font-family: 'BenchNine', sans-serif;
+}

@@ -169,6 +169,16 @@ function populateSearchForm() {
     $('#dnd-input-zipcode').val(currentUser.zipCode);
 }
 
+// Returns the difference between the user's requested time, and now (in hours).
+function hoursUntilUserTime() {
+    let currentDate = $('#dnd-input-date').val();
+    let currentTime = $('#dnd-input-time').val();
+    let userDate = moment(currentDate + ' ' + currentTime);
+    let localDate =  moment.utc(userDate).toDate();
+    var duration = moment.duration(moment.utc().diff(localDate));
+    return Math.abs(duration.asHours());
+}
+
 // when modal is opened, populate the form values
 function populateSettingsForm(modal) {
     modal.find('#dnd-settings-input-zipcode').val(currentUser.zipCode);
@@ -177,10 +187,22 @@ function populateSettingsForm(modal) {
 }
 
 function openStatusModal(text, title='Alert', duration=1500) {
+    $('#dnd-progress-modal').foundation('open');
+    $('#dnd-progress-modal-title').text(title);
+    $('#dnd-progress-modal-body').text(text);
+    if (duration > 0) {
+        setTimeout(() => {  $('#dnd-progress-modal').foundation('close');}, duration);
+    }
+}
+
+
+function openAlertModal(text, duration=1500) {
     $('#dnd-alert-modal').foundation('open');
-    $('#dnd-alert-modal-title').text(title);
+    $('#dnd-alert-modal-title').text('Error');
     $('#dnd-alert-modal-body').text(text);
-    setTimeout(() => {  $('#dnd-alert-modal').foundation('close');}, duration);
+    if (duration > 0) {
+        setTimeout(() => {  $('#dnd-alert-modal').foundation('close');}, duration);
+    }
 }
 
 // USER PREFS
@@ -237,15 +259,25 @@ $(document).on('open.zf.reveal', '[data-reveal]', function() {
 });
 
 
+$('#dnd-input-time').on('change', function() {
+    $(this).trigger('validate.zf.abide');
+});
+
 // form validation failed
 $(document).on("forminvalid.zf.abide", function(ev, frm) {
     // console.log('# form id "' + ev.target.id + '" is invalid');
 })
 
-
 // search form submitted...
 $(document).on("submit", function(ev) {
     ev.preventDefault();
+
+    // check how long until the requested date it
+    let hours = hoursUntilUserTime();
+    if (hours < 3.0) {
+        openAlertModal('Not enough time to plan your date!', 0);
+        return;
+    }
 
     console.log('# Searching...');
 
@@ -357,11 +389,9 @@ $(document).ready(function() {
 
     // force time input to validate
     $('body').on('change', '#dnd-input-time', function() {
-        var timeInput = $(this);
-        let currentValue = timeInput.val();
-        if (timeInput.attr('class') == 'is-invalid-input') {
-            timeInput.removeClass('is-invalid-input');
-            // timeInput.val(currentValue + ':00');
+        let hours = hoursUntilUserTime();
+        if (hours < 3.0) {
+            console.log('Not enough time to plan your date.');
         }
     });
 });

@@ -1,38 +1,46 @@
 {
-  "1": {
-    "name": "American",
-    "romance": 3
-  },
-  "3": {
-    "name": "Asian",
-    "romance": 3
-  },
-  "25": {
-    "name": "Chinese",
-    "romance": 2
-  },
-  "55": {
-    "name": "Italian",
-    "romance": 5
-  },
-  "60": {
-    "name": "Japanese",
-    "romance": 3
-  },
-  "82": {
-    "name": "Pizza",
-    "romance": 2
-  },
-  "83": {
-    "name": "Seafood",
-    "romance": 5
-  },
-  "148": {
-    "name": "Indian",
-    "romance": 1
-  },
-  "168": {
-    "name": "Burger",
-    "romance": 1
-  }
+    "1": {
+        "name": "American",
+        "romance": 3
+    },
+    "3": {
+        "name": "Asian",
+        "romance": 3
+    },
+    "25": {
+        "name": "Chinese",
+        "romance": 2
+    },
+    "55": {
+        "name": "Italian",
+        "romance": 5
+    },
+    "60": {
+        "name": "Japanese",
+        "romance": 3
+    },
+    "82": {
+        "name": "Pizza",
+        "romance": 2
+    },
+    "83": {
+        "name": "Seafood",
+        "romance": 5
+    },
+    "148": {
+        "name": "Indian",
+        "romance": 1
+    },
+    "168": {
+        "name": "Burger",
+        "romance": 1
+    },
+    "100": {
+        "name": "Desserts",
+        "romance": 5
+    },
+    "73": {
+        "name": "Mexican",
+        "romance": -1
+    }
 }

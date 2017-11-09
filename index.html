@@ -2,6 +2,7 @@
 
 <head>
     <link rel="stylesheet" href="assets/css/reset.css">
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -266,7 +267,7 @@
 
 
     <!-- PROGRESS MODAL -->
-    <div class="reveal dnd-reveal dnd-reveal-progress" id="dnd-alert-modal" data-reveal>
+    <div class="reveal dnd-reveal dnd-reveal-progress" id="dnd-progress-modal" data-reveal>
         <!-- was `align-center-middle` -->
         <div class="grid-x align-center-top text-center">
             <!-- LEFT COLUMN -->
@@ -274,6 +275,34 @@
                 <!-- this centers the icon -->
                 <div class="text-center">
                     <i class="fa fa-refresh fa-spin fa-fw" aria-hidden="true"></i>
+                </div>
+            </div>
+            <!-- BODY -->
+            <div class="auto cell dnd-alert-body-cell text-left">
+                <div class="grid-y">
+                    <div class="cell">
+                        <span id="dnd-progress-modal-title" class="dnd-alert-title">Someone Messaged You</span>
+                    </div>
+                    <div class="cell">
+                        <span id="dnd-progress-modal-body" class="dnd-alert-body">This is a typical notification. You have been notified.</span>
+                    </div>
+                    <div class="cell text-right dnd-alert-control-cell">
+                        <button class="button small dnd-button dnd-button-small" data-close type="button" name="button">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALERT MODAL -->
+    <div class="reveal dnd-reveal dnd-reveal-alert" id="dnd-alert-modal" data-reveal>
+        <!-- was `align-center-middle` -->
+        <div class="grid-x align-center-top text-center">
+            <!-- LEFT COLUMN -->
+            <div class="cell dnd-alert-icon-cell">
+                <!-- this centers the icon -->
+                <div class="text-center">
+                    <i class="fa fa-heart" aria-hidden="true"></i>
                 </div>
             </div>
             <!-- BODY -->

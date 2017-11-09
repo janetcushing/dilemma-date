@@ -242,10 +242,10 @@ $(document).on("forminvalid.zf.abide", function(ev, frm) {
     // console.log('# form id "' + ev.target.id + '" is invalid');
 })
 
-
 // search form submitted...
 $(document).on("submit", function(ev) {
     ev.preventDefault();
+    console.log(ev);
 
     console.log('# Searching...');
 
@@ -361,7 +361,7 @@ $(document).ready(function() {
         let currentValue = timeInput.val();
         if (timeInput.attr('class') == 'is-invalid-input') {
             timeInput.removeClass('is-invalid-input');
-            // timeInput.val(currentValue + ':00');
+            timeInput.val(currentValue + ':00');
         }
     });
 });

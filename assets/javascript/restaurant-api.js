@@ -77,7 +77,11 @@ function getLocation(zipCode, radius, selectedCuisines) {
                         // console.log(restaurantDetails);
                         return restaurantDetails;
 
+
+                        
                     });
+                    // this pulls a ranom index from the restaurants array (and wraps it in an array, because that's whats called for in the rest of the code) and returns it to restaurants variable.
+                    restaurants = [random.fromArray(restaurants)];
 
                     writeRestaurantToOutput(restaurants);
                     updateRestaurantInDateHistoryJsonObject(restaurants);

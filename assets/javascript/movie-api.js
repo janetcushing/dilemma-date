@@ -51,8 +51,8 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
             console.log("res: ");
             console.log(res);
             var movies = res
-                // .filter(hasGenre)
-                // .filter(checkGenre)
+                .filter(hasGenre)
+                .filter(checkGenre)
                 .map(function (movie) {
                     var obj = {};
                     obj.title = movie.title;
@@ -81,20 +81,20 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
             console.log("movies starts here");
             console.log(movies);
 
-            // function hasGenre(movie) {
+            function hasGenre(movie) {
 
-            //     if (movie.genres) {
-            //         return true;
-            //     }
-            // }
+                if (movie.genres) {
+                    return true;
+                }
+            }
 
-            // function checkGenre(movie) {
-            //     //genre is an ARRAY!
-            //     if (movie.genres.includes(selectedGenres[0])) {
-            //         return true;
-            //     }
+            function checkGenre(movie) {
+                //genre is an ARRAY!
+                if (movie.genres.includes(selectedGenres[0])) {
+                    return true;
+                }
 
-            // }
+            }
 
 
             // this variable returns a certain amount of movies from array (numMovies)

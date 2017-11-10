@@ -21,21 +21,6 @@
     <title>Date Night Dilemma</title>
 
     <style>
-        table td.shrink {
-            white-space: nowrap
-        }
-
-        table td.expand {
-            width: 99%
-        }
-
-        .dnd-date-detail-title {
-            font-weight: 600;
-        }
-
-        .dnd-date-detail-desc {
-            font-size: 0.8rem;
-        }
 
     </style>
 
@@ -49,8 +34,6 @@
 </head>
 
 <body>
-
-
     <div id="results-pane-new" class="container dnd-container">
         <div class="grid-x grid-padding-x align-center-middle">
             <!-- COLUMN 1 -->
@@ -67,61 +50,93 @@
 
                         <div class="small-12 medium-12 large-12 columns">
 
-                            <h3>Your Results</h3>
+                            <h3>Your Results...</h3>
+                            <h6>November 11, 2017</h6>
+                            <div class="tab-outer">
+                                <ul class="tabs" id="dnd-results-tab" data-tabs="">
+                                    <li class="tabs-title is-active"><a href="#dnd-random-results-tab-panel" aria-selected="true">Random</a></li>
+                                    <li class="tabs-title"><a href="#dnd-recommended-results-tab-panel">See what others recommend...</a></li>
+                                </ul>
 
-                            <h6>See what others recommend...</h6>
-                            <div class="medium-9 large-9 cell">
+
+                                <div class="tabs-content" data-tabs-content="dnd-results-tab">
+
+                                    <!-- TAB CONTENT START -->
+                                    <div class="tabs-panel is-active" id="dnd-random-results-tab-panel">
+
+                                        <div class="large-8 cell">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Time</th>
+                                                        <th>Name</th>
+                                                        <th>Type</th>
+                                                        <th>Romance</th>
+                                                        <th>Link</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <!--  RESTAURANT CLEAR HERE -->
+                                                <tbody id="dnd-restaurant-results">
+                                                    <tr>
+                                                        <td class="shrink">6:00 P.M.</td>
+                                                        <td class="expand">
+                                                            <i class="fa fa-cutlery" aria-hidden="true"></i>
+                                                            <span class="dnd-date-detail-title">The River House</span>
+                                                            <p class="dnd-date-detail-desc">Somewhere in Portsmouth, 03801</p>
+                                                        </td>
+                                                        <td class="shrink">Seafood</td>
+                                                        <td class="shrink" id="insert-romance"></td>
+                                                        <td class="shrink"><a href="#">Link</a></td>
+                                                    </tr>
+                                                </tbody>
+
+                                                <!--  RESTAURANT CLEAR HERE -->
+                                                <tbody id="dnd-movie-results">
+                                                    <tr>
+                                                        <td class="shrink">7:30 P.M.</td>
+                                                        <td class="expand">
+                                                            <i class="fa fa-film" aria-hidden="true"></i>
+                                                            <span class="dnd-date-detail-title">Murder on the Orient Express</span>
+                                                            <p class="dnd-date-detail-desc">Regal Fox Run Stadium 15 &amp; RPX, 03801</p>
+                                                        </td>
+                                                        <td class="shrink">Drama</td>
+                                                        <td class="shrink" id="insert-romance"></td>
+                                                        <td class="shrink"><a href="#">Link</a></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
 
 
-                                <!--  TABLE RESULTS HERE -->
-                                <div class="large-8 cell">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Time</th>
-                                                <th>Name</th>
-                                                <th>Type</th>
-                                                <th>Romance</th>
-                                                <th>Link</th>
-                                            </tr>
-                                        </thead>
+                                    </div>
 
-                                        <tbody id="dnd-restaurant-results">
-                                            <tr>
-                                                <td class="shrink">6:00 P.M.</td>
-                                                <td class="expand">
-                                                    <i class="fa fa-cutlery" aria-hidden="true"></i>
-                                                    <span class="dnd-date-detail-title">The River House</span>
-                                                    <p class="dnd-date-detail-desc">Somewhere in Portsmouth, 03801</p>
-                                                </td>
-                                                <td class="shrink">Seafood</td>
-                                                <td class="shrink" id="insert-romance"></td>
-                                                <td class="shrink"><a href="#">Link</a></td>
-                                            </tr>
-                                        </tbody>
+                                    <!--  RECOMMENDED RESULTS TAB  -->
+                                    <div class="tabs-panel" id="dnd-recommended-results-tab-panel">
 
-                                        <tbody id="dnd-movie-results">
-                                            <tr>
-                                                <td class="shrink">7:30 P.M.</td>
-                                                <td class="expand">
-                                                    <i class="fa fa-film" aria-hidden="true"></i>
-                                                    <span class="dnd-date-detail-title">Murder on the Orient Express</span>
-                                                    <p class="dnd-date-detail-desc">Regal Fox Run Stadium 15 & RPX, 03801</p>
-                                                </td>
-                                                <td class="shrink">Drama</td>
-                                                <td class="shrink" id="insert-romance"></td>
-                                                <td class="shrink"><a href="#">Link</a></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
 
+                                        <div class="large-8 cell">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Time</th>
+                                                        <th>Name</th>
+                                                        <th>Type</th>
+                                                        <th>Romance</th>
+                                                        <th>Link</th>
+                                                    </tr>
+                                                </thead>
+
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
-
-
-
-
-
                             </div>
+
+
+
+
                         </div>
                     </div>
                 </div>

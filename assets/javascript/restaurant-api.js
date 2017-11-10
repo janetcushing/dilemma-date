@@ -12,12 +12,20 @@ function getCuisinesFromRestaurantData(data) {
     return data.split(',').map((element) => { return element.trim() });
 }
 
-// given an array of cuisines, return the max romance factor
+// given an array of cuisines, return the max romance factor & cuisine
 function getRomanceFactorForRestaurant(cuisines) {
     let cuisinesKeys = Object.keys(restaurantCuisines);
+
+    var maxRomanceValue = 0;
+    var maxRomanceCuisine;
     var scores = cuisinesKeys.map((cindex) => {
         let cuisineData = restaurantCuisines[cindex];
         if (cuisines.includes(cuisineData.name)) {
+
+            if (cuisineData.romance > maxRomanceValue) {
+                maxRomanceValue = cuisineData.romance;
+                maxRomanceCuisine = cuisineData.name;
+            }
             return cuisineData.romance;
         }
         return 0;
@@ -28,7 +36,8 @@ function getRomanceFactorForRestaurant(cuisines) {
     });
 
     var sumOfScores = uniqueScores.reduce((a, b) => a + b, 0);
-    return (sumOfScores / uniqueScores.length);
+    let averageScore = (sumOfScores / uniqueScores.length);
+    return {'score': averageScore, 'cuisine': maxRomanceCuisine};
 }
 
 
@@ -66,13 +75,14 @@ function getLocation(zipCode, radius, selectedCuisines, numSelections=10) {
 
                         // parse the restaurant's cuisines
                         restaurantDetails.cuisines = getCuisinesFromRestaurantData(restaurantInfo.restaurant.cuisines);
-                        restaurantDetails.romance = getRomanceFactorForRestaurant(restaurantDetails.cuisines);
-
+                        let romanceData = getRomanceFactorForRestaurant(restaurantDetails.cuisines);
+                        restaurantDetails.romance = romanceData.score;
+                        restaurantDetails.primaryCuisine = romanceData.cuisine;
                         // this returns your restaurantDetails object & stuffs it into restaurants variable
-                        // console.log(restaurantDetails);
                         return restaurantDetails;
                     });
 
+                    parseRestaurantData(restaurants);
                     writeRestaurantToOutput(restaurants);
                     updateRestaurantInDateHistoryJsonObject(restaurants);
                 });

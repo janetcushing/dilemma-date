@@ -3,6 +3,10 @@ var holdDinnerTime = "";
 var isMovieCallCompleted = false;
 var isRestaurantCallCompleted = false;
 
+// ROMANCE EXTRAS
+var mostRomanticMovie;
+var mostRomanticRestaurant;
+
 
 // build the restaurant cuisine list
 function buildRestaurantCuinsineList() {
@@ -48,8 +52,6 @@ function getSelectedGenres() {
 
 // Write the movie output to the results page
 function writeMovieToOutput(movieObj) {
-
-
     if (movieObj) {
         if (typeof movieObj.ticketURI === "undefined") {
             movieObj.ticketURI = "https://www.fandango.com/";
@@ -104,6 +106,56 @@ function writeRestaurantToOutput(restaurants) {
     });
 }
 
+// NEW ROMANCE STUFF
+
+function parseRestaurantData(restaurants) {
+    console.log('# ' + restaurants.length + ' restaurants received.');
+}
+
+function parseMovieData(movies) {
+    var maxRomanceValue = 0;
+    var mostRomantic;
+    console.log('# parsing ' + movies.length + ' movies...');
+    movies.forEach(movie => {
+        if (movie.romance > maxRomanceValue) {
+            maxRomanceValue = movie.romance;
+            mostRomantic = movie;
+        }
+    })
+
+    $('#dnd-restaurant-results').empty();
+    $('#dnd-movie-results').empty();
+
+
+    console.log('# most romantic movie is: "' + mostRomantic.title + '"');
+    mostRomanticMovie = writeMovieToRandomResults(mostRomantic);
+    $('#dnd-movie-results').append(mostRomanticMovie)
+}
+
+function writeMovieToRandomResults(movie) {
+    console.log(movie);
+    var movieOutputHTML =
+    '<tr>' +
+    '<td class="shrink">' + movie.time + '</td>' +
+    '<td class="expand">' +
+    '<i class="fa fa-film" aria-hidden="true"></i>' +
+    '<span class="dnd-date-detail-title">  ' + movie.title + '</span>' +
+    '<p class="dnd-date-detail-desc">' + movie.theatre + '</p>' +
+    '</td><td class="shrink">' + movie.genres + '</td>' +
+    '<td class="shrink" id="insert-romance">' + getRatingsWidget(movie.romance).html() + '</td>' +
+    '<td class="shrink"><a href="' + movie.ticketURI + '">Link</a></td>' +
+    '</tr>'
+
+    return $(movieOutputHTML);
+}
+
+
+function clearRandomResults() {
+    $('#dnd-restaurant-results').empty();
+    $('#dnd-movie-results').empty()
+}
+
+
 // Returns the date & time from the search form
 function getDateTime() {
     if (!$('#dnd-input-date').val() || !$('#dnd-input-time').val()) {
@@ -127,20 +179,13 @@ function milesToMeters(miles) {
 function togglePaneElement(named) {
     let searchPane = $('#search-pane');
     let resultsPane = $('#results-pane');
-    let priorsPane = $('#prior-results-pane');
 
     if (named === "search") {
         searchPane.show();
         resultsPane.hide();
-        priorsPane.hide();
-    } else if (named === "results") {
+    } else {
         resultsPane.show();
         searchPane.hide();
-        priorsPane.hide();
-    } else {
-        priorsPane.show();
-        searchPane.hide();
-        resultsPane.hide();
     }
 }
 
@@ -259,7 +304,7 @@ var currentUser = {
     'dateIDs': [],
     saveLocalData() {
         localStorage.setItem('dnd-user-prefs', JSON.stringify(this));
-        console.log('Saving user data...');
+        console.log('# Saving user preferences...');
     },
     loadDataFromLocal() {
         var savedData = getUserDataFromLocal();
@@ -285,7 +330,7 @@ $(function() {
 
 // Foundation Modal Listeners
 $(document).on('open.zf.reveal', '[data-reveal]', function() {
-    console.log('# starting up...');
+
     var modal = $(this);
     let modalid = modal.attr('id');
 
@@ -294,33 +339,46 @@ $(document).on('open.zf.reveal', '[data-reveal]', function() {
     }
 });
 
-
+// validate the time input on change
 $('#dnd-input-time').on('change', function() {
-    $(this).trigger('validate.zf.abide');
+    // $(this).trigger('validate.zf.abide');
 });
 
 // form validation failed
 $(document).on("forminvalid.zf.abide", function(ev, frm) {
-    // console.log('# form id "' + ev.target.id + '" is invalid');
+    console.log('# form id "' + ev.target.id + '" is invalid');
 })
+
+// form validation failed
+$(document).on("formvalid.zf.abide", function(ev, frm) {
+    console.log('# form id "' + ev.target.id + '" is valid');
+})
+
 
 // search form submitted...
 $(document).on("submit", function(ev) {
     ev.preventDefault();
 
-    // check how long until the requested date it
+    // check time until the requested date...
     let hours = hoursUntilUserTime();
+    // if it's less than three hours away, no dice...
     if (hours < 3.0) {
-        openAlertModal('Not enough time to plan your date!', 0);
+        openAlertModal('Not enough time to plan your date! Perhaps buy some flowers?', 0);
         return;
     }
+
+    let requestedDate = new Date(getDateTime());
+    let requestedHour = requestedDate.getHours();
+
+    if (requestedHour > 21 ) {
+        openAlertModal('That\'s too late to plan this date!', 0);
+        return;
+    }
+
 
     // progress modal alert
     openProgressModal('querying database...', title = 'Searching...');
     togglePaneElement('results');
-
-    var numMovies = 1;
-    var radius = 20;
 
     // get selection data from menus
     let selectedCuisines = getSelectedCuisines();
@@ -340,24 +398,21 @@ $(document).on("submit", function(ev) {
     numMovies = 50;
     callback = '';
 
+    // this sends to firebase?
     updateInputInDateHistoryJsonObject(zipCode, radius, date, selectedCuisines.toString(), selectedGenres);
-    console.log("zipcode updated in json object " + JSON.stringify(dateHistoryData));
 
     getMovies(numMovies, zipCode, radius, date, time, selectedGenres, function(moviesInfo) {
         // add all the jquery outputs for movie info here > movie title / theater & show times
         var movieObj = moviesInfo[0];
-        // console.log(movieObj);
-        console.log('# moviesInfo: ');
-        console.log(moviesInfo);
         writeMovieToOutput(movieObj);
         updateMoviesInDateHistoryJsonObject(movieObj);
+        parseMovieData(moviesInfo);
         // updateDateHistoryDatabase(dateHistoryData);
     });
 
     getLocation(zipCode, milesToMeters(radius), selectedCuisines.toString());
 });
 
-var tempIcon;
 
 // page load
 $(document).ready(function() {
@@ -366,6 +421,9 @@ $(document).ready(function() {
 
     // load data from local storage
     currentUser.loadDataFromLocal();
+    let userCon = currentUser.dbRef = userHistoryQuery.push(true);
+    userCon.onDisconnect().remove();
+    userHistoryQuery.child(currentUser.dbRef.key).update({'userID': currentUser.uuid})
 
     // build the ui elements
     buildMovieGenresList();
@@ -435,14 +493,4 @@ $(document).ready(function() {
         let ratingData = ratingWidgetData(parentDiv);
         console.log(ratingData);
     });
-
-    $('[data-rating] .star').on('click', function() {
-        var selectedCssClass = 'selected';
-        var $this = $(this);
-        $this.siblings('.' + selectedCssClass).removeClass(selectedCssClass);
-        $this
-            .addClass(selectedCssClass)
-            .parent().addClass('is-voted');
-    });
-
 });

@@ -60,7 +60,40 @@ firebase.initializeApp(mfconfig);
 var database = firebase.database();
 var dateHistoryRef = database.ref("/dateHistory");
 var dateHistoryQuery = database.ref("dateHistory").orderByChild("timeStamp").limitToLast(3);
+var userHistoryQuery = database.ref("/userHistory");
 // var dateHistoryQuery2 = database.ref("dateHistory").orderByChild("zipCode").equalTo(zipCode);
+
+// Checks to see if a user ID exists
+function userIDExists(userID) {
+    if (userID === null) { return false;}
+    var exists = false;
+    userHistoryQuery.once('value', function(snapshot) {
+        let userData = snapshot.val();
+        let userKeys = Object.keys(userData);
+        userKeys.forEach(function(key) {
+            let thisUser = userData[key];
+            if (thisUser.userID === userID) {
+                console.log(thisUser);
+                exists = true;
+            }
+        })
+    })
+    return exists;
+}
+
+
+// Queries user id from email
+function getUserReferenceForID(userID) {
+    var refID = null;
+    userHistoryQuery.once('value', function(snapshot) {
+        var currentUser = snapshot.val();
+        if (currentUser) {
+            var values = Object.keys(snapshot.val());
+            refID = values[0];
+        }
+    });
+    return refID;
+}
 
 
 dateHistoryData = {

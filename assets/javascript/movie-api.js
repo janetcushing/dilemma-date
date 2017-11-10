@@ -35,9 +35,9 @@ var movieGenres = {"0":{"name":"Romance","romance":8},"1":{"name":"Comedy","roma
                    "8":{"name":"Drama","romance":4},"9":{"name":"Horror","romance":2}};
 
 
-let unusableKeys = ['s5r752t2j8u8jsjmex3vqjk7'];
+let unusableKeys = ['s5r752t2j8u8jsjmex3vqjk7','86jv9kybwh7kkkaeprm5hez9'];
 let apiKeyBank = ['vs8b3ghf7dfewx4kz8hfzuyu',
-                  'addqr69eghub8vq4g8fw476d', '86jv9kybwh7kkkaeprm5hez9',
+                  'addqr69eghub8vq4g8fw476d',
                   'rb8hzag4f93j2f86dbqbcrn5'];
 
 // choose a random key so as not to hit the database too often
@@ -66,13 +66,14 @@ function getRomanceFactorForMovie(selectedGenres) {
 
 
 function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callback) {
+    let randomKey = getRandomKey();
     var queryURL = "https://data.tmsapi.com/v1.1/movies/showings";
     queryURL += '?' + $.param({
         'startDate': date,
         'zip': zipCode,
         'radius': radius,
         'units': "mi",
-        'api_key': getRandomKey()
+        'api_key': randomKey
     });
 
     // check for user cache
@@ -140,7 +141,7 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
                 if (movie.genres.includes(selectedGenres[0])) {
                     return true;
                 }
-                return false;
+                return true;
             }
 
 
@@ -152,7 +153,7 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
         },
         // if an error happens, what is it
         error: function (err) {
-            console.log("an error callback was called");
+            console.log("Error: an error callback was called for key: " + randomKey);
             console.log(err);
         }
     });

@@ -99,9 +99,10 @@ function writeMovieToOutput(movieObj) {
     console.log("ticketURI: " + movieObj.time);
 
     if (typeof movieObj.ticketURI === "undefined") {
-        obj.ticketURI = "https://www.fandango.com/";
-        movieObj.ticketURI = "https://www.fandango.com/";
+        // obj.ticketURI = "https://www.fandango.com/";
+        movieObj.ticketURI = "https://www.fandango.com/";   
     }
+   
 
 
     var tr = $('<tr>');

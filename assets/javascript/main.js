@@ -90,49 +90,45 @@ function getSelectedGenres() {
 }
 
 // Write the movie output to the results page
+// and calculage the dinner time based on the movie time
 function writeMovieToOutput(movieObj) {
-    console.log("im in writeMovieToOutput");
-    console.log("movieObj3: " + JSON.stringify(movieObj));
-    console.log("name: " + movieObj.title);
-    console.log("theatre: " + movieObj.theatre);
-    console.log("ticketURI: " + movieObj.ticketURI);
-    console.log("ticketURI: " + movieObj.time);
-
     if (typeof movieObj.ticketURI === "undefined") {
-        // obj.ticketURI = "https://www.fandango.com/";
-        movieObj.ticketURI = "https://www.fandango.com/";   
+        movieObj.ticketURI = "https://www.fandango.com/";
     }
-   
-
-
     var tr = $('<tr>');
     tr.append('<td class="fa fa-film" aria-hidden="true"></td>');
     tr.append(`<td>${movieObj.time}</td>`);
     tr.append(`<td>${movieObj.title}</td>`);
     tr.append(`<td>${movieObj.theatre}</td>`);
     tr.append(`<td><a href="${movieObj.ticketURI}">Link</a></td>`);
-
     $('#dnd-user-results-tbody').prepend(tr);
+
     //calculate dinner time based on movie time
     // and write it to the results page
     holdDinnerTime = subtractTwoHourFromDate(movieObj.time);
-    // $("#dnd-output-dinner-time").text(dinnerTime);
 }
 
 //subtact 2 hours from a time in the format of "00:00 PM"
 function subtractTwoHourFromDate(origTime) {
-    console.log("origTime" + origTime);
-    var origHour = origTime.split(":")[0];
-    var origMinutes = origTime.split(":")[1];
-    console.log("origHour" + origHour);
-    console.log("origMinutes" + origMinutes);
-    // calculate the dinner time based on movie time
-    var earlierHour = parseInt(origHour) - 2;
-    var earlierMinutes = origMinutes;
-    console.log("earlierHour" + earlierHour);
-    console.log("earlierMinutes" + earlierMinutes);
-    var earlierTime = earlierHour + ":" + earlierMinutes;
-    console.log("earlierTime" + earlierTime);
+    var earlierTime = "";
+    if (origTime === "No showtimes available, try earlier") { 
+        //no movie time available, so make dinner time the entered time   
+        var enteredTime = $('#dnd-input-time').val().trim().split(":");
+        if (enteredTime[0] > "12") {
+            enteredTime[0] = (parseInt(enteredTime) - 12);
+            enteredTime[1] = enteredTime[1].toString() + " PM";
+        } else {
+            enteredTime[1] = enteredTime[1].toString() + " AM";
+        }
+        earlierTime = (enteredTime[0] + ":" + enteredTime[1]);
+    } else { 
+         // calculate the dinner time based on movie time
+        var origHour = origTime.split(":")[0];
+        var origMinutes = origTime.split(":")[1];
+        var earlierHour = parseInt(origHour) - 2;
+        var earlierMinutes = origMinutes;
+        earlierTime = earlierHour + ":" + earlierMinutes;
+    }
     return earlierTime;
 }
 
@@ -199,7 +195,7 @@ function hoursUntilUserTime() {
     let currentDate = $('#dnd-input-date').val();
     let currentTime = $('#dnd-input-time').val();
     let userDate = moment(currentDate + ' ' + currentTime);
-    let localDate =  moment.utc(userDate).toDate();
+    let localDate = moment.utc(userDate).toDate();
     var duration = moment.duration(moment.utc().diff(localDate));
     return Math.abs(duration.asHours());
 }
@@ -213,22 +209,26 @@ function populateSettingsForm(modal) {
 
 
 // opens a progress modal
-function openProgressModal(text, title='Alert', duration=1500) {
+function openProgressModal(text, title = 'Alert', duration = 1500) {
     $('#dnd-progress-modal').foundation('open');
     $('#dnd-progress-modal-title').text(title);
     $('#dnd-progress-modal-body').text(text);
     if (duration > 0) {
-        setTimeout(() => {  $('#dnd-progress-modal').foundation('close');}, duration);
+        setTimeout(() => {
+            $('#dnd-progress-modal').foundation('close');
+        }, duration);
     }
 }
 
 // opens an alert modal
-function openAlertModal(text, duration=1500) {
+function openAlertModal(text, duration = 1500) {
     $('#dnd-alert-modal').foundation('open');
     $('#dnd-alert-modal-title').text('Error');
     $('#dnd-alert-modal-body').text(text);
     if (duration > 0) {
-        setTimeout(() => {  $('#dnd-alert-modal').foundation('close');}, duration);
+        setTimeout(() => {
+            $('#dnd-alert-modal').foundation('close');
+        }, duration);
     }
 
 }
@@ -287,7 +287,7 @@ $(document).on('open.zf.reveal', '[data-reveal]', function () {
 });
 
 
-$('#dnd-input-time').on('change', function() {
+$('#dnd-input-time').on('change', function () {
     $(this).trigger('validate.zf.abide');
 });
 
@@ -309,7 +309,7 @@ $(document).on("submit", function (ev) {
 
     console.log('# Searching...');
 
-    openProgressModal('querying database...', title='Searching...');
+    openProgressModal('querying database...', title = 'Searching...');
     togglePaneElement('results');
 
     var numMovies = 1;
@@ -416,13 +416,12 @@ $(document).ready(function () {
         //     console.log("waiting for asyncronous calls to complete");
         //     console.log("isRestaurantCallCompleted " + isRestaurantCallCompleted);
         //     console.log("isMovieCallCompleted " + isRestaurantCallCompleted);
-            updateDateHistoryDatabase(dateHistoryData);
+        updateDateHistoryDatabase(dateHistoryData);
         //     isRestaurantCallCompleted = false;
         //     isRestaurantCallCompleted = false;
         // }
-       
+
         getOutputFromDateHistoryDatabase(dateHistoryData.zipCode);
     });
 
 });
-

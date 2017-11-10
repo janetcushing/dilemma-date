@@ -1,10 +1,43 @@
 // globals
 // genres from: http://www.imdb.com/genre/
-var movieGenres = {"0":{"name":"Romance","romance":8},"1":{"name":"Comedy","romance":4},
-                   "2":{"name":"Action","romance":1},"3":{"name":"Family","romance":4},
-                   "4":{"name":"Musical","romance":3},"5":{"name":"Western","romance":-2},
-                   "6":{"name":"Science Fiction","romance":2},"7":{"name":"Mystery","romance":3},
-                   "8":{"name":"Drama","romance":4}};
+var movieGenres = {
+    "0": {
+        "name": "Romance",
+        "romance": 8
+    },
+    "1": {
+        "name": "Comedy",
+        "romance": 4
+    },
+    "2": {
+        "name": "Action",
+        "romance": 1
+    },
+    "3": {
+        "name": "Family",
+        "romance": 4
+    },
+    "4": {
+        "name": "Musical",
+        "romance": 3
+    },
+    "5": {
+        "name": "Western",
+        "romance": -2
+    },
+    "6": {
+        "name": "Science Fiction",
+        "romance": 2
+    },
+    "7": {
+        "name": "Mystery",
+        "romance": 3
+    },
+    "8": {
+        "name": "Drama",
+        "romance": 4
+    }
+};
 
 // generate unique id
 function guid() {
@@ -18,13 +51,15 @@ function guid() {
 }
 
 var holdDinnerTime = "";
+var isMovieCallCompleted = false;
+var isRestaurantCallCompleted = false;
 
 // build the restaurant cuisine list
 function buildRestaurantCuinsineList() {
     var cuisineList = $('#dnd-cuisine-menu');
     cuisineList.empty();
     let restaurantKeys = Object.keys(restaurantCuisines);
-    restaurantKeys.forEach(function(key) {
+    restaurantKeys.forEach(function (key) {
         let cuisineData = restaurantCuisines[key];
         // console.log('adding cuisine: "' + cuisineName + '" for index: ' + key);
         cuisineList.append('<option value="' + key + '" romance="' + cuisineData.romance + '">' + cuisineData.name + '</option>');
@@ -47,7 +82,7 @@ function buildMovieGenresList() {
 // Return currently selected restaurant cuisines
 function getSelectedCuisines() {
     var selected = [];
-    $('select#dnd-cuisine-menu').find('option:selected').each(function() {
+    $('select#dnd-cuisine-menu').find('option:selected').each(function () {
         selected.push(parseInt($(this).attr('value')));
     });
     return selected;
@@ -57,7 +92,7 @@ function getSelectedCuisines() {
 // Return currently selected movie genres
 function getSelectedGenres() {
     var selected = [];
-    $('select#dnd-genre-menu').find('option:selected').each(function() {
+    $('select#dnd-genre-menu').find('option:selected').each(function () {
         selected.push($(this).text());
     });
     return selected;
@@ -70,7 +105,7 @@ function writeMovieToOutput(movieObj) {
     console.log("name: " + movieObj.title);
     console.log("theatre: " + movieObj.theatre);
     console.log("ticketURI: " + movieObj.ticketURI);
-    console.log("ticketURI: " + movieObj.times[0]);
+    console.log("ticketURI: " + movieObj.time);
 
     if (typeof movieObj.ticketURI === "undefined") {
         movieObj.ticketURI = "https://www.fandango.com/";
@@ -87,7 +122,7 @@ function writeMovieToOutput(movieObj) {
     $('#dnd-user-results-tbody').prepend(tr);
     //calculate dinner time based on movie time
     // and write it to the results page
-    holdDinnerTime = subtractTwoHourFromDate(movieObj.times[0]);
+    holdDinnerTime = subtractTwoHourFromDate(movieObj.time);
     // $("#dnd-output-dinner-time").text(dinnerTime);
 }
 
@@ -181,11 +216,13 @@ function populateSettingsForm(modal) {
     modal.find('#dnd-settings-input-movie-start').val(currentUser.movieStart);
 }
 
-function openStatusModal(text, title='Alert', duration=1500) {
+function openStatusModal(text, title = 'Alert', duration = 1500) {
     $('#dnd-alert-modal').foundation('open');
     $('#dnd-alert-modal-title').text(title);
     $('#dnd-alert-modal-body').text(text);
-    setTimeout(() => {  $('#dnd-alert-modal').foundation('close');}, duration);
+    setTimeout(() => {
+        $('#dnd-alert-modal').foundation('close');
+    }, duration);
 }
 
 // USER PREFS
@@ -226,13 +263,13 @@ var currentUser = {
 
 
 // Foundation initialize
-$(function() {
+$(function () {
     $(document).foundation();
 });
 
 
 // Foundation Modal Listeners
-$(document).on('open.zf.reveal', '[data-reveal]', function() {
+$(document).on('open.zf.reveal', '[data-reveal]', function () {
     var modal = $(this);
     let modalid = modal.attr('id');
 
@@ -243,18 +280,18 @@ $(document).on('open.zf.reveal', '[data-reveal]', function() {
 
 
 // form validation failed
-$(document).on("forminvalid.zf.abide", function(ev, frm) {
+$(document).on("forminvalid.zf.abide", function (ev, frm) {
     // console.log('# form id "' + ev.target.id + '" is invalid');
 })
 
 
 // search form submitted...
-$(document).on("submit", function(ev) {
+$(document).on("submit", function (ev) {
     ev.preventDefault();
 
     console.log('# Searching...');
 
-    openStatusModal('querying database...', title='Searching...');
+    openStatusModal('querying database...', title = 'Searching...');
     togglePaneElement('results');
 
     var numMovies = 1;
@@ -264,7 +301,7 @@ $(document).on("submit", function(ev) {
     let selectedCuisines = getSelectedCuisines();
     let selectedGenres = getSelectedGenres();
 
-    let zipCode = $('#dnd-input-zipcode').val().trim();
+    var zipCode = $('#dnd-input-zipcode').val().trim();
     var date = $('#dnd-input-date').val().trim();
     var time = $('#dnd-input-time').val().trim();
 
@@ -279,24 +316,25 @@ $(document).on("submit", function(ev) {
     console.log("zipcode updated in json object " + JSON.stringify(dateHistoryData));
 
     getMovies(numMovies, zipCode, radius, date, time, selectedGenres, function (moviesInfo) {
-      // add all the jquery outputs for movie info here > movie title / theater & show times
-      var movieObj = moviesInfo[0];
-      console.log("movie returns control to program");
-      console.log(movieObj);
-      console.log(moviesInfo);
-      writeMovieToOutput(movieObj);
-      updateMoviesInDateHistoryJsonObject(movieObj);
-      console.log("updating movies in json object " + JSON.stringify(dateHistoryData));
-      // updateDateHistoryDatabase(dateHistoryData);
+        // add all the jquery outputs for movie info here > movie title / theater & show times
+        var movieObj = moviesInfo[0];
+        console.log("movie returns control to program");
+        console.log(movieObj);
+        console.log(moviesInfo);
+        writeMovieToOutput(movieObj);
+        updateMoviesInDateHistoryJsonObject(movieObj);
+        console.log("updating movies in json object " + JSON.stringify(dateHistoryData));
+        // updateDateHistoryDatabase(dateHistoryData);
     });
 
     getLocation(zipCode, radius, selectedCuisines.toString());
+
 
 });
 
 
 // page load
-$(document).ready(function() {
+$(document).ready(function () {
     // show the search pane
     togglePaneElement('search');
 
@@ -313,24 +351,24 @@ $(document).ready(function() {
 
     // FOOTER
     // link to home page
-    $('body').on('click', '#dnd-btn-home', function() {
+    $('body').on('click', '#dnd-btn-home', function () {
         togglePaneElement('search');
     });
 
     // user preferences modal
-    $('body').on('click', '#dnd-btn-settings', function() {
+    $('body').on('click', '#dnd-btn-settings', function () {
         $('#dnd-settings-modal').foundation('open');
     });
 
 
     // link to home page
-    $('body').on('click', '#dnd-btn-suggestions', function() {
-        getOutputFromDateHistoryDatabase();
+    $('body').on('click', '#dnd-btn-suggestions', function () {
+        getOutputFromDateHistoryDatabase(dateHistoryData.zipCode);
         togglePaneElement('prior');
     });
 
     // user preferences modal submitted
-    $('body').on('click', '#dnd-settings-save', function() {
+    $('body').on('click', '#dnd-settings-save', function () {
         let saveButton = $(this);
         let modal = saveButton.parents().find('#dnd-settings-modal');
         currentUser.zipCode = modal.find('#dnd-settings-input-zipcode').val();
@@ -343,30 +381,38 @@ $(document).ready(function() {
     // NAVIGATION LINKS
 
     // home link clicked
-    $('body').on('click', '#dnd-breadcumb-home', function() {
+    $('body').on('click', '#dnd-breadcumb-home', function () {
         togglePaneElement('search');
     });
 
     // results link clicked
-    $('body').on('click', '#dnd-breadcumb-results', function() {
+    $('body').on('click', '#dnd-breadcumb-results', function () {
         togglePaneElement('results');
     });
 
     // other results link clicked
-    $('body').on('click', '#dnd-breadcumb-prior-results', function() {
+    $('body').on('click', '#dnd-breadcumb-prior-results', function () {
         togglePaneElement('prior');
         console.log("updating firebase-2, json object is " + JSON.stringify(dateHistoryData));
-        updateDateHistoryDatabase(dateHistoryData);
-        getOutputFromDateHistoryDatabase();
+        // while (isRestaurantCallCompleted && isMovieCallCompleted) {
+        //     console.log("waiting for asyncronous calls to complete");
+        //     console.log("isRestaurantCallCompleted " + isRestaurantCallCompleted);
+        //     console.log("isMovieCallCompleted " + isRestaurantCallCompleted);
+            updateDateHistoryDatabase(dateHistoryData);
+        //     isRestaurantCallCompleted = false;
+        //     isRestaurantCallCompleted = false;
+        // }
+       
+        getOutputFromDateHistoryDatabase(dateHistoryData.zipCode);
     });
 
     // force time input to validate
-    $('body').on('change', '#dnd-input-time', function() {
+    $('body').on('change', '#dnd-input-time', function () {
         var timeInput = $(this);
         let currentValue = timeInput.val();
         if (timeInput.attr('class') == 'is-invalid-input') {
             timeInput.removeClass('is-invalid-input');
-            // timeInput.val(currentValue + ':00');
+            timeInput.val(currentValue + ':00');
         }
     });
 });

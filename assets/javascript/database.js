@@ -16,24 +16,25 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 var dateHistoryRef = database.ref("/dateHistory");
-var dateHistoryQuery = database.ref("dateHistory").orderByChild("zipCode").limitToLast(3);
+var dateHistoryQuery = database.ref("dateHistory").orderByChild("timeStamp").limitToLast(3);
+// var dateHistoryQuery2 = database.ref("dateHistory").orderByChild("zipCode").equalTo(zipCode);
 
 
 dateHistoryData = {
-    "zipCode": '',
-    "radius": '',
-    "date": '',
-    "movieTitle": '',
-    "movieTheatre": '',
-    "movieTime": '',
-    "movieTheatreUrl": '',
-    "movieGenre": "",
-    "restaurantTime": '',
-    "restaurantName": '',
-    "restaurantLocation": '',
-    "restaurantUrl": '',
-    "restaurantCuisine": '',
-    "dateRating": ''
+    "zipCode": 'default',
+    "radius": 'default',
+    "date": 'default',
+    "movieTitle": 'default',
+    "movieTheatre": 'default',
+    "movieTime": 'default',
+    "movieTheatreUrl": 'default',
+    "movieGenre": "default",
+    "restaurantTime": 'default',
+    "restaurantName": 'default',
+    "restaurantLocation": 'default',
+    "restaurantUrl": 'default',
+    "restaurantCuisine": 'xv',
+    "dateRating": 'default'
 };
 
 function updateInputInDateHistoryJsonObject(zipCode, radius, date, selectedCuisines, selectedGenres) {
@@ -48,10 +49,11 @@ function updateInputInDateHistoryJsonObject(zipCode, radius, date, selectedCuisi
 function updateMoviesInDateHistoryJsonObject(movieObj) {
     dateHistoryData.movieTitle = movieObj.title;
     dateHistoryData.movieTheatre = movieObj.theatre;
-    dateHistoryData.movieTime = movieObj.times[0];
+    dateHistoryData.movieTime = movieObj.time;
     dateHistoryData.movieTheatreUrl = movieObj.ticketURI;
     // also insert the dinner time into the json object based on the movie time
-    dateHistoryData.restaurantTime = subtractTwoHourFromDate(movieObj.times[0]);
+    dateHistoryData.restaurantTime = subtractTwoHourFromDate(movieObj.time);
+    isMovieCallComplete = true;
 }
 
 function updateRestaurantInDateHistoryJsonObject(restaurants) {
@@ -59,13 +61,16 @@ function updateRestaurantInDateHistoryJsonObject(restaurants) {
     dateHistoryData.restaurantLocation = restaurants[0].location;
     dateHistoryData.restaurantUrl = restaurants[0].url;
     console.log("dateHistoryData " + JSON.stringify(dateHistoryData));
+    isRestaurantCallCompleted = true;
 }
 
 
 function updateDateHistoryDatabase(dateHistoryData) {
     console.log("im in updateDateHistoryDatabase");
     console.log("the json object " + JSON.stringify(dateHistoryData));
-    let timeStamp = (new Date()).getTime();
+    // let timeStamp = (new Date()).getTime();
+    let timeStamp = firebase.database.ServerValue.TIMESTAMP;
+
     dateHistoryRef.push({
         timeStamp: timeStamp,
         zipCode: dateHistoryData.zipCode,
@@ -87,54 +92,76 @@ function updateDateHistoryDatabase(dateHistoryData) {
 
 }
 
-function getOutputFromDateHistoryDatabase() {
+function getOutputFromDateHistoryDatabase(zipCode) {
     console.log("im in getOutputFromDatabase ");
-
+    console.log("zipCode " + zipCode);
+    isRestaurantCallCompleted = false;
+    isMovieCallComplete = false;
     var i = 0;
-    dateHistoryQuery.on("child_added", function (snapshot) {
-   // dateHistoryQuery.once("child_added", function (snap) {
-        // snap.forEach(function (snapshot) {
-  
-        console.log("snapshot.val().movieTime1 " + snapshot.val().movieTime);
-        console.log("snapshot.val().movieTime2 " + snapshot.val().movieTime.toString());
-        let dinnerTr = $("<tr>");
-        let tdDinnerTime = $("<td>");
-        tdDinnerTime.attr("id", "dnd-output-prior-dinner-time-" + i);
-        tdDinnerTime.text(snapshot.val().restaurantTime);
-        let tdDinnerVenue = $("<td>");
-        tdDinnerVenue.attr("id", "dnd-output-prior-dinner-venue-" + i);
-        tdDinnerVenue.text(snapshot.val().restaurantLocation);
-        let tdDinnerName = $("<td>");
-        tdDinnerName.attr("id", "dnd-output-prior-dinner-name-" + i);
-        tdDinnerName.text(snapshot.val().restaurantName);
-        let tdDinnerUrl = $('<td><a href="' + snapshot.val().restaurantUrl + '">Link</a>');
-        tdDinnerUrl.attr("id", "dnd-output-prior-dinner-url-" + i);
-        dinnerTr.append(tdDinnerTime);
-        dinnerTr.append(tdDinnerName);
-        dinnerTr.append(tdDinnerVenue);
-        dinnerTr.append(tdDinnerUrl);
-        $("#dnd-prior-results-tbody").append(dinnerTr);
+    // dateHistoryQuery.on("child_added", function (snapshot) {
+    // dateHistoryQuery.once("child_added", function (snap) {
+    // snap.forEach(function (snapshot) {
 
-        let movieTr = $("<tr>");
-        let tdMovieTime = $("<td>");
-        tdMovieTime.attr("id", "dnd-output-prior-movie-time-" + i);
-        tdMovieTime.text(snapshot.val().movieTime);
-        let tdMovieTitle = $("<td>");
-        tdMovieTitle.attr("id", "dnd-output-prior-movie-title-" + i);
-        tdMovieTitle.text(snapshot.val().movieTitle);
-        let tdMovieVenue = $("<td>");
-        tdMovieVenue.attr("id", "dnd-output-prior-movie-venue-" + i);
-        tdMovieVenue.text(snapshot.val().movieTheatre);
-        let tdMovieTheatreUrl = $('<td><a href="' + snapshot.val().movieTheatreUrl + '">Link</a>');
-        tdMovieTheatreUrl.attr("id", "dnd-output-prior-movie-url-" + i);
+    // dateHistoryQuery2.on("child_added", function (snapshot) {
+    // database.ref("dateHistory").orderByChild("zipCode").equalTo(zipCode).on("child_added", function (snap) {
+    //    this works:  database.ref("dateHistory").orderByChild("zipCode").equalTo(zipCode).on("child_added", function (snapshot){
+    database.ref("dateHistory").orderByChild("zipCode").equalTo(zipCode).once("value", function (snapshot1) {
+        console.log("im in the data call1");
+        console.log("snapshot1.val() " + JSON.stringify(snapshot1.val()));
+        console.log("snapshot1.val().timeStamp " + snapshot1.val().timeStamp);
+        snapshot1.ref.orderByChild("timeStamp").limitToLast(3).on("value", function (snapshot2) {
+            snapshot2.forEach(function (snapshot) {
+                console.log("im in the next data call2");
+                // snapshot2.ref.startAt(1).endAt(3).on("value", function (snapshot) {
 
-        movieTr.append(tdMovieTime);
-        movieTr.append(tdMovieTitle);
-        movieTr.append(tdMovieVenue);
-        movieTr.append(tdMovieTheatreUrl);
-        $("#dnd-prior-results-tbody").append(movieTr);
+                // console.log("im in the third data call3");
+                // snap.ref.orderByChild("timeStamp").limitToLast(3).on("value", function (snapshot) {
+                // snapshot.ref.orderByChild("timeStamp").limitToLast(3);
+                console.log("snapshot.val() " + JSON.stringify(snapshot.val()));
+                // console.log("snap.val() " + snap.val());
+                console.log("snapshot.val().restaurantTime2 " + snapshot.val().restaurantTime);
+                console.log("snapshot.val().restaurantName " + snapshot.val().restaurantName);
+                let dinnerTr = $("<tr>");
+                let tdDinnerTime = $("<td>");
+                tdDinnerTime.attr("id", "dnd-output-prior-dinner-time-" + i);
+                tdDinnerTime.text(snapshot.val().restaurantTime);
+                let tdDinnerVenue = $("<td>");
+                tdDinnerVenue.attr("id", "dnd-output-prior-dinner-venue-" + i);
+                tdDinnerVenue.text(snapshot.val().restaurantLocation);
+                let tdDinnerName = $("<td>");
+                tdDinnerName.attr("id", "dnd-output-prior-dinner-name-" + i);
+                tdDinnerName.text(snapshot.val().restaurantName);
+                let tdDinnerUrl = $('<td><a href="' + snapshot.val().restaurantUrl + '">Link</a>');
+                tdDinnerUrl.attr("id", "dnd-output-prior-dinner-url-" + i);
+                dinnerTr.append(tdDinnerTime);
+                dinnerTr.append(tdDinnerName);
+                dinnerTr.append(tdDinnerVenue);
+                dinnerTr.append(tdDinnerUrl);
+                $("#dnd-prior-results-tbody").append(dinnerTr);
 
-        i++;
+                let movieTr = $("<tr>");
+                let tdMovieTime = $("<td>");
+                tdMovieTime.attr("id", "dnd-output-prior-movie-time-" + i);
+                tdMovieTime.text(snapshot.val().movieTime);
+                let tdMovieTitle = $("<td>");
+                tdMovieTitle.attr("id", "dnd-output-prior-movie-title-" + i);
+                tdMovieTitle.text(snapshot.val().movieTitle);
+                let tdMovieVenue = $("<td>");
+                tdMovieVenue.attr("id", "dnd-output-prior-movie-venue-" + i);
+                tdMovieVenue.text(snapshot.val().movieTheatre);
+                let tdMovieTheatreUrl = $('<td><a href="' + snapshot.val().movieTheatreUrl + '">Link</a>');
+                tdMovieTheatreUrl.attr("id", "dnd-output-prior-movie-url-" + i);
+
+                movieTr.append(tdMovieTime);
+                movieTr.append(tdMovieTitle);
+                movieTr.append(tdMovieVenue);
+                movieTr.append(tdMovieTheatreUrl);
+                $("#dnd-prior-results-tbody").append(movieTr);
+
+                i++;
+
+            });
+        });
     });
 
 }

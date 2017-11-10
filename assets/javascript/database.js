@@ -13,6 +13,28 @@ function guid() {
         s4() + '-' + s4() + s4() + s4();
 }
 
+
+// dateString @ "11/11/2017 19:00:00"
+function getIDString(zipCode, radius, results, dateString) {
+    let dtt = new Date(dateString);
+    let mtt = moment(dtt);
+    return (zipCode + ',' + mtt.format('YYYY-MM-DD:HH') + ',' + radius + ',' + results).hashCode();
+}
+
+
+// hash function
+String.prototype.hashCode = function() {
+  var hash = 0, i, chr;
+  if (this.length === 0) return hash;
+  for (i = 0; i < this.length; i++) {
+    chr   = this.charCodeAt(i);
+    hash  = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+};
+
+
 // Initialize Firebase
 var config = {
     apiKey: "AIzaSyA1xGXNJrGt5WMHcopz8FXpkCEG5fcVdDQ",

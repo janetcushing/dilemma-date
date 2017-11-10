@@ -1,53 +1,8 @@
 // globals
-// genres from: http://www.imdb.com/genre/
-var movieGenres = {
-    "0": {
-        "name": "Romance",
-        "romance": 8
-    },
-    "1": {
-        "name": "Comedy",
-        "romance": 4
-    },
-    "2": {
-        "name": "Action",
-        "romance": 1
-    },
-    "3": {
-        "name": "Family",
-        "romance": 4
-    },
-    "4": {
-        "name": "Musical",
-        "romance": 3
-    },
-    "5": {
-        "name": "Western",
-        "romance": -2
-    },
-    "6": {
-        "name": "Science Fiction",
-        "romance": 2
-    },
-    "7": {
-        "name": "Mystery",
-        "romance": 3
-    },
-    "8": {
-        "name": "Drama",
-        "romance": 4
-    },
-    "9": {
-        "name": "Horror",
-        "romance": 2
-    }
-};
-
-
-
 var holdDinnerTime = "";
 var isMovieCallCompleted = false;
 var isRestaurantCallCompleted = false;
+
 
 // build the restaurant cuisine list
 function buildRestaurantCuinsineList() {
@@ -56,7 +11,6 @@ function buildRestaurantCuinsineList() {
     let restaurantKeys = Object.keys(restaurantCuisines);
     restaurantKeys.forEach(function(key) {
         let cuisineData = restaurantCuisines[key];
-        // console.log('adding cuisine: "' + cuisineName + '" for index: ' + key);
         cuisineList.append('<option value="' + key + '" romance="' + cuisineData.romance + '">' + cuisineData.name + '</option>');
     });
 }
@@ -68,7 +22,6 @@ function buildMovieGenresList() {
     movieGenreList.empty();
     for (key in Object.keys(movieGenres)) {
         let genreData = movieGenres[key];
-        // console.log('adding genre: "' + genreName + '" for index: ' + key);
         movieGenreList.append('<option value="' + key + '" romance="' + genreData.romance + '">' + genreData.name + '</option>');
     }
 }
@@ -95,18 +48,13 @@ function getSelectedGenres() {
 
 // Write the movie output to the results page
 function writeMovieToOutput(movieObj) {
-    if (movieObj) {
-        console.log("im in writeMovieToOutput");
-        console.log("movieObj3: " + JSON.stringify(movieObj));
-        console.log("name: " + movieObj.title);
-        console.log("theatre: " + movieObj.theatre);
-        console.log("ticketURI: " + movieObj.ticketURI);
-        console.log("ticketURI: " + movieObj.time);
 
+
+    if (movieObj) {
         if (typeof movieObj.ticketURI === "undefined") {
             movieObj.ticketURI = "https://www.fandango.com/";
         }
-
+        console.log('# writing movie object: ');
 
         var tr = $('<tr>');
         tr.append('<td class="fa fa-film" aria-hidden="true"></td>');
@@ -115,34 +63,31 @@ function writeMovieToOutput(movieObj) {
         tr.append(`<td>${movieObj.theatre}</td>`);
         tr.append(`<td><a href="${movieObj.ticketURI}">Link</a></td>`);
 
-        $('#dnd-user-results-tbody').prepend(tr);
+        $('#dnd-user-results-movies-tbody').prepend(tr);
+
+        // $('#dnd-user-results-tbody').prepend(tr);
         //calculate dinner time based on movie time
         // and write it to the results page
         holdDinnerTime = subtractTwoHourFromDate(movieObj.time);
-        // $("#dnd-output-dinner-time").text(dinnerTime);
     }
 }
 
-//subtact 2 hours from a time in the format of "00:00 PM"
+//subtract 2 hours from a time in the format of "00:00 PM"
 function subtractTwoHourFromDate(origTime) {
-    console.log("origTime" + origTime);
     var origHour = origTime.split(":")[0];
     var origMinutes = origTime.split(":")[1];
-    console.log("origHour" + origHour);
-    console.log("origMinutes" + origMinutes);
+
     // calculate the dinner time based on movie time
     var earlierHour = parseInt(origHour) - 2;
-    var earlierMinutes = origMinutes;
-    console.log("earlierHour" + earlierHour);
-    console.log("earlierMinutes" + earlierMinutes);
-    var earlierTime = earlierHour + ":" + earlierMinutes;
-    console.log("earlierTime" + earlierTime);
+    var earlierMinutes = parseInt(origMinutes);
+
+    // round minutes down to the nearest half hour; suggested dinner times should be even numbers
+    var minutesRoundedDown = (earlierMinutes <= 15) ? 0 : (earlierMinutes <= 45) ? 30 : 0;
+    var earlierTime = earlierHour + ":" + String(minutesRoundedDown).padStart(2, '0');
     return earlierTime;
 }
 
-
 function writeRestaurantToOutput(restaurants) {
-    console.log(restaurants);
     if (typeof restaurants[0].url === "undefined") {
         restaurants[0].url = "https://www.zomato.com/";
     }
@@ -173,7 +118,7 @@ function getDateTime() {
 
 
 function milesToMeters(miles) {
-    return parseFloat(miles) * 1609.34
+    return parseFloat(miles) * 1609.34;
 }
 
 // UI
@@ -265,6 +210,40 @@ function getUserDataFromLocal() {
     return {};
 }
 
+// Generates a widget with 0-5 heart rating
+function getRatingsWidget(starCount, uuid=null, parentObj=null) {
+    // fa-heart-o on fa-heart
+    let container = $('<div class="dnd-user-rating-container"></td>');
+    let parentDiv = $('<div data-value="' + (uuid || guid()) + '" id="dnd-rating-widget" class="dnd-user-rating-widget"></td>');
+    [1, 2, 3, 4, 5].forEach(function(item) {
+        var ariaName = (item <= starCount) ? 'fa-heart' : 'fa-heart-o';
+        var fillValue = (item <= starCount) ? 'filled' : 'unfilled';
+        parentDiv.append($('<i fill-value="' + fillValue + '" data-value="' + item + '" class="fa ' + ariaName + ' dnd-heart-widget" aria-hidden="true"></i>'));
+    });
+    container.append(parentDiv);
+    if (parentObj) {
+        parentObj.append(container);
+    }
+    return container;
+}
+
+// pass this a '#dnd-rating-widget'
+function ratingWidgetData(widget) {
+    if (!widget) {
+        return {};
+    }
+
+    let rating = widget.find("i[fill-value='filled']").length;
+    return {
+        'rating': rating,
+        'uuid': widget.attr('data-value')
+    };
+}
+
+function processUserRating(data) {
+
+}
+
 
 // user prefs
 var currentUser = {
@@ -288,14 +267,24 @@ var currentUser = {
 };
 
 
+class DateObject {
+    constructor() {
+        this.movie = null;
+        this.restaurant = null;
+    }
+}
+
+
 // Foundation initialize
 $(function() {
     $(document).foundation();
+    console.log('# initializing Foundation...');
 });
 
 
 // Foundation Modal Listeners
 $(document).on('open.zf.reveal', '[data-reveal]', function() {
+    console.log('# starting up...');
     var modal = $(this);
     let modalid = modal.attr('id');
 
@@ -347,7 +336,7 @@ $(document).on("submit", function(ev) {
         'radius': radius
     });
 
-    numMovies = 1;
+    numMovies = 50;
     callback = '';
 
     updateInputInDateHistoryJsonObject(zipCode, radius, date, selectedCuisines.toString(), selectedGenres);
@@ -356,18 +345,18 @@ $(document).on("submit", function(ev) {
     getMovies(numMovies, zipCode, radius, date, time, selectedGenres, function(moviesInfo) {
         // add all the jquery outputs for movie info here > movie title / theater & show times
         var movieObj = moviesInfo[0];
-        console.log("movie returns control to program");
-        console.log(movieObj);
+        // console.log(movieObj);
+        console.log('# moviesInfo: ');
         console.log(moviesInfo);
         writeMovieToOutput(movieObj);
         updateMoviesInDateHistoryJsonObject(movieObj);
-        console.log("updating movies in json object " + JSON.stringify(dateHistoryData));
         // updateDateHistoryDatabase(dateHistoryData);
     });
 
     getLocation(zipCode, milesToMeters(radius), selectedCuisines.toString());
 });
 
+var tempIcon;
 
 // page load
 $(document).ready(function() {
@@ -433,6 +422,17 @@ $(document).ready(function() {
 
         updateDateHistoryDatabase(dateHistoryData);
         getOutputFromDateHistoryDatabase(dateHistoryData.zipCode);
+    });
+
+
+    // rating widget clicked
+    $('body').on('click', '.dnd-heart-widget', function() {
+        let icon = $(this);
+        let heartNum = icon.attr('data-value');
+        let isFilled = icon.attr('fill-value');
+        let parentDiv = icon.parents().find('#dnd-rating-widget');
+        let ratingData = ratingWidgetData(parentDiv);
+        console.log(ratingData);
     });
 
     $('[data-rating] .star').on('click', function() {

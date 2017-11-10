@@ -27,26 +27,70 @@
 // the callback returns the moviesInfo object
 
 // var obj = {};
+// genres from: http://www.imdb.com/genre/
+var movieGenres = {"0":{"name":"Romance","romance":8},"1":{"name":"Comedy","romance":4},
+                   "2":{"name":"Action","romance":1},"3":{"name":"Family","romance":4},
+                   "4":{"name":"Musical","romance":3},"5":{"name":"Western","romance":-2},
+                   "6":{"name":"Science Fiction","romance":2},"7":{"name":"Mystery","romance":3},
+                   "8":{"name":"Drama","romance":4},"9":{"name":"Horror","romance":2}};
+
+
+let unusableKeys = ['s5r752t2j8u8jsjmex3vqjk7'];
+let apiKeyBank = ['vs8b3ghf7dfewx4kz8hfzuyu',
+                  'addqr69eghub8vq4g8fw476d', '86jv9kybwh7kkkaeprm5hez9',
+                  'rb8hzag4f93j2f86dbqbcrn5'];
+
+// choose a random key so as not to hit the database too often
+function getRandomKey() {
+    return apiKeyBank[Math.floor(Math.random() * apiKeyBank.length)];
+}
+
+// given an array of genres, return the max romance factor
+function getRomanceFactorForMovie(selectedGenres) {
+    let genreKeys = Object.keys(movieGenres);
+    var scores = genreKeys.map((cindex) => {
+        let genreData = movieGenres[cindex];
+        if (selectedGenres.includes(genreData.name)) {
+            return genreData.romance;
+        }
+        return 0;
+    });
+
+    var uniqueScores = scores.filter(function(item, pos) {
+        return scores.indexOf(item) == pos;
+    });
+
+    var sumOfScores = uniqueScores.reduce((a, b) => a + b, 0);
+    return (sumOfScores / uniqueScores.length);
+}
+
 
 function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callback) {
-
     var queryURL = "https://data.tmsapi.com/v1.1/movies/showings";
     queryURL += '?' + $.param({
         'startDate': date,
         'zip': zipCode,
         'radius': radius,
         'units': "mi",
-        'api_key': "s5r752t2j8u8jsjmex3vqjk7"
+        'api_key': getRandomKey()
     });
 
-    console.log(queryURL);
+    // check for user cache
+    let storageKeyName = 'dnd-movies-' + getIDString(zipCode, radius, numMovies, (date + ' ' + time))
+    let hasSavedSearch = localStorage.hasOwnProperty(storageKeyName);
+
+    if (hasSavedSearch) {
+        let movieResults = JSON.parse(localStorage.getItem(storageKeyName));
+        console.log('# returning ' + movieResults.length + ' movies from storage "' + storageKeyName + '"...');
+        callback(movieResults);
+        return
+    }
 
     $.ajax({
         url: queryURL,
         method: 'GET',
         success: function (res) {
-            console.log("res: ");
-            console.log(res);
+            console.log('# returning ' + res.length + ' results from movie database.');
             var movies = res
                     .filter(hasGenre)
                     .filter(checkGenre)
@@ -54,6 +98,7 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
                     var obj = {};
                     obj.title = movie.title;
                     obj.genres = movie.genres;
+                    obj.romance = getRomanceFactorForMovie(movie.genres);
                     obj.theatre = movie.showtimes[0].theatre.name;
                     obj.date = movie.showtimes[0].dateTime.split('T')[0];
                     //this only lists 1 showtime per movie
@@ -65,19 +110,23 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
                     // else, no showtimes that match, returns string
                     obj.times = movie.showtimes.filter(findTimesAfterFormTime);
                     if (obj.times[0]) {
-                        console.log("look for this: " + obj.times[0].dateTime);
+                        // console.log("look for this: " + obj.times[0].dateTime);
                         obj.time = convertMilitaryToStandard(obj.times[0].dateTime.split('T')[1]);
                     } else {
                         obj.time = 'No showtimes this late'
                     }
 
                     obj.ticketURI = movie.showtimes[0].ticketURI;
-                    console.log("obj inside ajax call, about to return it: " + JSON.stringify(obj));
+                    // console.log("obj inside ajax call, about to return it: " + JSON.stringify(obj));
                     return obj;
                 });
-                
-            console.log("movies starts here");
-            console.log(movies);
+
+
+            if (!localStorage.hasOwnProperty(storageKeyName)) {
+                console.log('# caching ' + movies.length +' movies at: "' + storageKeyName + '"');
+                localStorage.setItem(storageKeyName, JSON.stringify(movies));
+            }
+
 
             function hasGenre(movie) {
                 if (movie.genres) {
@@ -97,7 +146,6 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
 
             // this variable returns a certain amount of movies from array (numMovies)
             var moviesInfo = movies.slice(0, numMovies);
-            console.log(moviesInfo);
 
             // this is the callback, it returns the movies object from above
             callback(moviesInfo);
@@ -117,16 +165,9 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
         var timeFromApi = showTime.dateTime.split('T')[1];
         //add seconds to make js date datatype object to work
         var userTime = new Date(date + " " + time + ":00");
-        // console.log("userTime variable: " + userTime);
-        // console.log("this is time: " + time);
-        // console.log("this is date: " + date);
-
         var movieTime = new Date(date + " " + timeFromApi + ":00");
-        // console.log("movieTime variable: " + movieTime);
-        // console.log("this is time: " + timeFromApi);
-        // console.log("this is date: " + date);
         if (userTime < movieTime) {
-            console.log("this is a valid movie time");
+            console.log("# this is a valid movie time");
         }
         // if the movie showtime is later than the user inputted time, return that time.
         return movieTime > userTime;

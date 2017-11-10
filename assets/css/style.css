@@ -43,9 +43,23 @@ select {
     /* line-height: 1; */
 }
 
-thead {
+/*thead {
     border-radius: 12px;
 }
+
+thead.dnd-date-panel {
+    background-color: #e858be;
+}
+
+table thead {
+    background: rgba(255, 255, 255, 0);
+    color: #0a0a0a;
+}
+
+table tbody, table tfoot, table thead {
+    border-style: none;
+}*/
+
 
 /* Foundation 6 Overrides */
 
@@ -160,27 +174,7 @@ table.dnd-date-result {
     border-left-style: none;
 }
 
-thead.dnd-date-panel {
-    background-color: #e858be;
-}
 
-table thead {
-    background: rgba(255, 255, 255, 0);
-    color: #0a0a0a;
-}
-
-table tbody, table tfoot, table thead {
-    border-style: none;
-}
-
-/*
-table { border-collapse: separate; }
-td { border: solid 1px #000; }
-tr:first-child td:first-child { border-top-left-radius: 10px; }
-tr:first-child td:last-child { border-top-right-radius: 10px; }
-tr:last-child td:first-child { border-bottom-left-radius: 10px; }
-tr:last-child td:last-child { border-bottom-right-radius: 10px; }
-*/
 
 .responsive-card-table {
     border-collapse: collapse;
@@ -444,10 +438,25 @@ main {
     border-radius: 8px;
 }
 
-.dnd-date-detail-title {
-    color: #e7e272;
-    font-weight: 700px;
-    position: relative;
-    top: -1.2rem;
-    font-family: 'BenchNine', sans-serif;
+
+/* Heart Rating Widget */
+.dnd-user-rating-container {
+    border: 1px solid #cbcbcb;
+    border-radius: 0.6rem;
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+    width: fit-content;
+}
+
+.dnd-user-rating-widget {
+    padding: 3px;
+    letter-spacing: 0.1rem;
+}
+
+.dnd-heart-widget {
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+}
+
+.dnd-heart-widget:hover {
+    transform: scale(1.25);
 }

@@ -1,0 +1,135 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://www.gstatic.com/firebasejs/4.6.1/firebase.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js" crossorigin="anonymous"></script>
+
+    <script src="assets/javascript/database.js" type="text/javascript"></script>
+    <script src="assets/javascript/frontend.js" type="text/javascript"></script>
+    <script src="assets/javascript/movie-api.js" type="text/javascript"></script>
+    <script src="assets/javascript/restaurant-api.js" type="text/javascript"></script>
+    <script src="assets/javascript/main.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <meta class="foundation-mq">
+    <link rel="shortcut icon" type="assets/png" href="assets/images/favicon.png" />
+    <title>Date Night Dilemma</title>
+
+    <style>
+        table td.shrink {
+            white-space: nowrap
+        }
+
+        table td.expand {
+            width: 99%
+        }
+
+        .dnd-date-detail-title {
+            font-weight: 600;
+        }
+
+        .dnd-date-detail-desc {
+            font-size: 0.8rem;
+        }
+    </style>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#insert-romance').append(getRatingsWidget(4));
+        });
+    </script>
+
+
+</head>
+
+<body>
+
+
+    <div id="results-pane-new" class="container dnd-container">
+        <div class="grid-x grid-padding-x align-center-middle">
+            <!-- COLUMN 1 -->
+            <div class="medium-12 large-10 cell align-self-middle">
+                <h1 class="dnd-h-white">Book Your Perfect Date</h1>
+                <h5 class="dnd-h-white">Compare your results with others in your area.</h5>
+            </div>
+
+            <!-- COLUMN 2 -->
+            <div class="medium-12 large-10 cell">
+                <div class="card dnd-card">
+                    <!-- adds padding -->
+                    <div class="card-section">
+
+                        <div class="small-12 medium-12 large-12 columns">
+
+                            <h3>Your Results</h3>
+                            <div class="medium-9 large-9 cell">
+
+
+                                <!--  TABLE RESULTS HERE -->
+                                <div class="large-8 cell">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Time</th>
+                                                <th>Name</th>
+                                                <th>Type</th>
+                                                <th>Romance</th>
+                                                <th>Link</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody id="dnd-restaurant-results">
+                                            <tr>
+                                                <td class="shrink">6:00 P.M.</td>
+                                                <td class="expand">
+                                                    <i class="fa fa-cutlery" aria-hidden="true"></i>
+                                                    <span class="dnd-date-detail-title">The River House</span>
+                                                    <p class="dnd-date-detail-desc">Somewhere in Portsmouth, 03801</p>
+                                                </td>
+                                                <td class="shrink">Seafood</td>
+                                                <td class="shrink" id="insert-romance"></td>
+                                                <td class="shrink"><a href="#">Link</a></td>
+                                            </tr>
+                                        </tbody>
+
+                                        <tbody id="dnd-movie-results">
+                                            <tr>
+                                                <td class="shrink">7:30 P.M.</td>
+                                                <td class="expand">
+                                                    <i class="fa fa-film" aria-hidden="true"></i>
+                                                    <span class="dnd-date-detail-title">Murder on the Orient Express</span>
+                                                    <p class="dnd-date-detail-desc">Regal Fox Run Stadium 15 & RPX, 03801</p>
+                                                </td>
+                                                <td class="shrink">Drama</td>
+                                                <td class="shrink" id="insert-romance"></td>
+                                                <td class="shrink"><a href="#">Link</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</body>
+
+</html>

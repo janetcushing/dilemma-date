@@ -47,8 +47,6 @@ function getLocation(zipCode, radius, selectedCuisines, numSelections=10) {
         if (status == google.maps.GeocoderStatus.OK) {
             var latitude = results[0].geometry.location.lat();
             var longitude = results[0].geometry.location.lng();
-            // console.log("Latitude: " + latitude + "\nLongitude: " + longitude);
-
             //This is the "ajax" call to the Zomato server to fetch 5 restaurants serving x cuisine within 15+/- miles of the zip code requested.
             $.get(
                 "https://developers.zomato.com/api/v2.1/search?count=10&sort=cost&order=asc&lat=" + latitude + "&lon=" +
@@ -73,7 +71,6 @@ function getLocation(zipCode, radius, selectedCuisines, numSelections=10) {
                         // this returns your restaurantDetails object & stuffs it into restaurants variable
                         // console.log(restaurantDetails);
                         return restaurantDetails;
-
                     });
 
                     writeRestaurantToOutput(restaurants);

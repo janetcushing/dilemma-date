@@ -48,9 +48,9 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
             console.log("res: ");
             console.log(res);
             var movies = res
-                // .filter(hasGenre)
-                // .filter(checkGenre)
-                .map(function (movie) {
+                    .filter(hasGenre)
+                    .filter(checkGenre)
+                    .map(function (movie) {
                     var obj = {};
                     obj.title = movie.title;
                     obj.genres = movie.genres;
@@ -75,28 +75,29 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
                     console.log("obj inside ajax call, about to return it: " + JSON.stringify(obj));
                     return obj;
                 });
+                
             console.log("movies starts here");
             console.log(movies);
 
-            // function hasGenre(movie) {
+            function hasGenre(movie) {
+                if (movie.genres) {
+                    return true;
+                }
+                return false;
+            }
 
-            //     if (movie.genres) {
-            //         return true;
-            //     }
-            // }
-
-            // function checkGenre(movie) {
-            //     //genre is an ARRAY!
-            //     if (movie.genres.includes(selectedGenres[0])) {
-            //         return true;
-            //     }
-
-            // }
+            function checkGenre(movie) {
+                //genre is an ARRAY!
+                if (movie.genres.includes(selectedGenres[0])) {
+                    return true;
+                }
+                return false;
+            }
 
 
             // this variable returns a certain amount of movies from array (numMovies)
             var moviesInfo = movies.slice(0, numMovies);
-            console.log("moviesInfo: " + moviesInfo);
+            console.log(moviesInfo);
 
             // this is the callback, it returns the movies object from above
             callback(moviesInfo);
@@ -112,7 +113,7 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
 
     function findTimesAfterFormTime(showTime) {
         // if time from form >= showTime return
-        // split time from dateTime 
+        // split time from dateTime
         var timeFromApi = showTime.dateTime.split('T')[1];
         //add seconds to make js date datatype object to work
         var userTime = new Date(date + " " + time + ":00");

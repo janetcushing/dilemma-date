@@ -282,8 +282,8 @@ tr:last-child td:last-child { border-bottom-right-radius: 10px; }
     -webkit-align-items: center;
     -ms-flex-align: center;
     align-items: center;
-    position: absolute;
-    /*position: sticky;*/
+    /*position: absolute;*/
+    position: fixed;
     bottom: -10px;
 }
 

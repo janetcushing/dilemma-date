@@ -38,7 +38,7 @@ function getRomanceFactorForRestaurant(cuisines) {
  - parameter radius: `Int` search radius (miles).
  - parameter selectedCuisines: `String` comma-separated string of restaurant codes.
  */
-function getLocation(zipCode, radius, selectedCuisines) {
+function getLocation(zipCode, radius, selectedCuisines, numSelections=10) {
     var geocoder = new google.maps.Geocoder();
     // var restaurants;
     geocoder.geocode({
@@ -52,16 +52,13 @@ function getLocation(zipCode, radius, selectedCuisines) {
             //This is the "ajax" call to the Zomato server to fetch 5 restaurants serving x cuisine within 15+/- miles of the zip code requested.
             $.get(
                 "https://developers.zomato.com/api/v2.1/search?count=10&sort=cost&order=asc&lat=" + latitude + "&lon=" +
-                longitude +
-                "&radius=25000&cuisines=" + selectedCuisines +
-                // "&radius=" + radius +
-                // "&cuisines=" + selectedCuisines +
+                longitude + "&radius=" + radius + "&cuisines=" + selectedCuisines +
                 "&apikey=5c1a7ed52d0f6e28f3b6a0cbadd9284b",
                 function (data, status) {
 
                     // take response data | slice off the first result | map over the result & create function to stick the restuarant details object you are building into restaurants variable
                     // console.log(data.restaurants);
-                    var restaurants = data.restaurants.slice(0, 10).map(function (restaurantInfo) {
+                    var restaurants = data.restaurants.slice(0, numSelections).map(function (restaurantInfo) {
                         var restaurantDetails = {};
                         // console.log(restaurantInfo.restaurant);
                         restaurantDetails.id = restaurantInfo.restaurant.id;

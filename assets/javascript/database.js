@@ -61,13 +61,15 @@ function updateInputInDateHistoryJsonObject(zipCode, radius, date, selectedCuisi
 }
 
 function updateMoviesInDateHistoryJsonObject(movieObj) {
-    dateHistoryData.movieTitle = movieObj.title;
-    dateHistoryData.movieTheatre = movieObj.theatre;
-    dateHistoryData.movieTime = movieObj.time;
-    dateHistoryData.movieTheatreUrl = movieObj.ticketURI;
-    // also insert the dinner time into the json object based on the movie time
-    dateHistoryData.restaurantTime = subtractTwoHourFromDate(movieObj.time);
-    isMovieCallComplete = true;
+    if (movieObj){
+        dateHistoryData.movieTitle = movieObj.title;
+        dateHistoryData.movieTheatre = movieObj.theatre;
+        dateHistoryData.movieTime = movieObj.time;
+        dateHistoryData.movieTheatreUrl = movieObj.ticketURI;
+        // also insert the dinner time into the json object based on the movie time
+        dateHistoryData.restaurantTime = subtractTwoHourFromDate(movieObj.time);
+        isMovieCallComplete = true;
+    }
 }
 
 function updateRestaurantInDateHistoryJsonObject(restaurants) {

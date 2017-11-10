@@ -71,7 +71,7 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
                         console.log("look for this: " + obj.times[0].dateTime);
                         obj.time = convertMilitaryToStandard(obj.times[0].dateTime.split('T')[1]);
                     } else {
-                        obj.time = 'No showtimes this late'
+                        obj.time = 'No showtimes available, try earlier'
                     }
 
                     obj.ticketURI = movie.showtimes[0].ticketURI;

@@ -66,6 +66,8 @@ function updateMoviesInDateHistoryJsonObject(movieObj) {
     dateHistoryData.movieTime = movieObj.time;
     dateHistoryData.movieTheatreUrl = movieObj.ticketURI;
     // also insert the dinner time into the json object based on the movie time
+    console.log("movieObj.time.toString()" + movieObj.time.toString());
+    console.log("movieObj.time" + movieObj.time.toString());
     dateHistoryData.restaurantTime = subtractTwoHourFromDate(movieObj.time);
     isMovieCallComplete = true;
 }

@@ -430,21 +430,18 @@ main {
 
 .dnd-alert-control-cell {
     padding-right: 1em;
-}
-
-.dnd-date-detail-container {
-    background-color: #2f3081;
-	border: 1px solid #e49a36;
-    border-radius: 8px;
+	border-bottom-style: solid;
+	border-bottom-color: rgba(112, 112, 112, 0.66);
 }
 
 
 /* Heart Rating Widget */
 .dnd-user-rating-container {
-    border: 1px solid #cbcbcb;
     border-radius: 0.6rem;
     padding: 0.2rem 0.4rem 0.2rem 0.4rem;
     width: fit-content;
+	background-color: #f5f3f3;
+    border-bottom: 2px solid #9898982e;
 }
 
 .dnd-user-rating-widget {
@@ -455,6 +452,12 @@ main {
 .dnd-heart-widget {
     transition: all .2s ease-in-out;
     cursor: pointer;
+    color: #f11464;
+    text-shadow: 0 1px 0 #30303040;
+}
+
+.dnd-heart-widget.unfilled {
+    color: #000;
 }
 
 .dnd-heart-widget:hover {

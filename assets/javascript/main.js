@@ -197,7 +197,7 @@ function openAlertModal(text, duration = 1500) {
 
 // USER PREFS
 
-function saveUserDataToLocal(data = {}) {
+function saveUserDataToLocal(data={}) {
     for (var k in data) currentUser[k] = data[k];
     currentUser.saveLocalData();
 }
@@ -218,7 +218,8 @@ function getRatingsWidget(starCount, uuid=null, parentObj=null) {
     [1, 2, 3, 4, 5].forEach(function(item) {
         var ariaName = (item <= starCount) ? 'fa-heart' : 'fa-heart-o';
         var fillValue = (item <= starCount) ? 'filled' : 'unfilled';
-        parentDiv.append($('<i fill-value="' + fillValue + '" data-value="' + item + '" class="fa ' + ariaName + ' dnd-heart-widget" aria-hidden="true"></i>'));
+        var classString = (item <= starCount) ? 'dnd-heart-widget' : 'dnd-heart-widget unfilled';
+        parentDiv.append($('<i fill-value="' + fillValue + '" data-value="' + item + '" class="fa ' + ariaName + ' ' + classString + '" aria-hidden="true"></i>'));
     });
     container.append(parentDiv);
     if (parentObj) {

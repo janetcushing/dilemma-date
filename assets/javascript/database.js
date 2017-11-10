@@ -45,7 +45,17 @@ var config = {
     messagingSenderId: "829055048426"
 };
 
-firebase.initializeApp(config);
+var mfconfig = {
+  apiKey: "AIzaSyCU9xl8dhN7IntMOte_XdiaQXEyG8_pQRI",
+  authDomain: "dilemma-date-1509903581959.firebaseapp.com",
+  databaseURL: "https://dilemma-date-1509903581959.firebaseio.com",
+  projectId: "dilemma-date-1509903581959",
+  storageBucket: "dilemma-date-1509903581959.appspot.com",
+  messagingSenderId: "967437045923"
+};
+
+
+firebase.initializeApp(mfconfig);
 
 var database = firebase.database();
 var dateHistoryRef = database.ref("/dateHistory");
@@ -54,7 +64,6 @@ var dateHistoryQuery = database.ref("dateHistory").orderByChild("timeStamp").lim
 
 
 dateHistoryData = {
-
     "zipCode": '',
     "radius": '',
     "date": '',
@@ -68,9 +77,9 @@ dateHistoryData = {
     "restaurantLocation": '',
     "restaurantUrl": '',
     "restaurantCuisine": '',
-    "dateRating": '',
-    "romanceLevel": 0
-
+    "dateRating": 0,
+    "movieRomance": 0,
+    "restuarantRomance": 0
 };
 
 function updateInputInDateHistoryJsonObject(zipCode, radius, date, selectedCuisines, selectedGenres) {
@@ -79,7 +88,7 @@ function updateInputInDateHistoryJsonObject(zipCode, radius, date, selectedCuisi
     dateHistoryData.date = date;
     dateHistoryData.movieGenre = selectedGenres.toString();
     dateHistoryData.restaurantCuisine = selectedCuisines;
-    dateHistoryData.dateRating = '';
+    dateHistoryData.dateRating = 0;
 }
 
 function updateMoviesInDateHistoryJsonObject(movieObj) {
@@ -99,14 +108,11 @@ function updateRestaurantInDateHistoryJsonObject(restaurants) {
     dateHistoryData.restaurantLocation = restaurants[0].location;
     dateHistoryData.restaurantUrl = restaurants[0].url;
     dateHistoryData.restaurantID = restaurants[0].id;
-    console.log("dateHistoryData " + JSON.stringify(dateHistoryData));
     isRestaurantCallCompleted = true;
 }
 
 
 function updateDateHistoryDatabase(dateHistoryData) {
-    console.log("im in updateDateHistoryDatabase");
-    console.log("the json object " + JSON.stringify(dateHistoryData));
     // let timeStamp = (new Date()).getTime();
     let timeStamp = firebase.database.ServerValue.TIMESTAMP;
 
@@ -126,16 +132,14 @@ function updateDateHistoryDatabase(dateHistoryData) {
         restaurantUrl: dateHistoryData.restaurantUrl,
         restaurantCuisine: dateHistoryData.restaurantCuisine,
         restaurantID: dateHistoryData.restaurantID,
-        romanceLevel: dateHistoryData.romanceLevel
+        movieRomance: dateHistoryData.movieRomance,
+        restuarantRomance: dateHistoryData.restuarantRomance
         // dateRating: dateDataHistory.dateRating
-
     });
 
 }
 
 function getOutputFromDateHistoryDatabase(zipCode) {
-    console.log("im in getOutputFromDatabase ");
-    console.log("zipCode " + zipCode);
     isRestaurantCallCompleted = false;
     isMovieCallComplete = false;
     var i = 0;
@@ -148,21 +152,9 @@ function getOutputFromDateHistoryDatabase(zipCode) {
     // database.ref("dateHistory").orderByChild("zipCode").equalTo(zipCode).on("child_added", function (snap) {
     //    this works:  database.ref("dateHistory").orderByChild("zipCode").equalTo(zipCode).on("child_added", function (snapshot){
     database.ref("dateHistory").orderByChild("zipCode").equalTo(zipCode).once("value", function (snapshot1) {
-        console.log("im in the data call1");
-        console.log("snapshot1.val() " + JSON.stringify(snapshot1.val()));
-        console.log("snapshot1.val().timeStamp " + snapshot1.val().timeStamp);
         snapshot1.ref.orderByChild("timeStamp").limitToLast(3).on("value", function (snapshot2) {
             snapshot2.forEach(function (snapshot) {
-                console.log("im in the next data call2");
-                // snapshot2.ref.startAt(1).endAt(3).on("value", function (snapshot) {
 
-                // console.log("im in the third data call3");
-                // snap.ref.orderByChild("timeStamp").limitToLast(3).on("value", function (snapshot) {
-                // snapshot.ref.orderByChild("timeStamp").limitToLast(3);
-                console.log("snapshot.val() " + JSON.stringify(snapshot.val()));
-                // console.log("snap.val() " + snap.val());
-                console.log("snapshot.val().restaurantTime2 " + snapshot.val().restaurantTime);
-                console.log("snapshot.val().restaurantName " + snapshot.val().restaurantName);
                 let dinnerTr = $("<tr>");
                 let tdDinnerTime = $("<td>");
                 tdDinnerTime.attr("id", "dnd-output-prior-dinner-time-" + i);
@@ -179,6 +171,8 @@ function getOutputFromDateHistoryDatabase(zipCode) {
                 dinnerTr.append(tdDinnerName);
                 dinnerTr.append(tdDinnerVenue);
                 dinnerTr.append(tdDinnerUrl);
+
+                // add to prior-results
                 $("#dnd-prior-results-tbody").append(dinnerTr);
 
                 let movieTr = $("<tr>");
@@ -206,5 +200,4 @@ function getOutputFromDateHistoryDatabase(zipCode) {
         });
 
     });
-
 }

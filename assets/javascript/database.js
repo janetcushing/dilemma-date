@@ -2,6 +2,16 @@
 // javascript code for writing to and reading from the firebase database
 //--------------------------------------------------------------------------//
 
+// generate unique id
+function guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+}
 
 // Initialize Firebase
 var config = {
@@ -21,20 +31,23 @@ var dateHistoryQuery = database.ref("dateHistory").orderByChild("timeStamp").lim
 
 
 dateHistoryData = {
-    "zipCode": 'default',
-    "radius": 'default',
-    "date": 'default',
-    "movieTitle": 'default',
-    "movieTheatre": 'default',
-    "movieTime": 'default',
-    "movieTheatreUrl": 'default',
-    "movieGenre": "default",
-    "restaurantTime": 'default',
-    "restaurantName": 'default',
-    "restaurantLocation": 'default',
-    "restaurantUrl": 'default',
-    "restaurantCuisine": 'xv',
-    "dateRating": 'default'
+
+    "zipCode": '',
+    "radius": '',
+    "date": '',
+    "movieTitle": '',
+    "movieTheatre": '',
+    "movieTime": '',
+    "movieTheatreUrl": '',
+    "movieGenre": "",
+    "restaurantTime": '',
+    "restaurantName": '',
+    "restaurantLocation": '',
+    "restaurantUrl": '',
+    "restaurantCuisine": '',
+    "dateRating": '',
+    "romanceLevel": 0
+
 };
 
 function updateInputInDateHistoryJsonObject(zipCode, radius, date, selectedCuisines, selectedGenres) {
@@ -60,6 +73,7 @@ function updateRestaurantInDateHistoryJsonObject(restaurants) {
     dateHistoryData.restaurantName = restaurants[0].name;
     dateHistoryData.restaurantLocation = restaurants[0].location;
     dateHistoryData.restaurantUrl = restaurants[0].url;
+    dateHistoryData.restaurantID = restaurants[0].id;
     console.log("dateHistoryData " + JSON.stringify(dateHistoryData));
     isRestaurantCallCompleted = true;
 }
@@ -85,7 +99,9 @@ function updateDateHistoryDatabase(dateHistoryData) {
         restaurantName: dateHistoryData.restaurantName,
         restaurantLocation: dateHistoryData.restaurantLocation,
         restaurantUrl: dateHistoryData.restaurantUrl,
-        restaurantCuisine: dateHistoryData.restaurantCuisine
+        restaurantCuisine: dateHistoryData.restaurantCuisine,
+        restaurantID: dateHistoryData.restaurantID,
+        romanceLevel: dateHistoryData.romanceLevel
         // dateRating: dateDataHistory.dateRating
 
     });
@@ -98,6 +114,7 @@ function getOutputFromDateHistoryDatabase(zipCode) {
     isRestaurantCallCompleted = false;
     isMovieCallComplete = false;
     var i = 0;
+
     // dateHistoryQuery.on("child_added", function (snapshot) {
     // dateHistoryQuery.once("child_added", function (snap) {
     // snap.forEach(function (snapshot) {
@@ -162,6 +179,7 @@ function getOutputFromDateHistoryDatabase(zipCode) {
 
             });
         });
+
     });
 
 }

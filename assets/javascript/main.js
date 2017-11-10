@@ -335,7 +335,7 @@ $(document).on("submit", function (ev) {
 
     getMovies(numMovies, zipCode, radius, date, time, selectedGenres, function (moviesInfo) {
         // add all the jquery outputs for movie info here > movie title / theater & show times
-        var movieObj = moviesInfo[0];
+        var movieObj = moviesInfo;
         console.log("movie returns control to program");
         console.log(movieObj);
         console.log(moviesInfo);

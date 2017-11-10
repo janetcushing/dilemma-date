@@ -98,8 +98,9 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
 
 
             // this variable returns a certain amount of movies from array (numMovies)
-            var moviesInfo = movies.slice(0, numMovies);
-            console.log("moviesInfo: " + moviesInfo);
+            var moviesInfo = random.fromArray(movies);
+            console.log("this is what you are looking for: ");
+            console.log(moviesInfo);
 
             // this is the callback, it returns the movies object from above
             callback(moviesInfo);

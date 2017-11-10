@@ -25,6 +25,9 @@
 
 // this function passes in the variable data for zipCode, radius & date, which is pulled from input fields on form
 // the callback returns the moviesInfo object
+// 'api_key': "s5r752t2j8u8jsjmex3vqjk7"
+// 'api_key': "b8hzag4f93j2f86dbqbcrn5"
+
 
 // var obj = {};
 
@@ -36,7 +39,7 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
         'zip': zipCode,
         'radius': radius,
         'units': "mi",
-        'api_key': "s5r752t2j8u8jsjmex3vqjk7"
+        'api_key': "86jv9kybwh7kkkaeprm5hez9"
     });
 
     console.log(queryURL);

@@ -2,8 +2,8 @@
 // genres from: http://www.imdb.com/genre/
 var movieGenres = {
     "0": {
-        "name": "Romance",
-        "romance": 8
+        "name": "Documentary",
+        "romance": 3
     },
     "1": {
         "name": "Comedy",
@@ -14,19 +14,19 @@ var movieGenres = {
         "romance": 1
     },
     "3": {
-        "name": "Family",
-        "romance": 4
+        "name": "Fantasy",
+        "romance": 6
     },
     "4": {
-        "name": "Musical",
+        "name": "Adventure",
         "romance": 3
     },
     "5": {
-        "name": "Western",
+        "name": "Horror",
         "romance": -2
     },
     "6": {
-        "name": "Science Fiction",
+        "name": "Science fiction",
         "romance": 2
     },
     "7": {

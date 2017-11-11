@@ -302,6 +302,12 @@ table.dnd-date-result {
     .responsive-card-table td::before:first-child {
         background: #ccc;
     }
+
+    html {
+        margin: 0px;
+        font-size: 0.6rem;
+        line-height: 0.8rem;
+    }
 }
 
 /* Mobile Footer  */
@@ -539,4 +545,5 @@ p.dnd-romance-desc {
 
 .dnd-tbody-end {
     border-bottom: 2px solid #909090;
+    background-color: #fbf7f1;
 }

@@ -17,7 +17,7 @@ function getRomanceFactorForRestaurant(cuisines) {
     let cuisinesKeys = Object.keys(restaurantCuisines);
 
     var maxRomanceValue = 0;
-    var maxRomanceCuisine;
+    var maxRomanceCuisine = cuisines[0];
     var scores = cuisinesKeys.map((cindex) => {
         let cuisineData = restaurantCuisines[cindex];
         if (cuisines.includes(cuisineData.name)) {
@@ -27,7 +27,7 @@ function getRomanceFactorForRestaurant(cuisines) {
             }
             return cuisineData.romance;
         }
-        return 0;
+        return -1;
     });
 
     var uniqueScores = scores.filter(function(item, pos) {
@@ -36,7 +36,8 @@ function getRomanceFactorForRestaurant(cuisines) {
 
     var sumOfScores = uniqueScores.reduce((a, b) => a + b, 0);
     let averageScore = (sumOfScores / uniqueScores.length);
-    return {'score': averageScore, 'cuisine': maxRomanceCuisine};
+    let randomizedScore = averageScore + (Math.random() * 2.0);
+    return {'score': randomizedScore, 'cuisine': maxRomanceCuisine};
 }
 
 
@@ -77,6 +78,11 @@ function getLocation(zipCode, radius, selectedCuisines, numSelections=10) {
                         let romanceData = getRomanceFactorForRestaurant(restaurantDetails.cuisines);
                         restaurantDetails.romance = romanceData.score;
                         restaurantDetails.primaryCuisine = romanceData.cuisine;
+
+                        if (restaurantDetails.primaryCuisine === 'undefined') {
+                            restaurantDetails.primaryCuisine = restaurantInfo.restaurant.cuisines[0];
+                        }
+
                         // this returns your restaurantDetails object & stuffs it into restaurants variable
                         return restaurantDetails;
                     });

@@ -70,7 +70,8 @@ function getRomanceFactorForMovie(selectedGenres) {
 
     var sumOfScores = uniqueScores.reduce((a, b) => a + b, 0);
     let averageScore = (sumOfScores / uniqueScores.length);
-    return {'score': averageScore, 'genre': maxRomanceGenre};
+    let randomizedScore = averageScore + (Math.random() * 2.0);
+    return {'score': randomizedScore, 'genre': maxRomanceGenre};
 }
 
 

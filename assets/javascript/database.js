@@ -96,6 +96,9 @@ function getUserReferenceForID(userID) {
 }
 
 
+
+
+
 dateHistoryData = {
     "zipCode": '',
     "radius": '',
@@ -112,8 +115,43 @@ dateHistoryData = {
     "restaurantCuisine": '',
     "dateRating": 0,
     "movieRomance": 0,
-    "restuarantRomance": 0
+    "restaurantRomance": 0
 };
+
+class DateObject {
+    constructor() {
+        this.uuid = null;
+        this.dbRef = null;
+        this.timeStamp = null;
+        this.date = null;
+        this.zipCode = null;
+
+        this.movieID = null;
+        this.movieTitle = null;
+        this.movieGenre = null;
+        this.movieTheatre = null;
+
+        this.restaurantName = null;
+        this.restaurantLocation = null;
+        this.restaurantCuisine = null;
+        this.restaurantUrl = null;
+
+        this.dateRating = 0;
+        this.movieRomance = 0;
+        this.restaurantRomance = 0;
+    }
+
+    update() {
+        for (var key in this) {
+            let value = this[key];
+            if (!value === 'undefined') {
+                console.log('updating: ' + key + ', ' + value);
+                dateHistoryRef.child(this.dbRef.key).update({key: value})
+            }
+        }
+    }
+}
+
 
 function updateInputInDateHistoryJsonObject(zipCode, radius, date, selectedCuisines, selectedGenres) {
     dateHistoryData.zipCode = zipCode;
@@ -166,7 +204,7 @@ function updateDateHistoryDatabase(dateHistoryData) {
         restaurantCuisine: dateHistoryData.restaurantCuisine,
         restaurantID: dateHistoryData.restaurantID,
         movieRomance: dateHistoryData.movieRomance,
-        restuarantRomance: dateHistoryData.restuarantRomance
+        restaurantRomance: dateHistoryData.restaurantRomance
         // dateRating: dateDataHistory.dateRating
     });
 
@@ -233,4 +271,51 @@ function getOutputFromDateHistoryDatabase(zipCode) {
         });
 
     });
+}
+
+
+function populateRecommendedDates(data) {
+
+    if (!data.restaurantName || !data.movieTitle) {
+        return;
+    }
+
+    let romanceValue = Math.ceil((data.restaurantRomance + data.movieRomance) / 2);
+
+    let rtbody = $('<tbody class="dnd-tbody-start" restaurant-id="' + data.restaurantID + '">');
+    let mtbody = $('<tbody class="dnd-tbody-end" movie-id="' + data.restaurantID + '">');
+    var restHTML =
+    '<tr>' +
+    '<td class="shrink">' + data.date + '</td>' +
+    '<td class="expand">' +
+    '<i class="fa fa-cutlery" aria-hidden="true"></i>' +
+    '<span class="dnd-date-detail-title">  ' + data.restaurantName + '</span>' +
+    '<p class="dnd-date-detail-desc">' + data.restaurantLocation + '</p>' +
+    '</td><td class="shrink">' + data.restaurantCuisine + '</td>' +
+    '<td class="shrink" id="insert-romance"></td>' +
+    '<td class="shrink"><a href="' + data.restaurantUrl + '">Link</a></td>' +
+    '</tr><hr>'
+
+    let restaurantElement = $(restHTML);
+    restaurantElement.find('#insert-romance').append(getRatingsWidget(romanceValue));
+    rtbody.append(restaurantElement);
+
+    var movieHTML =
+    '<tr>' +
+    '<td class="shrink"></td>' +
+    '<td class="expand">' +
+    '<i class="fa fa-film" aria-hidden="true"></i>' +
+    '<span class="dnd-date-detail-title">  ' + data.movieTitle + '</span>' +
+    '<p class="dnd-date-detail-desc">' + data.movieTheatre + '</p>' +
+    '</td><td class="shrink">' + data.movieGenre + '</td>' +
+    '<td class="shrink" id="insert-romance"></td>' +
+    '<td class="shrink"><a href="' + data.movieTheaterUrl + '">Link</a></td>' +
+    '</tr>'
+
+    let movieElement = $(movieHTML);
+    mtbody.append($(movieElement));
+
+    //
+    $('#dnd-recommended-results').append(rtbody);
+    $('#dnd-recommended-results').append(mtbody);
 }

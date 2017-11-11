@@ -106,12 +106,14 @@ table tbody, table tfoot, table thead {
 
 .tabs-title>a:focus, .tabs-title>a[aria-selected=true] {
     /*background-color: #85bff5;*/
+    background-color: rgba(#ffffff, 0);
 }
 
 /* unfocused tab */
 
 .tabs-title>a {
     /*background-color: #e0dc79;*/
+    background-color: rgba(#ffffff, 0);
 }
 
 /* tabs are border */
@@ -131,23 +133,27 @@ table tbody, table tfoot, table thead {
     border-top-right-radius: 0.5rem;
 }
 
-
+.tabs-title>a {
+    padding: 0.6rem 0.5rem 0.6rem 0.5rem;
+}
 
 .tabs-title>a:focus,
 .tabs-title>a[aria-selected=true],
 .tabs-title>a[aria-active=true] {
-    background-color: none;
+    background-color: rgba(#ffffff, 0);
 }
 
 .tabs-title > a:focus, .tabs-title > a[aria-selected='true'] {
-    background: none;
+    background: #edecec;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
     font-weight: 600;
 }
 
-.tabs-title>a:hover {
-    transform: scale(1.25);
+.tabs-title > a[role='presentation'] {
     background-color: none;
 }
+
 
 /* Application */
 
@@ -502,17 +508,35 @@ main {
 }
 
 table td.shrink {
-    white-space: nowrap
+    white-space: nowrap;
 }
 
 table td.expand {
-    width: 99%
+    width: 99%;
 }
 
 .dnd-date-detail-title {
     font-weight: 600;
 }
 
+.dnd-date-detail-error-desc,
 .dnd-date-detail-desc {
     font-size: 0.8rem;
+}
+
+.dnd-date-detail-error-desc {
+    color: #ee3052;
+    font-weight: 700;
+}
+
+p.dnd-romance-desc {
+    font-size: 0.8rem;
+}
+
+.dnd-tbody-start {
+    /*border-top: 2px solid #333333;*/
+}
+
+.dnd-tbody-end {
+    border-bottom: 2px solid #909090;
 }

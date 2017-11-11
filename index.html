@@ -41,7 +41,7 @@
 
                         <!-- SEARCH PANE -->
                         <div class="small-12 medium-12 large-12 columns">
-                            <h6>When, Where and How?</h6>
+                            <h3>When, Where and How?</h3>
 
 
                             <div id="dnd-custom-search">
@@ -118,11 +118,12 @@
 
                         <div class="small-12 medium-12 large-12 columns">
 
-                            <h3>Your Results...</h3>
-                            <h6 id="dnd-results-date-title">XXX</h6>
+                            <h3 id="dnd-results-tab-title">Your Results...</h3>
+                            <h6 id="dnd-results-tab-subtitle"></h6>
+                            <h5 id="dnd-results-date-title"></h5>
                             <div class="tab-outer">
                                 <ul class="tabs" id="dnd-results-tab" data-tabs>
-                                    <li class="tabs-title is-active"><a href="#dnd-random-results-tab-panel" aria-selected="true">Random</a></li>
+                                    <li class="tabs-title is-active"><a href="#dnd-random-results-tab-panel" aria-selected="true">Your Result</a></li>
                                     <li class="tabs-title"><a href="#dnd-recommended-results-tab-panel">See what others recommend...</a></li>
                                 </ul>
 
@@ -139,7 +140,7 @@
                                                         <th>Time</th>
                                                         <th>Name</th>
                                                         <th>Type</th>
-                                                        <th>Romance</th>
+                                                        <th>Rating</th>
                                                         <th>Link</th>
                                                     </tr>
                                                 </thead>
@@ -147,34 +148,43 @@
                                                 <!--  RESTAURANT CLEAR HERE -->
                                                 <tbody id="dnd-restaurant-results">
                                                     <tr>
-                                                        <td class="shrink">6:00 P.M.</td>
+                                                        <td class="shrink"></td>
                                                         <td class="expand">
-                                                            <i class="fa fa-cutlery" aria-hidden="true"></i>
-                                                            <span class="dnd-date-detail-title">The River House</span>
-                                                            <p class="dnd-date-detail-desc">Somewhere in Portsmouth, 03801</p>
+                                                            <!-- <i class="fa fa-cutlery" aria-hidden="true"></i> -->
+                                                            <span class="dnd-date-detail-title"></span>
+                                                            <p class="dnd-date-detail-desc"></p>
                                                         </td>
-                                                        <td class="shrink">Seafood</td>
-                                                        <td class="shrink" id="insert-romance"></td>
-                                                        <td class="shrink"><a href="#">Link</a></td>
+                                                        <td class="shrink"></td>
+                                                        <td class="shrink" id="restaurant-rating"></td>
+                                                        <td class="shrink"><a href="#"></a></td>
                                                     </tr>
                                                 </tbody>
 
                                                 <!--  RESTAURANT CLEAR HERE -->
                                                 <tbody id="dnd-movie-results">
                                                     <tr>
-                                                        <td class="shrink">7:30 P.M.</td>
+                                                        <td class="shrink"></td>
                                                         <td class="expand">
-                                                            <i class="fa fa-film" aria-hidden="true"></i>
-                                                            <span class="dnd-date-detail-title">Murder on the Orient Express</span>
-                                                            <p class="dnd-date-detail-desc">Regal Fox Run Stadium 15 &amp; RPX, 03801</p>
+                                                            <!-- <i class="fa fa-film" aria-hidden="true"></i> -->
+                                                            <span class="dnd-date-detail-title"></span>
+                                                            <p class="dnd-date-detail-desc"></p>
                                                         </td>
-                                                        <td class="shrink">Drama</td>
-                                                        <td class="shrink" id="insert-romance"></td>
-                                                        <td class="shrink"><a href="#">Link</a></td>
+                                                        <td class="shrink"></td>
+                                                        <td class="shrink" id="movie-rating"></td>
+                                                        <td class="shrink"><a href="#"></a></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
 
+                                        </div>
+                                        <div class="grid-x">
+                                            <div class="small-6 cell">
+                                                <h5 id="dnd-romance-score">Romance Score: 0</h5>
+                                                <p class="dnd-romance-desc" id="dnd-romance-score-desc"></p>
+                                            </div>
+                                            <div class="small-6 cell text-right">
+                                                <button id="dnd-search-btn-retry" class="button dnd-button" type="Submit" name="button">Retry</button>
+                                            </div>
                                         </div>
 
 
@@ -185,27 +195,39 @@
 
 
                                         <div class="large-8 cell">
-                                            <table>
+                                            <table id="dnd-recommended-results">
                                                 <thead>
                                                     <tr>
-                                                        <th>Time</th>
+                                                        <th>Date</th>
                                                         <th>Name</th>
                                                         <th>Type</th>
-                                                        <th>Romance</th>
+                                                        <th>Rating</th>
                                                         <th>Link</th>
                                                     </tr>
                                                 </thead>
+
+                                                <!--  RESTAURANT CLEAR HERE -->
+                                                <!-- <tbody id="dnd-recommended-results"> -->
+
+                                                <!-- </tbody> -->
 
                                             </table>
                                         </div>
                                     </div>
                                 </div>
+
+
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
+
     </div>
     <!-- END RESULTS PANE -->
 
@@ -339,7 +361,7 @@
             </div>
             <div class="small-4 cell">
                 <a href="#" id="dnd-btn-suggestions" class="footer-link">
-                    <i class="fa fa-gratipay"></i> <span class='footer-text'>Suggested</span>
+                    <i class="fa fa-gratipay"></i> <span class='footer-text'>Recommended</span>
                 </a>
             </div>
             <div class="small-4 cell">

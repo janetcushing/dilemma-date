@@ -2,18 +2,28 @@
 var holdDinnerTime = "";
 var isMovieCallCompleted = false;
 var isRestaurantCallCompleted = false;
+var userSearchTime = "";
+var currentDateObj;
 
 // ROMANCE EXTRAS
+var romanceScores = [];
 var mostRomanticMovie;
 var mostRomanticRestaurant;
-let romanceAltTags = {'1': 'You probably will not get laid tonight.', '2': 'With enough alcohol, you might get laid tonight.',
-                      '3': 'There is a fair chance of you getting laid tonight.', '4': 'You will most likely get laid tonight.',
-                      '5': 'You will absolutely get laid tonight.'}
+let romanceAltTags = {'1': 'This looks pretty lame. But hey, at least you\'re out of the house.', '2': 'This might be fun, but it might also suck.',
+                      '3': 'This looks like a fun night out.', '4': 'This looks pretty awesome.',
+                      '5': 'You will most likely get laid tonight.'}
 
 // build the restaurant cuisine list
 function buildRestaurantCuinsineList() {
     var cuisineList = $('#dnd-cuisine-menu');
     cuisineList.empty();
+
+    let objValues = Object.values(restaurantCuisines);
+
+    objValues.sort(function(a, b) {
+        return (a.romance < b.romance) ? 1 : ((b.romance < a.romance) ? -1 : 0);
+    })
+
     let restaurantKeys = Object.keys(restaurantCuisines);
     restaurantKeys.forEach(function(key) {
         let cuisineData = restaurantCuisines[key];
@@ -78,6 +88,7 @@ function writeMovieToOutput(movieObj) {
 
 //subtract 2 hours from a time in the format of "00:00 PM"
 function subtractTwoHourFromDate(origTime) {
+    console.log(origTime);
     var origHour = origTime.split(":")[0];
     var origMinutes = origTime.split(":")[1];
 
@@ -110,53 +121,148 @@ function writeRestaurantToOutput(restaurants) {
 
 // NEW ROMANCE STUFF
 
+// manage restaurant data
 function parseRestaurantData(restaurants) {
-    console.log('# ' + restaurants.length + ' restaurants received.');
+    console.log('# parsing ' + restaurants.length + ' restaurants...');
+    // sort restaurant data by romance factor
+    restaurants.sort(function(a,b) {
+        return (a.romance < b.romance) ? 1 : ((b.romance < a.romance) ? -1 : 0);
+    });
+
+    var mostRomantic = restaurants.slice(0, 10);
+    // console.log(mostRomantic);
+    let restaurantResult = mostRomantic[parseInt(Math.floor(Math.random() * mostRomantic.length))];
+    console.log('# most romantic restaurant is: "' + restaurantResult.name + '"');
+    mostRomanticRestaurant = writeRestaurantToRandomResults(restaurantResult);
+    $('#dnd-restaurant-results').empty();
+    $('#dnd-restaurant-results').append(mostRomanticRestaurant)
+
+    currentDateObj.restaurantName = restaurantResult.name;
+    currentDateObj.restaurantLocation = restaurantResult.location;
+    currentDateObj.restaurantCuisine = restaurantResult.primaryCuisine;
+    currentDateObj.restaurantID = restaurantResult.id
+    currentDateObj.restaurantUrl = restaurantResult.url;
+    currentDateObj.restaurantRomance = restaurantResult.romance;
+    console.log(restaurantResult);
+    dateHistoryRef.child(currentDateObj.dbRef.key).update({
+        'date': currentDateObj.date,
+        'zipCode': currentDateObj.zipCode,
+        'restaurantName': currentDateObj.restaurantName,
+        'restaurantLocation': currentDateObj.restaurantLocation,
+        'restaurantCuisine': currentDateObj.restaurantCuisine,
+        'restaurantID': currentDateObj.restaurantID,
+        'restaurantUrl': currentDateObj.restaurantUrl,
+        'restaurantRomance': currentDateObj.restaurantRomance
+    })
+
 }
 
 function parseMovieData(movies) {
-    var maxRomanceValue = 0;
-    var mostRomantic;
     console.log('# parsing ' + movies.length + ' movies...');
-    movies.forEach(movie => {
-        if (movie.romance > maxRomanceValue) {
-            maxRomanceValue = movie.romance;
-            mostRomantic = movie;
-        }
+    // sort restaurant data by romance factor
+    movies.sort(function(a,b) {
+        return (a.romance < b.romance) ? 1 : ((b.romance < a.romance) ? -1 : 0);
+    });
 
-        if (typeof movie.ticketURI === "undefined") {
-            movie.ticketURI = "https://www.fandango.com/";
-        }
-    })
+    var mostRomantic = movies.slice(0, 10);
+    let movieResult = mostRomantic[parseInt(Math.floor(Math.random() * mostRomantic.length))];
+    if (typeof movieResult.ticketURI === "undefined") {
+        movieResult.ticketURI = "https://www.fandango.com/";
+    }
 
-    $('#dnd-restaurant-results').empty();
+    if (movieResult.time != 'No showtimes this late') {
+        //7:30 P.M.
+        //["7:30", "P.M."]
+        var dateData = movieResult.time.split(' ');
+        holdDinnerTime = subtractTwoHourFromDate(movieResult.time);
+        holdDinnerTime += (' ' + dateData[1]);
+    } else {
+        holdDinnerTime = convertMilitaryToStandard($('#dnd-input-time').val().trim());
+    }
+
+    // $('#dnd-restaurant-results').empty();
     $('#dnd-movie-results').empty();
-    console.log('# most romantic movie is: "' + mostRomantic.title + '"');
-    mostRomanticMovie = writeMovieToRandomResults(mostRomantic);
-    $('#dnd-movie-results').append(mostRomanticMovie)
+    console.log('# most romantic movie is: "' + movieResult.title + '"');
+    mostRomanticMovie = writeMovieToRandomResults(movieResult);
+    $('#dnd-movie-results').append(mostRomanticMovie);
+
+    currentDateObj.movieTitle = movieResult.title;
+    currentDateObj.movieGenre = movieResult.primaryGenre;
+    currentDateObj.movieRomance = movieResult.romance;
+    currentDateObj.movieTheatre = movieResult.theatre;
+    currentDateObj.movieTheatreUrl = movieResult.ticketURI;
+
+    dateHistoryRef.child(currentDateObj.dbRef.key).update({
+        'movieTitle': currentDateObj.movieTitle,
+        'movieGenre': currentDateObj.movieGenre,
+        'movieRomance': currentDateObj.movieRomance,
+        'movieTheatre': currentDateObj.movieTheatre,
+        'movieTheatreUrl': currentDateObj.movieTheatreUrl
+    })
+    console.log('updating database...');
 }
 
+
 function writeMovieToRandomResults(movie) {
+
+    var movieTime = movie.time;
+    if (movieTime === 'No showtimes this late') {
+        movieTime = ' '
+    }
+
     var movieOutputHTML =
     '<tr>' +
-    '<td class="shrink">' + movie.time + '</td>' +
+    '<td class="shrink">' + movieTime + '</td>' +
     '<td class="expand">' +
     '<i class="fa fa-film" aria-hidden="true"></i>' +
     '<span class="dnd-date-detail-title">  ' + movie.title + '</span>' +
-    '<p class="dnd-date-detail-desc">' + movie.theatre + '</p>' +
+    '<p class="dnd-date-detail-desc">' + movie.theatre + '</p>'
+
+    if (movie.time === 'No showtimes this late') {
+        movieOutputHTML += '<p class="dnd-date-detail-error-desc">No showtimes this late</p>'
+    }
+
+    movieOutputHTML +=
     '</td><td class="shrink">' + movie.primaryGenre + '</td>' +
-    '<td class="shrink" id="insert-romance"></td>' +
+    '<td class="shrink" id="movie-rating"></td>' +
     '<td class="shrink"><a href="' + movie.ticketURI + '">Link</a></td>' +
     '</tr>'
 
-
-
     let movieElement = $(movieOutputHTML);
-    movieElement.find('#insert-romance').append(getRatingsWidget(movie.romance));
+    movieElement.find('#movie-rating').append(getRatingsWidget(Math.ceil(movie.romance), 'movie', currentDateObj.uuid));
+    romanceScores.push(movie.romance);
 
+    if (romanceScores.length > 1) {
+        processRomanceScores(romanceScores);
+    }
     return movieElement;
 }
 
+
+function writeRestaurantToRandomResults(restaurant) {
+    var restaurantOutputHTML =
+    '<tr restaurant-id="' + restaurant.id + '">' +
+    '<td class="shrink">' + holdDinnerTime + '</td>' +
+    '<td class="expand">' +
+    '<i class="fa fa-cutlery" aria-hidden="true"></i>' +
+    '<span class="dnd-date-detail-title">  ' + restaurant.name + '</span>' +
+    '<p class="dnd-date-detail-desc">' + restaurant.location + '</p>' +
+    '</td><td class="shrink">' + restaurant.primaryCuisine + '</td>' +
+    '<td class="shrink" id="restaurant-rating"></td>' +
+    '<td class="shrink"><a href="' + restaurant.url + '">Link</a></td>' +
+    '</tr>'
+
+    // dnd-restaurant-results
+    let restaurantElement = $(restaurantOutputHTML);
+    restaurantElement.find('#restaurant-rating').append(getRatingsWidget(Math.ceil(restaurant.romance), 'restaurant', currentDateObj.uuid));
+    romanceScores.push(restaurant.romance);
+
+    if (romanceScores.length > 1) {
+        processRomanceScores(romanceScores);
+    }
+
+    return restaurantElement;
+}
 
 function clearRandomResults() {
     $('#dnd-restaurant-results').empty();
@@ -187,14 +293,35 @@ function milesToMeters(miles) {
 function togglePaneElement(named) {
     let searchPane = $('#search-pane');
     let resultsPane = $('#results-pane');
+    var sessionValue;
+
+    var tabTitle = 'Your Results...';
+    var subTitle = '';
 
     if (named === "search") {
         searchPane.show();
         resultsPane.hide();
-    } else {
+        sessionValue = 'search';
+    } else if (named === 'results'){
         resultsPane.show();
         searchPane.hide();
+        sessionValue = 'results';
+    } else {
+        sessionValue = 'recommendations';
+        var tabTitle = 'Recommendations';
+        var subTitle = '0 records found.';
+        resultsPane.show();
+        searchPane.hide();
+        // $('#dnd-recommended-results-tab-panel').show();
+        // $('#dnd-random-results-tab-panel').hide();
+
+
+        // $('.tabs-content').hide()
     }
+
+    $('#dnd-results-tab-title').text(tabTitle);
+    $('#dnd-results-tab-subtitle').text(subTitle);
+    localStorage.setItem('dnd-current-state', sessionValue);
 }
 
 // populate inital form values
@@ -245,7 +372,6 @@ function openAlertModal(text, duration = 1500) {
             $('#dnd-alert-modal').foundation('close');
         }, duration);
     }
-
 }
 
 // USER PREFS
@@ -264,20 +390,23 @@ function getUserDataFromLocal() {
 }
 
 // Generates a widget with 0-5 heart rating
-function getRatingsWidget(starCount, uuid=null) {
+function getRatingsWidget(starCount, category, uuid=null) {
     // fa-heart-o on fa-heart
-    let tooltip = $('<span data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" tabindex="2" title="' + romanceAltTags[starCount] + '">')
+
+    var uuidString = (uuid === null) ? guid() : uuid;
+    // let tooltip = $('<span data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" tabindex="2" title="' + romanceAltTags[starCount] + '">')
     let container = $('<div class="dnd-user-rating-container"></div>');
     // container.append(tooltip)
-    let parentDiv = $('<div data-value="' + (uuid || guid()) + '" id="dnd-rating-widget" class="dnd-user-rating-widget"></td>');
+    let parentDiv = $('<div data-value="' + uuidString + '" id="dnd-rating-widget" class="dnd-user-rating-widget"></div>');
     [1, 2, 3, 4, 5].forEach(function(item) {
         var ariaName = (item <= starCount) ? 'fa-heart' : 'fa-heart-o';
         var fillValue = (item <= starCount) ? 'filled' : 'unfilled';
         var classString = (item <= starCount) ? 'dnd-heart-widget' : 'dnd-heart-widget unfilled';
-        parentDiv.append($('<i fill-value="' + fillValue + '" data-value="' + item + '" class="fa ' + ariaName + ' ' + classString + '" aria-hidden="true"></i>'));
+        parentDiv.append($('<i category="' + category + '" fill-value="' + fillValue + '" data-value="' + item + '" class="fa ' + ariaName + ' ' + classString + '" aria-hidden="true"></i>'));
     });
+
     container.append(parentDiv);
-    parentDiv.append(tooltip)
+    // parentDiv.append(tooltip)
     return container;
 }
 
@@ -298,12 +427,20 @@ function processUserRating(data) {
 
 }
 
+function processRomanceScores(scores) {
+    let sumScores = Math.ceil(scores.reduce((sum, value) => sum + value, 0));
+    let averageScore = Math.round(sumScores / scores.length);
+
+    $('#dnd-romance-score').text('Romance Score: ' + parseInt(averageScore));
+    $('#dnd-romance-score-desc').text(romanceAltTags[parseInt(averageScore)]);
+}
 
 // user prefs
 var currentUser = {
     'uuid': guid(),
     'zipCode': '',
     'radius': 10,
+    'results': 50,
     'latLng': {
         'lat': 0,
         'lng': 0
@@ -321,12 +458,7 @@ var currentUser = {
 };
 
 
-class DateObject {
-    constructor() {
-        this.movie = null;
-        this.restaurant = null;
-    }
-}
+
 
 
 // Foundation initialize
@@ -347,21 +479,30 @@ $(document).on('open.zf.reveal', '[data-reveal]', function() {
 });
 
 
-// form validation failed
+// validate the form on time change
 $('#dnd-input-time').on('change', function () {
     $(this).trigger('validate.zf.abide');
 });
 
 // form validation failed
 $(document).on("forminvalid.zf.abide", function (ev, frm) {
-    // console.log('# form id "' + ev.target.id + '" is invalid');
+    $('#dnd-search-btn-retry').addClass('disabled')
 })
 
+// form validation failed
+$(document).on("formvalid.zf.abide", function (ev, frm) {
+    $('#dnd-search-btn-retry').removeClass('disabled')
+})
+
+
+var movieResults = [];
 
 // search form submitted...
 $(document).on("submit", function(ev) {
     ev.preventDefault();
 
+
+    romanceScores = [];
     // check time until the requested date...
     let hours = hoursUntilUserTime();
     // if it's less than three hours away, no dice...
@@ -370,14 +511,19 @@ $(document).on("submit", function(ev) {
         return;
     }
 
+    currentDateObj.date = getDateTime();
     let requestedDate = new Date(getDateTime());
+    userSearchTime = requestedDate.toDateString();
+    $('#dnd-results-date-title').text(userSearchTime);
+
     let requestedHour = requestedDate.getHours();
 
+    // just get a value in here...will be replaced later
+    holdDinnerTime = (requestedHour - 2) + ':00';
     if (requestedHour > 21 ) {
         openAlertModal('That\'s too late to plan this date!', 0);
         return;
     }
-
 
     // progress modal alert
     openProgressModal('querying database...', title = 'Searching...');
@@ -398,13 +544,12 @@ $(document).on("submit", function(ev) {
         'radius': radius
     });
 
-    numMovies = 50;
     callback = '';
 
     // this sends to firebase?
     updateInputInDateHistoryJsonObject(zipCode, radius, date, selectedCuisines.toString(), selectedGenres);
 
-    getMovies(numMovies, zipCode, radius, date, time, selectedGenres, function(moviesInfo) {
+    getMovies(currentUser.results, zipCode, radius, date, time, selectedGenres, function(moviesInfo) {
         // add all the jquery outputs for movie info here > movie title / theater & show times
         var movieObj = moviesInfo[0];
         writeMovieToOutput(movieObj);
@@ -413,17 +558,40 @@ $(document).on("submit", function(ev) {
         // updateDateHistoryDatabase(dateHistoryData);
     });
 
-    getLocation(zipCode, milesToMeters(radius), selectedCuisines.toString());
+    getLocation(zipCode, milesToMeters(radius), selectedCuisines.toString(), currentUser.results);
 });
 
 
 // page load
 $(document).ready(function() {
-    // show the search pane
-    togglePaneElement('search');
+
+    dateHistoryRef.on("value", function(snapshot) {
+        $('#dnd-recommended-results').empty();
+        var objects = snapshot.val();
+        for (var key in objects) {
+            populateRecommendedDates(objects[key])
+        }
+    });
+
+
+    var lastState = localStorage.getItem('dnd-current-state');
+    if (!lastState) {
+        lastState = 'search';
+    }
 
     // load data from local storage
     currentUser.loadDataFromLocal();
+
+    // show the search pane
+    togglePaneElement(lastState);
+    currentDateObj = new DateObject();
+
+    currentDateObj.timeStamp = firebase.database.ServerValue.TIMESTAMP;
+    currentDateObj.uuid = currentUser.uuid;
+    currentDateObj.zipCode = currentUser.zipCode;
+    currentDateObj.dbRef = dateHistoryRef.push(currentDateObj);
+
+
     let userCon = currentUser.dbRef = userHistoryQuery.push(true);
     userCon.onDisconnect().remove();
     userHistoryQuery.child(currentUser.dbRef.key).update({'userID': currentUser.uuid})
@@ -447,11 +615,25 @@ $(document).ready(function() {
         $('#dnd-settings-modal').foundation('open');
     });
 
+    // recommendations page clicked
+    $('body').on('click', '#dnd-random-results-tab-link', function() {
+        getOutputFromDateHistoryDatabase(dateHistoryData.zipCode);
+        console.log('switching to recommendations');
+        togglePaneElement('recommendations');
+    });
 
-    // link to home page
+    // recommendations page clicked
+    $('body').on('click', '#dnd-recommended-results-tab-link', function() {
+        getOutputFromDateHistoryDatabase(dateHistoryData.zipCode);
+        console.log('switching to recommendations');
+        togglePaneElement('recommendations');
+    });
+
+    // recommendations page clicked
     $('body').on('click', '#dnd-btn-suggestions', function() {
         getOutputFromDateHistoryDatabase(dateHistoryData.zipCode);
-        togglePaneElement('prior');
+        console.log('switching to recommendations');
+        togglePaneElement('recommendations');
     });
 
     // user preferences modal submitted
@@ -477,15 +659,10 @@ $(document).ready(function() {
         togglePaneElement('results');
     });
 
-    // other results link clicked
-    $('body').on('click', '#dnd-breadcumb-prior-results', function() {
-        togglePaneElement('prior');
-        console.log("updating firebase-2, json object is " + JSON.stringify(dateHistoryData));
-
-        updateDateHistoryDatabase(dateHistoryData);
-        getOutputFromDateHistoryDatabase(dateHistoryData.zipCode);
+    // retry widget clicked
+    $('body').on('click', '#dnd-search-btn-retry', function() {
+        $('#dnd-search-form').submit()
     });
-
 
     // rating widget clicked
     $('body').on('click', '.dnd-heart-widget', function() {
@@ -494,6 +671,36 @@ $(document).ready(function() {
         let isFilled = icon.attr('fill-value');
         let parentDiv = icon.parents().find('#dnd-rating-widget');
         let ratingData = ratingWidgetData(parentDiv);
+        let category = icon.attr('category');
+
+
+        // heart = parentDiv;
+
         console.log(ratingData);
+        console.log(category + ' heart clicked: ' + heartNum);
+
+        if (category == 'restaurant') {
+            currentDateObj.restuarantRomance = parseInt(heartNum);
+            dateHistoryRef.child(currentDateObj.dbRef.key).update({
+                'restuarantRomance': currentDateObj.restuarantRomance
+            })
+        } else if (category == 'movie') {
+            currentDateObj.movieRomance = parseInt(heartNum);
+            dateHistoryRef.child(currentDateObj.dbRef.key).update({
+                'movieRomance': currentDateObj.movieRomance
+            })
+        }
+
+        for (var h in parentDiv.children()) {
+            let hicon = $(parentDiv.children()[h]);
+            if (parseInt(hicon.attr('data-value')) < heartNum) {
+                hicon.attr('class', 'fa fa-heart-o unfilled')
+            } else {
+                hicon.attr('class', 'fa fa-heart filled')
+            }
+        }
+
+
+
     });
 });

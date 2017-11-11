@@ -75,7 +75,7 @@ function writeMovieToOutput(movieObj) {
         tr.append(`<td>${movieObj.time}</td>`);
         tr.append(`<td>${movieObj.title}</td>`);
         tr.append(`<td>${movieObj.theatre}</td>`);
-        tr.append(`<td><a href="${movieObj.ticketURI}">Link</a></td>`);
+        tr.append(`<td><a href="${movieObj.ticketURI}" target="blank">Link</a></td>`);
 
         $('#dnd-user-results-movies-tbody').prepend(tr);
 
@@ -88,7 +88,6 @@ function writeMovieToOutput(movieObj) {
 
 //subtract 2 hours from a time in the format of "00:00 PM"
 function subtractTwoHourFromDate(origTime) {
-    console.log(origTime);
     var origHour = origTime.split(":")[0];
     var origMinutes = origTime.split(":")[1];
 
@@ -114,7 +113,7 @@ function writeRestaurantToOutput(restaurants) {
         tr.append(`<td>${restaurant.name}</td>`);
         tr.append(`<td>${restaurant.cuisines}</td>`);
         tr.append(`<td>${restaurant.location}</td>`);
-        tr.append(`<td><a href="${restaurant.url}">Link</a></td>`);
+        tr.append(`<td><a href="${restaurant.url}" target="blank">Link</a></td>`);
         $('#dnd-user-results-tbody').prepend(tr);
     });
 }
@@ -143,7 +142,7 @@ function parseRestaurantData(restaurants) {
     currentDateObj.restaurantID = restaurantResult.id
     currentDateObj.restaurantUrl = restaurantResult.url;
     currentDateObj.restaurantRomance = restaurantResult.romance;
-    console.log(restaurantResult);
+    // console.log(restaurantResult);
     dateHistoryRef.child(currentDateObj.dbRef.key).update({
         'date': currentDateObj.date,
         'zipCode': currentDateObj.zipCode,
@@ -226,7 +225,7 @@ function writeMovieToRandomResults(movie) {
     movieOutputHTML +=
     '</td><td class="shrink">' + movie.primaryGenre + '</td>' +
     '<td class="shrink" id="movie-rating"></td>' +
-    '<td class="shrink"><a href="' + movie.ticketURI + '">Link</a></td>' +
+    '<td class="shrink"><a href="' + movie.ticketURI + '" target="blank">Link</a></td>' +
     '</tr>'
 
     let movieElement = $(movieOutputHTML);
@@ -250,7 +249,7 @@ function writeRestaurantToRandomResults(restaurant) {
     '<p class="dnd-date-detail-desc">' + restaurant.location + '</p>' +
     '</td><td class="shrink">' + restaurant.primaryCuisine + '</td>' +
     '<td class="shrink" id="restaurant-rating"></td>' +
-    '<td class="shrink"><a href="' + restaurant.url + '">Link</a></td>' +
+    '<td class="shrink"><a href="' + restaurant.url + '" target="blank">Link</a></td>' +
     '</tr>'
 
     // dnd-restaurant-results
@@ -673,12 +672,11 @@ $(document).ready(function() {
         let parentDiv = icon.parents().find('#dnd-rating-widget');
         let ratingData = ratingWidgetData(parentDiv);
         let category = icon.attr('category');
+        // parentWidget.empty();
+        // parentWidget.append(getRatingsWidget(heartNum, category))
 
-
-        // heart = parentDiv;
-
-        console.log(ratingData);
-        console.log(category + ' heart clicked: ' + heartNum);
+        // console.log(ratingData);
+        // console.log(category + ' heart clicked: ' + heartNum);
 
         if (category == 'restaurant') {
             currentDateObj.restuarantRomance = parseInt(heartNum);
@@ -692,16 +690,14 @@ $(document).ready(function() {
             })
         }
 
-        for (var h in parentDiv.children()) {
-            let hicon = $(parentDiv.children()[h]);
-            if (parseInt(hicon.attr('data-value')) < heartNum) {
-                hicon.attr('class', 'fa fa-heart-o unfilled')
-            } else {
-                hicon.attr('class', 'fa fa-heart filled')
-            }
-        }
-
-
+        // for (var h in parentDiv.children()) {
+        //     let hicon = $(parentDiv.children()[h]);
+        //     if (parseInt(hicon.attr('data-value')) < heartNum) {
+        //         //hicon.attr('class', 'fa fa-heart-o unfilled')
+        //     } else {
+        //         //hicon.attr('class', 'fa fa-heart filled')
+        //     }
+        // }
 
     });
 });

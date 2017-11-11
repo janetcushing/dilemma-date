@@ -6,7 +6,9 @@ var isRestaurantCallCompleted = false;
 // ROMANCE EXTRAS
 var mostRomanticMovie;
 var mostRomanticRestaurant;
-
+let romanceAltTags = {'1': 'You probably will not get laid tonight.', '2': 'With enough alcohol, you might get laid tonight.',
+                      '3': 'There is a fair chance of you getting laid tonight.', '4': 'You will most likely get laid tonight.',
+                      '5': 'You will absolutely get laid tonight.'}
 
 // build the restaurant cuisine list
 function buildRestaurantCuinsineList() {
@@ -143,11 +145,16 @@ function writeMovieToRandomResults(movie) {
     '<span class="dnd-date-detail-title">  ' + movie.title + '</span>' +
     '<p class="dnd-date-detail-desc">' + movie.theatre + '</p>' +
     '</td><td class="shrink">' + movie.primaryGenre + '</td>' +
-    '<td class="shrink" id="insert-romance">' + getRatingsWidget(movie.romance).html() + '</td>' +
+    '<td class="shrink" id="insert-romance"></td>' +
     '<td class="shrink"><a href="' + movie.ticketURI + '">Link</a></td>' +
     '</tr>'
 
-    return $(movieOutputHTML);
+
+
+    let movieElement = $(movieOutputHTML);
+    movieElement.find('#insert-romance').append(getRatingsWidget(movie.romance));
+
+    return movieElement;
 }
 
 
@@ -257,9 +264,11 @@ function getUserDataFromLocal() {
 }
 
 // Generates a widget with 0-5 heart rating
-function getRatingsWidget(starCount, uuid=null, parentObj=null) {
+function getRatingsWidget(starCount, uuid=null) {
     // fa-heart-o on fa-heart
-    let container = $('<div class="dnd-user-rating-container"></td>');
+    let tooltip = $('<span data-tooltip aria-haspopup="true" class="has-tip top" data-disable-hover="false" tabindex="2" title="' + romanceAltTags[starCount] + '">')
+    let container = $('<div class="dnd-user-rating-container"></div>');
+    // container.append(tooltip)
     let parentDiv = $('<div data-value="' + (uuid || guid()) + '" id="dnd-rating-widget" class="dnd-user-rating-widget"></td>');
     [1, 2, 3, 4, 5].forEach(function(item) {
         var ariaName = (item <= starCount) ? 'fa-heart' : 'fa-heart-o';
@@ -268,9 +277,7 @@ function getRatingsWidget(starCount, uuid=null, parentObj=null) {
         parentDiv.append($('<i fill-value="' + fillValue + '" data-value="' + item + '" class="fa ' + ariaName + ' ' + classString + '" aria-hidden="true"></i>'));
     });
     container.append(parentDiv);
-    if (parentObj) {
-        parentObj.append(container);
-    }
+    parentDiv.append(tooltip)
     return container;
 }
 

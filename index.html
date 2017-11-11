@@ -42,59 +42,57 @@
 
                         <!-- SEARCH PANE -->
                         <div class="small-12 medium-12 large-12 columns">
-                            <h6>When, Where and How?</h6>
+                            <h3>When, Where and How?</h3>
 
-                            <!-- TABS -->
-                            <ul class="tabs" data-active-collapse="true" data-tabs id="dnd-search-tabs">
-                                <li class="tabs-title is-active"><a href="#dnd-custom-search" aria-selected="true">Custom</a></li>
-                                <li class="tabs-title"><a href="#dnd-area-search">Users Near You</a></li>
-                            </ul>
 
-                            <div class="tabs-content" data-tabs-content="dnd-search-tabs">
+                            <div id="dnd-custom-search">
+                                <form id="dnd-search-form" data-abide novalidate>
+                                    <div class="grid-x grid-padding-x">
+                                        <div class="small-6 large-6 medium-6 cell">
 
-                                <div class="tabs-panel is-active" id="dnd-custom-search">
-                                    <form id="dnd-search-form" data-abide novalidate>
-                                        <label>Where?
-                                            <input id="dnd-input-zipcode" placeholder="your zip code" required type="number" value="">
-                                            <span class="form-error" data-form-error-for="dnd-input-zipcode">Zip code is required.</span>
-                                        </label>
+                                            <label>Where?
+                                                <input id="dnd-input-zipcode" placeholder="your zip code" required type="number" value="">
+                                                <span class="form-error" data-form-error-for="dnd-input-zipcode">Zip code is required.</span>
+                                            </label>
 
-                                        <!-- DATE & TIME -->
-                                        <div class="grid-x grid-padding-x">
-                                            <div class="small-6 large-6 medium-6 cell">
-                                                <label>Date</label>
-                                                <input id="dnd-input-date" required type="date">
-                                                <span class="form-error" data-form-error-for="dnd-input-date">Date is required.</span>
+                                        </div>
+                                        <div class="small-6 large-6 medium-6 cell">
+                                            <label>Radius</label>
+                                            <input id="dnd-input-radius" required type="number" placeholder="25">
+                                            <span class="form-error" data-form-error-for="dnd-input-radius">Please enter a valid radius.</span>
+                                        </div>
+                                    </div>
+                                    <!-- DATE & TIME -->
+                                    <div class="grid-x grid-padding-x">
+                                        <div class="small-6 large-6 medium-6 cell">
+                                            <label>Date</label>
+                                            <input id="dnd-input-date" required type="date">
+                                            <span class="form-error" data-form-error-for="dnd-input-date">Date is required.</span>
 
-                                            </div>
-
-                                            <div class="small-6 large-6 medium-6 cell">
-                                                <label>Time</label>
-                                                <input id="dnd-input-time" type="time" required pattern="[0-9]{2}:[0-9]{2}">
-                                                <span class="form-error" data-form-error-for="dnd-input-time">Please enter a valid time.</span>
-                                            </div>
                                         </div>
 
-                                        <!-- RESTAURANT DROPDOWN -->
-                                        <label>Food
-                                            <select multiple id="dnd-cuisine-menu" required></select>
-                                            <span class="form-error" data-form-error-for="dnd-cuisine-menu">Please select at least one type of food.</span>
-                                        </label>
+                                        <div class="small-6 large-6 medium-6 cell">
+                                            <label>Time</label>
+                                            <input id="dnd-input-time" type="time" required pattern="[0-9]{2}:[0-9]{2}">
+                                            <span class="form-error" data-form-error-for="dnd-input-time">Please enter a valid time.</span>
+                                        </div>
 
-                                        <!-- MOVIE DROPDOWN -->
-                                        <label>Movie
-                                            <select multiple id="dnd-genre-menu" required></select>
-                                            <span class="form-error" data-form-error-for="dnd-genre-menu">Please select at least movie genre.</span>
-                                        </label>
-                                        <button id="dnd-btn-search" class="button medium dnd-button" type="submit" value="Submit">Search!</button>
-                                    </form>
-                                </div>
+                                    </div>
 
-                                <div class="tabs-panel" id="dnd-area-search">
-                                    <p>Users in your Area</p>
-                                    <div id="map" style="width:400px;height:400px;"></div>
-                                </div>
 
+                                    <!-- RESTAURANT DROPDOWN -->
+                                    <label>Food
+                                        <select multiple id="dnd-cuisine-menu" required></select>
+                                        <span class="form-error" data-form-error-for="dnd-cuisine-menu">Please select at least one type of food.</span>
+                                    </label>
+
+                                    <!-- MOVIE DROPDOWN -->
+                                    <label>Movie
+                                        <select multiple id="dnd-genre-menu" required></select>
+                                        <span class="form-error" data-form-error-for="dnd-genre-menu">Please select at least movie genre.</span>
+                                    </label>
+                                    <button id="dnd-btn-search" class="button medium dnd-button" type="submit" value="Submit">Search!</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -120,94 +118,120 @@
                     <div class="card-section">
 
                         <div class="small-12 medium-12 large-12 columns">
-                            <h3>Search Results</h3>
-                            <div class="medium-9 large-9 cell">
 
-                                <!-- NAVIGATION -->
-                                <nav aria-label="You are here:" role="navigation">
-                                    <ul class="breadcrumbs">
-                                        <li><a id="dnd-breadcumb-home" href="#">Home</a></li>
-                                        <li>
-                                            <span class="show-for-sr">Current: </span> Results
-                                        </li>
-                                        <li><a id="dnd-breadcumb-prior-results" href="#">Other Results</a></li>
-                                    </ul>
-                                </nav>
+                            <h3 id="dnd-results-tab-title">Your Results...</h3>
+                            <h6 id="dnd-results-tab-subtitle"></h6>
+                            <h5 id="dnd-results-date-title"></h5>
+                            <div class="tab-outer">
+                                <ul class="tabs" id="dnd-results-tab" data-tabs>
+                                    <li class="tabs-title is-active"><a href="#dnd-random-results-tab-panel" aria-selected="true">Your Result</a></li>
+                                    <li class="tabs-title"><a href="#dnd-recommended-results-tab-panel">See what others recommend...</a></li>
+                                </ul>
 
 
-                                <table class="responsive-card-table unstriped dnd-date-result">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Time</th>
-                                            <th>Name</th>
-                                            <th>Venue</th>
-                                            <th>URL</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="dnd-user-results-tbody">
-                                    </tbody>
-                                </table>
+                                <div class="tabs-content" data-tabs-content="dnd-results-tab">
+
+                                    <!-- TAB CONTENT START -->
+                                    <div class="tabs-panel is-active" id="dnd-random-results-tab-panel">
+
+                                        <div class="large-8 cell">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Time</th>
+                                                        <th>Name</th>
+                                                        <th>Type</th>
+                                                        <th>Rating</th>
+                                                        <th>Link</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <!--  RESTAURANT CLEAR HERE -->
+                                                <tbody id="dnd-restaurant-results">
+                                                    <tr>
+                                                        <td class="shrink"></td>
+                                                        <td class="expand">
+                                                            <!-- <i class="fa fa-cutlery" aria-hidden="true"></i> -->
+                                                            <span class="dnd-date-detail-title"></span>
+                                                            <p class="dnd-date-detail-desc"></p>
+                                                        </td>
+                                                        <td class="shrink"></td>
+                                                        <td class="shrink" id="restaurant-rating"></td>
+                                                        <td class="shrink"><a href="#"></a></td>
+                                                    </tr>
+                                                </tbody>
+
+                                                <!--  RESTAURANT CLEAR HERE -->
+                                                <tbody id="dnd-movie-results">
+                                                    <tr>
+                                                        <td class="shrink"></td>
+                                                        <td class="expand">
+                                                            <!-- <i class="fa fa-film" aria-hidden="true"></i> -->
+                                                            <span class="dnd-date-detail-title"></span>
+                                                            <p class="dnd-date-detail-desc"></p>
+                                                        </td>
+                                                        <td class="shrink"></td>
+                                                        <td class="shrink" id="movie-rating"></td>
+                                                        <td class="shrink"><a href="#"></a></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div class="grid-x">
+                                            <div class="small-6 cell">
+                                                <h5 id="dnd-romance-score">Romance Score: 0</h5>
+                                                <p class="dnd-romance-desc" id="dnd-romance-score-desc"></p>
+                                            </div>
+                                            <div class="small-6 cell text-right">
+                                                <button id="dnd-search-btn-retry" class="button dnd-button" type="Submit" name="button">Retry</button>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    <!--  RECOMMENDED RESULTS TAB  -->
+                                    <div class="tabs-panel" id="dnd-recommended-results-tab-panel">
+
+
+                                        <div class="large-8 cell">
+                                            <table id="dnd-recommended-results">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Name</th>
+                                                        <th>Type</th>
+                                                        <th>Rating</th>
+                                                        <th>Link</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <!--  RESTAURANT CLEAR HERE -->
+                                                <!-- <tbody id="dnd-recommended-results"> -->
+
+                                                <!-- </tbody> -->
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
+
     </div>
     <!-- END RESULTS PANE -->
 
-    <!-- PRIOR RESULTS PANE -->
-    <div id="prior-results-pane" class="container dnd-container">
-        <div class="grid-x grid-padding-x align-center-middle">
-            <!-- COLUMN 1 -->
-            <div class="medium-12 large-10 cell align-self-middle">
-                <h1 class="dnd-h-white">Book Your Perfect Date</h1>
-                <h5 class="dnd-h-white">Compare your results with others in your area.</h5>
-            </div>
-
-            <!-- COLUMN 2 -->
-            <div class="medium-12 large-10 cell">
-                <div class="card dnd-card">
-                    <!-- adds padding -->
-                    <div class="card-section">
-
-                        <div class="small-12 medium-12 large-12 columns">
-                            <h3>Here are Prior Results</h3>
-                            <div class="medium-9 large-9 cell">
-
-                                <!-- NAVIGATION -->
-                                <nav aria-label="You are here:" role="navigation">
-                                    <ul class="breadcrumbs">
-                                        <li><a id="dnd-breadcumb-home" href="#">Home</a></li>
-                                        <li><a id="dnd-breadcumb-results" href="#">Results</a></li>
-                                        <li>
-                                            <span class="show-for-sr">Current: </span> Other Results
-                                        </li>
-                                    </ul>
-                                </nav>
-
-                                <table class="responsive-card-table unstriped dnd-date-result">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Venus</th>
-                                            <th>Address</th>
-                                            <th>URL</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="dnd-prior-results-tbody">
-                                        <tr>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
     <!-- MODALS -->
@@ -259,6 +283,7 @@
                             <a class="button medium secondary dnd-button-medium" data-close aria-label="Close modal">Close</a>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -280,12 +305,15 @@
             <!-- BODY -->
             <div class="auto cell dnd-alert-body-cell text-left">
                 <div class="grid-y">
+
                     <div class="cell">
                         <span id="dnd-progress-modal-title" class="dnd-alert-title">Someone Messaged You</span>
                     </div>
+
                     <div class="cell">
                         <span id="dnd-progress-modal-body" class="dnd-alert-body">This is a typical notification. You have been notified.</span>
                     </div>
+
                     <div class="cell text-right dnd-alert-control-cell">
                         <button class="button small dnd-button dnd-button-small" data-close type="button" name="button">Close</button>
                     </div>
@@ -334,7 +362,7 @@
             </div>
             <div class="small-4 cell">
                 <a href="#" id="dnd-btn-suggestions" class="footer-link">
-                    <i class="fa fa-gratipay"></i> <span class='footer-text'>Suggested</span>
+                    <i class="fa fa-gratipay"></i> <span class='footer-text'>Recommended</span>
                 </a>
             </div>
             <div class="small-4 cell">

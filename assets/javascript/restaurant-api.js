@@ -12,15 +12,22 @@ function getCuisinesFromRestaurantData(data) {
     return data.split(',').map((element) => { return element.trim() });
 }
 
-// given an array of cuisines, return the max romance factor
+// given an array of cuisines, return the max romance factor & cuisine
 function getRomanceFactorForRestaurant(cuisines) {
     let cuisinesKeys = Object.keys(restaurantCuisines);
+
+    var maxRomanceValue = 0;
+    var maxRomanceCuisine = cuisines[0];
     var scores = cuisinesKeys.map((cindex) => {
         let cuisineData = restaurantCuisines[cindex];
         if (cuisines.includes(cuisineData.name)) {
+            if (cuisineData.romance > maxRomanceValue) {
+                maxRomanceValue = cuisineData.romance;
+                maxRomanceCuisine = cuisineData.name;
+            }
             return cuisineData.romance;
         }
-        return 0;
+        return -1;
     });
 
     var uniqueScores = scores.filter(function(item, pos) {
@@ -28,7 +35,9 @@ function getRomanceFactorForRestaurant(cuisines) {
     });
 
     var sumOfScores = uniqueScores.reduce((a, b) => a + b, 0);
-    return (sumOfScores / uniqueScores.length);
+    let averageScore = (sumOfScores / uniqueScores.length);
+    let randomizedScore = averageScore + (Math.random() * 2.0);
+    return {'score': randomizedScore, 'cuisine': maxRomanceCuisine};
 }
 
 
@@ -38,7 +47,7 @@ function getRomanceFactorForRestaurant(cuisines) {
  - parameter radius: `Int` search radius (miles).
  - parameter selectedCuisines: `String` comma-separated string of restaurant codes.
  */
-function getLocation(zipCode, radius, selectedCuisines) {
+function getLocation(zipCode, radius, selectedCuisines, numSelections=10) {
     var geocoder = new google.maps.Geocoder();
     // var restaurants;
     geocoder.geocode({
@@ -47,21 +56,16 @@ function getLocation(zipCode, radius, selectedCuisines) {
         if (status == google.maps.GeocoderStatus.OK) {
             var latitude = results[0].geometry.location.lat();
             var longitude = results[0].geometry.location.lng();
-            // console.log("Latitude: " + latitude + "\nLongitude: " + longitude);
-
             //This is the "ajax" call to the Zomato server to fetch 5 restaurants serving x cuisine within 15+/- miles of the zip code requested.
             $.get(
                 "https://developers.zomato.com/api/v2.1/search?count=10&sort=cost&order=asc&lat=" + latitude + "&lon=" +
-                longitude +
-                "&radius=25000&cuisines=" + selectedCuisines +
-                // "&radius=" + radius +
-                // "&cuisines=" + selectedCuisines +
+                longitude + "&radius=" + radius + "&cuisines=" + selectedCuisines +
                 "&apikey=5c1a7ed52d0f6e28f3b6a0cbadd9284b",
                 function (data, status) {
 
                     // take response data | slice off the first result | map over the result & create function to stick the restuarant details object you are building into restaurants variable
                     // console.log(data.restaurants);
-                    var restaurants = data.restaurants.slice(0, 10).map(function (restaurantInfo) {
+                    var restaurants = data.restaurants.slice(0, numSelections).map(function (restaurantInfo) {
                         var restaurantDetails = {};
                         // console.log(restaurantInfo.restaurant);
                         restaurantDetails.id = restaurantInfo.restaurant.id;
@@ -71,10 +75,15 @@ function getLocation(zipCode, radius, selectedCuisines) {
 
                         // parse the restaurant's cuisines
                         restaurantDetails.cuisines = getCuisinesFromRestaurantData(restaurantInfo.restaurant.cuisines);
-                        restaurantDetails.romance = getRomanceFactorForRestaurant(restaurantDetails.cuisines);
+                        let romanceData = getRomanceFactorForRestaurant(restaurantDetails.cuisines);
+                        restaurantDetails.romance = romanceData.score;
+                        restaurantDetails.primaryCuisine = romanceData.cuisine;
+
+                        if (restaurantDetails.primaryCuisine === 'undefined') {
+                            restaurantDetails.primaryCuisine = restaurantInfo.restaurant.cuisines[0];
+                        }
 
                         // this returns your restaurantDetails object & stuffs it into restaurants variable
-                        // console.log(restaurantDetails);
                         return restaurantDetails;
 
 
@@ -83,6 +92,7 @@ function getLocation(zipCode, radius, selectedCuisines) {
                     // this pulls a ranom index from the restaurants array (and wraps it in an array, because that's whats called for in the rest of the code) and returns it to restaurants variable.
                     restaurants = [random.fromArray(restaurants)];
 
+                    parseRestaurantData(restaurants);
                     writeRestaurantToOutput(restaurants);
                     updateRestaurantInDateHistoryJsonObject(restaurants);
                 });

@@ -43,9 +43,22 @@ select {
     /* line-height: 1; */
 }
 
-thead {
+/*thead {
     border-radius: 12px;
 }
+
+thead.dnd-date-panel {
+    background-color: #e858be;
+}
+
+table thead {
+    background: rgba(255, 255, 255, 0);
+    color: #0a0a0a;
+}
+
+table tbody, table tfoot, table thead {
+    border-style: none;
+}*/
 
 /* Foundation 6 Overrides */
 
@@ -93,13 +106,54 @@ thead {
 
 .tabs-title>a:focus, .tabs-title>a[aria-selected=true] {
     /*background-color: #85bff5;*/
+    background-color: rgba(#ffffff, 0);
 }
 
 /* unfocused tab */
 
 .tabs-title>a {
     /*background-color: #e0dc79;*/
+    background-color: rgba(#ffffff, 0);
 }
+
+/* tabs are border */
+
+.tabs {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+.tabs-title {
+    background-color: none;
+    border-top: 1px solid #cccccc7a;
+    border-left: 1px solid #cccccc7a;
+    border-right: 1px solid #cccccc7a;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+.tabs-title>a {
+    padding: 0.6rem 0.5rem 0.6rem 0.5rem;
+}
+
+.tabs-title>a:focus,
+.tabs-title>a[aria-selected=true],
+.tabs-title>a[aria-active=true] {
+    background-color: rgba(#ffffff, 0);
+}
+
+.tabs-title > a:focus, .tabs-title > a[aria-selected='true'] {
+    background: #edecec;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    font-weight: 600;
+}
+
+.tabs-title > a[role='presentation'] {
+    background-color: none;
+}
+
 
 /* Application */
 
@@ -111,6 +165,11 @@ thead {
     font-size: 1.25rem;
 }
 
+
+.custom.tabs > .tabs-title > a:focus, .custom.tabs > .tabs-title > a[aria-selected='true'] {
+    background: black;
+    color: white;
+}
 /* modal background */
 
 .ddn-modal {
@@ -159,28 +218,6 @@ table.dnd-date-result {
     border-bottom-style: none;
     border-left-style: none;
 }
-
-thead.dnd-date-panel {
-    background-color: #e858be;
-}
-
-table thead {
-    background: rgba(255, 255, 255, 0);
-    color: #0a0a0a;
-}
-
-table tbody, table tfoot, table thead {
-    border-style: none;
-}
-
-/*
-table { border-collapse: separate; }
-td { border: solid 1px #000; }
-tr:first-child td:first-child { border-top-left-radius: 10px; }
-tr:first-child td:last-child { border-top-right-radius: 10px; }
-tr:last-child td:first-child { border-bottom-left-radius: 10px; }
-tr:last-child td:last-child { border-bottom-right-radius: 10px; }
-*/
 
 .responsive-card-table {
     border-collapse: collapse;
@@ -282,8 +319,8 @@ tr:last-child td:last-child { border-bottom-right-radius: 10px; }
     -webkit-align-items: center;
     -ms-flex-align: center;
     align-items: center;
-    position: absolute;
-    /*position: sticky;*/
+    /*position: absolute;*/
+    position: fixed;
     bottom: -10px;
 }
 
@@ -341,7 +378,6 @@ main {
     max-width: 400px;
 }
 
-
 .dnd-reveal, .dnd-reveal-alert, .dnd-reveal-settings, .dnd-reveal-progress {
     background-color: #ffffff;
     /* 50px => 3.2rem */
@@ -376,7 +412,9 @@ main {
     background-image: -o-linear-gradient(left, rgb(48, 173, 99) 3.2rem, rgb(255, 255, 255) 3.2rem);
     background-image: linear-gradient(to right, rgb(48, 173, 99) 3.2rem, rgb(255, 255, 255) 3.2rem);
 }
+
 /* 2F81B7 */
+
 .dnd-reveal-progress {
     /* 50px => 3.2rem */
     font-size: 0.6em;
@@ -387,8 +425,7 @@ main {
     background-image: linear-gradient(to right, rgb(47, 129, 183) 3.2rem, rgb(255, 255, 255) 3.2rem);
 }
 
-.dnd-reveal-alert,
-.dnd-reveal-progress {
+.dnd-reveal-alert, .dnd-reveal-progress {
     max-width: 400px;
 }
 
@@ -414,6 +451,7 @@ main {
 }
 
 /* body text style */
+
 .dnd-progress-body {
     color: rgba(#000000, 0.9);
     font-size: 1.0rem;
@@ -425,29 +463,80 @@ main {
 }
 
 /* body text style */
+
 .dnd-alert-body {
     color: rgba(#000000, 0.9);
     font-size: 0.8rem;
 }
 
-
-
 /* buttons container */
 
 .dnd-alert-control-cell {
     padding-right: 1em;
+    border-bottom-style: solid;
+    border-bottom-color: rgba(112, 112, 112, 0.66);
 }
 
-.dnd-date-detail-container {
-    background-color: #2f3081;
-	border: 1px solid #e49a36;
-    border-radius: 8px;
+/* Heart Rating Widget */
+
+.dnd-user-rating-container {
+    border-radius: 0.6rem;
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+    width: fit-content;
+    background-color: #f5f3f3;
+    border-bottom: 2px solid #9898982e;
+}
+
+.dnd-user-rating-widget {
+    padding: 3px;
+    letter-spacing: 0.1rem;
+}
+
+.dnd-heart-widget {
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+    color: #f11464;
+    text-shadow: 0 1px 0 #30303040;
+}
+
+.dnd-heart-widget.unfilled {
+    color: #000;
+}
+
+.dnd-heart-widget:hover {
+    transform: scale(1.25);
+}
+
+table td.shrink {
+    white-space: nowrap;
+}
+
+table td.expand {
+    width: 99%;
 }
 
 .dnd-date-detail-title {
-    color: #e7e272;
-    font-weight: 700px;
-    position: relative;
-    top: -1.2rem;
-    font-family: 'BenchNine', sans-serif;
+    font-weight: 600;
+}
+
+.dnd-date-detail-error-desc,
+.dnd-date-detail-desc {
+    font-size: 0.8rem;
+}
+
+.dnd-date-detail-error-desc {
+    color: #ee3052;
+    font-weight: 700;
+}
+
+p.dnd-romance-desc {
+    font-size: 0.8rem;
+}
+
+.dnd-tbody-start {
+    /*border-top: 2px solid #333333;*/
+}
+
+.dnd-tbody-end {
+    border-bottom: 2px solid #909090;
 }

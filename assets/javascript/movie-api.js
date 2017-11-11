@@ -1,32 +1,3 @@
-///////////////////////////////////////////////This is for testing only //////////////////////////////////////////////
-// var zero = 0;
-// var numMovies = 3;
-// var zipCode = "03867";
-// var radius = 20;
-// var date = "11/09/2017";
-
-// IMPORTANT: the date must be within 6 days from current day, else returns an error.
-
-// if we want to remove the date field from the form & only allow searches for the current day, use this instead
-// var d = new Date();
-// // this pulls in todays date
-// var today = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-
-// this calls the whole getMovies function, which includes api call & creates the movieInfo array of objects
-// this should be moved into biz logic file & attached to the onclick for the form submit button
-
-// getMovies(numMovies, zipCode, radius, date, function (moviesInfo) {
-//     // add all the jquery outputs for movie info here > movie title / theater & show times
-//     console.log(moviesInfo);
-// });
-
-
-//////////////////////////////////////////////This is for testing only //////////////////////////////////////////////
-
-// this function passes in the variable data for zipCode, radius & date, which is pulled from input fields on form
-// the callback returns the moviesInfo object
-
-// var obj = {};
 // genres from: http://www.imdb.com/genre/
 var movieGenres = {"0":{"name":"Romance","romance":8},"1":{"name":"Comedy","romance":4},
                    "2":{"name":"Action","romance":1},"3":{"name":"Family","romance":4},

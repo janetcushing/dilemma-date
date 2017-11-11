@@ -131,7 +131,7 @@ function parseRestaurantData(restaurants) {
 
     var mostRomantic = restaurants.slice(0, 10);
     // console.log(mostRomantic);
-    let restaurantResult = mostRomantic[parseInt(Math.floor(Math.random() * mostRomantic.length))];
+    var restaurantResult = random.fromArray(mostRomantic);
     console.log('# most romantic restaurant is: "' + restaurantResult.name + '"');
     mostRomanticRestaurant = writeRestaurantToRandomResults(restaurantResult);
     $('#dnd-restaurant-results').empty();
@@ -165,7 +165,8 @@ function parseMovieData(movies) {
     });
 
     var mostRomantic = movies.slice(0, 10);
-    let movieResult = mostRomantic[parseInt(Math.floor(Math.random() * mostRomantic.length))];
+    // move this from movie api
+    var movieResult = random.fromArray(mostRomantic);
     if (typeof movieResult.ticketURI === "undefined") {
         movieResult.ticketURI = "https://www.fandango.com/";
     }
@@ -583,7 +584,7 @@ $(document).ready(function() {
     currentUser.loadDataFromLocal();
 
     // show the search pane
-    togglePaneElement(lastState);
+    togglePaneElement('search');
     currentDateObj = new DateObject();
 
     currentDateObj.timeStamp = firebase.database.ServerValue.TIMESTAMP;

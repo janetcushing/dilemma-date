@@ -48,9 +48,17 @@ function getRandomKey() {
 // given an array of genres, return the max romance factor
 function getRomanceFactorForMovie(selectedGenres) {
     let genreKeys = Object.keys(movieGenres);
+    var maxRomanceValue = 0;
+    var maxRomanceGenre;
     var scores = genreKeys.map((cindex) => {
         let genreData = movieGenres[cindex];
         if (selectedGenres.includes(genreData.name)) {
+            if (genreData.romance > maxRomanceValue) {
+
+                maxRomanceValue = genreData.romance;
+                maxRomanceGenre = genreData.name;
+            }
+
             return genreData.romance;
         }
         return 0;
@@ -61,7 +69,8 @@ function getRomanceFactorForMovie(selectedGenres) {
     });
 
     var sumOfScores = uniqueScores.reduce((a, b) => a + b, 0);
-    return (sumOfScores / uniqueScores.length);
+    let averageScore = (sumOfScores / uniqueScores.length);
+    return {'score': averageScore, 'genre': maxRomanceGenre};
 }
 
 
@@ -99,7 +108,12 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
                     var obj = {};
                     obj.title = movie.title;
                     obj.genres = movie.genres;
-                    obj.romance = getRomanceFactorForMovie(movie.genres);
+
+                    // get the romance factor & genre
+                    let romanceData = getRomanceFactorForMovie(obj.genres);
+                    obj.romance = romanceData.score;
+                    obj.primaryGenre = romanceData.genre;
+
                     obj.theatre = movie.showtimes[0].theatre.name;
                     obj.date = movie.showtimes[0].dateTime.split('T')[0];
                     //this only lists 1 showtime per movie
@@ -118,7 +132,6 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
                     }
 
                     obj.ticketURI = movie.showtimes[0].ticketURI;
-                    // console.log("obj inside ajax call, about to return it: " + JSON.stringify(obj));
                     return obj;
                 });
 
@@ -127,7 +140,6 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
                 console.log('# caching ' + movies.length +' movies at: "' + storageKeyName + '"');
                 localStorage.setItem(storageKeyName, JSON.stringify(movies));
             }
-
 
             function hasGenre(movie) {
                 if (movie.genres) {
@@ -147,7 +159,6 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
 
             // this variable returns a certain amount of movies from array (numMovies)
             var moviesInfo = movies.slice(0, numMovies);
-
             // this is the callback, it returns the movies object from above
             callback(moviesInfo);
         },
@@ -168,7 +179,7 @@ function getMovies(numMovies, zipCode, radius, date, time, selectedGenres, callb
         var userTime = new Date(date + " " + time + ":00");
         var movieTime = new Date(date + " " + timeFromApi + ":00");
         if (userTime < movieTime) {
-            console.log("# this is a valid movie time");
+            // console.log("# this is a valid movie time");
         }
         // if the movie showtime is later than the user inputted time, return that time.
         return movieTime > userTime;

@@ -121,19 +121,20 @@ function parseMovieData(movies) {
             maxRomanceValue = movie.romance;
             mostRomantic = movie;
         }
+
+        if (typeof movie.ticketURI === "undefined") {
+            movie.ticketURI = "https://www.fandango.com/";
+        }
     })
 
     $('#dnd-restaurant-results').empty();
     $('#dnd-movie-results').empty();
-
-
     console.log('# most romantic movie is: "' + mostRomantic.title + '"');
     mostRomanticMovie = writeMovieToRandomResults(mostRomantic);
     $('#dnd-movie-results').append(mostRomanticMovie)
 }
 
 function writeMovieToRandomResults(movie) {
-    console.log(movie);
     var movieOutputHTML =
     '<tr>' +
     '<td class="shrink">' + movie.time + '</td>' +
@@ -141,7 +142,7 @@ function writeMovieToRandomResults(movie) {
     '<i class="fa fa-film" aria-hidden="true"></i>' +
     '<span class="dnd-date-detail-title">  ' + movie.title + '</span>' +
     '<p class="dnd-date-detail-desc">' + movie.theatre + '</p>' +
-    '</td><td class="shrink">' + movie.genres + '</td>' +
+    '</td><td class="shrink">' + movie.primaryGenre + '</td>' +
     '<td class="shrink" id="insert-romance">' + getRatingsWidget(movie.romance).html() + '</td>' +
     '<td class="shrink"><a href="' + movie.ticketURI + '">Link</a></td>' +
     '</tr>'
@@ -330,7 +331,6 @@ $(function() {
 
 // Foundation Modal Listeners
 $(document).on('open.zf.reveal', '[data-reveal]', function() {
-
     var modal = $(this);
     let modalid = modal.attr('id');
 
@@ -339,19 +339,15 @@ $(document).on('open.zf.reveal', '[data-reveal]', function() {
     }
 });
 
-// validate the time input on change
-$('#dnd-input-time').on('change', function() {
-    // $(this).trigger('validate.zf.abide');
+
+// form validation failed
+$('#dnd-input-time').on('change', function () {
+    $(this).trigger('validate.zf.abide');
 });
 
 // form validation failed
-$(document).on("forminvalid.zf.abide", function(ev, frm) {
-    console.log('# form id "' + ev.target.id + '" is invalid');
-})
-
-// form validation failed
-$(document).on("formvalid.zf.abide", function(ev, frm) {
-    console.log('# form id "' + ev.target.id + '" is valid');
+$(document).on("forminvalid.zf.abide", function (ev, frm) {
+    // console.log('# form id "' + ev.target.id + '" is invalid');
 })
 
 

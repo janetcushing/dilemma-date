@@ -21,7 +21,6 @@ function getRomanceFactorForRestaurant(cuisines) {
     var scores = cuisinesKeys.map((cindex) => {
         let cuisineData = restaurantCuisines[cindex];
         if (cuisines.includes(cuisineData.name)) {
-
             if (cuisineData.romance > maxRomanceValue) {
                 maxRomanceValue = cuisineData.romance;
                 maxRomanceCuisine = cuisineData.name;

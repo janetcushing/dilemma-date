@@ -9,9 +9,13 @@ var currentDateObj;
 var romanceScores = [];
 var mostRomanticMovie;
 var mostRomanticRestaurant;
-let romanceAltTags = {'1': 'This looks pretty lame. But hey, at least you\'re out of the house.', '2': 'This might be fun, but it might also suck.',
-                      '3': 'This looks like a fun night out.', '4': 'This looks pretty awesome.',
-                      '5': 'You will most likely get laid tonight.'}
+let romanceAltTags = {
+    '1': 'This looks pretty lame. But hey, at least you\'re out of the house.',
+    '2': 'This might be fun, but it might also suck.',
+    '3': 'This looks like a fun night out.',
+    '4': 'This looks pretty awesome.',
+    '5': 'You will most likely get laid tonight.'
+}
 
 // build the restaurant cuisine list
 function buildRestaurantCuinsineList() {
@@ -20,12 +24,12 @@ function buildRestaurantCuinsineList() {
 
     let objValues = Object.values(restaurantCuisines);
 
-    objValues.sort(function(a, b) {
+    objValues.sort(function (a, b) {
         return (a.romance < b.romance) ? 1 : ((b.romance < a.romance) ? -1 : 0);
     })
 
     let restaurantKeys = Object.keys(restaurantCuisines);
-    restaurantKeys.forEach(function(key) {
+    restaurantKeys.forEach(function (key) {
         let cuisineData = restaurantCuisines[key];
         cuisineList.append('<option value="' + key + '" romance="' + cuisineData.romance + '">' + cuisineData.name + '</option>');
     });
@@ -46,7 +50,7 @@ function buildMovieGenresList() {
 // Return currently selected restaurant cuisines
 function getSelectedCuisines() {
     var selected = [];
-    $('select#dnd-cuisine-menu').find('option:selected').each(function() {
+    $('select#dnd-cuisine-menu').find('option:selected').each(function () {
         selected.push(parseInt($(this).attr('value')));
     });
     return selected;
@@ -56,7 +60,7 @@ function getSelectedCuisines() {
 // Return currently selected movie genres
 function getSelectedGenres() {
     var selected = [];
-    $('select#dnd-genre-menu').find('option:selected').each(function() {
+    $('select#dnd-genre-menu').find('option:selected').each(function () {
         selected.push($(this).text());
     });
     return selected;
@@ -87,18 +91,33 @@ function writeMovieToOutput(movieObj) {
 }
 
 //subtract 2 hours from a time in the format of "00:00 PM"
+// calculate the dinner time based on movie time
 function subtractTwoHourFromDate(origTime) {
+    console.log("origTime " + origTime);
+    if (origTime === "No showtimes available, try earlier") {
+        //no movie time available, so make dinner time the entered time 
+        origTime = " ";  
+        origTime = $('#dnd-input-time').val().trim();
+    }
     var origHour = origTime.split(":")[0];
     var origMinutes = origTime.split(":")[1];
-
-    // calculate the dinner time based on movie time
-    var earlierHour = parseInt(origHour) - 2;
-    var earlierMinutes = parseInt(origMinutes);
-
-    // round minutes down to the nearest half hour; suggested dinner times should be even numbers
-    var minutesRoundedDown = (earlierMinutes <= 15) ? 0 : (earlierMinutes <= 45) ? 30 : 0;
-    var earlierTime = earlierHour + ":" + String(minutesRoundedDown).padStart(2, '0');
-    return earlierTime;
+    console.log("origTime2 " + origTime);
+    if (parseInt(origHour) > 12) {
+        origHour = origHour - 12;
+        origMinutes = "00 PM";
+        console.log("origTime3 " + origHour + origMinutes);
+    } else {
+        origMinutes = "00 AM";
+        console.log("origTime3 " + origHour + origMinutes);
+    }
+console.log("origTime4 " + origTime);
+// calculate the dinner time based on movie time
+var earlierHour = parseInt(origHour) - 2;
+var earlierMinutes = parseInt(origMinutes);
+// round minutes down to the nearest half hour; suggested dinner times should be even numbers
+var minutesRoundedDown = (earlierMinutes <= 15) ? 0 : (earlierMinutes <= 45) ? 30 : 0;
+var earlierTime = earlierHour + ":" + String(minutesRoundedDown).padStart(2, '0');
+return earlierTime;
 }
 
 function writeRestaurantToOutput(restaurants) {
@@ -124,7 +143,7 @@ function writeRestaurantToOutput(restaurants) {
 function parseRestaurantData(restaurants) {
     console.log('# parsing ' + restaurants.length + ' restaurants...');
     // sort restaurant data by romance factor
-    restaurants.sort(function(a,b) {
+    restaurants.sort(function (a, b) {
         return (a.romance < b.romance) ? 1 : ((b.romance < a.romance) ? -1 : 0);
     });
 
@@ -159,7 +178,7 @@ function parseRestaurantData(restaurants) {
 function parseMovieData(movies) {
     console.log('# parsing ' + movies.length + ' movies...');
     // sort restaurant data by romance factor
-    movies.sort(function(a,b) {
+    movies.sort(function (a, b) {
         return (a.romance < b.romance) ? 1 : ((b.romance < a.romance) ? -1 : 0);
     });
 
@@ -211,22 +230,22 @@ function writeMovieToRandomResults(movie) {
     }
 
     var movieOutputHTML =
-    '<tr>' +
-    '<td class="shrink">' + movieTime + '</td>' +
-    '<td class="expand">' +
-    '<i class="fa fa-film" aria-hidden="true"></i>' +
-    '<span class="dnd-date-detail-title">  ' + movie.title + '</span>' +
-    '<p class="dnd-date-detail-desc">' + movie.theatre + '</p>'
+        '<tr>' +
+        '<td class="shrink">' + movieTime + '</td>' +
+        '<td class="expand">' +
+        '<i class="fa fa-film" aria-hidden="true"></i>' +
+        '<span class="dnd-date-detail-title">  ' + movie.title + '</span>' +
+        '<p class="dnd-date-detail-desc">' + movie.theatre + '</p>'
 
     if (movie.time === 'No showtimes this late') {
         movieOutputHTML += '<p class="dnd-date-detail-error-desc">No showtimes this late</p>'
     }
 
     movieOutputHTML +=
-    '</td><td class="shrink">' + movie.primaryGenre + '</td>' +
-    '<td class="shrink" id="movie-rating"></td>' +
-    '<td class="shrink"><a href="' + movie.ticketURI + '" target="blank">Link</a></td>' +
-    '</tr>'
+        '</td><td class="shrink">' + movie.primaryGenre + '</td>' +
+        '<td class="shrink" id="movie-rating"></td>' +
+        '<td class="shrink"><a href="' + movie.ticketURI + '" target="blank">Link</a></td>' +
+        '</tr>'
 
     let movieElement = $(movieOutputHTML);
     movieElement.find('#movie-rating').append(getRatingsWidget(Math.ceil(movie.romance), 'movie', currentDateObj.uuid));
@@ -240,17 +259,20 @@ function writeMovieToRandomResults(movie) {
 
 
 function writeRestaurantToRandomResults(restaurant) {
+    if (holdDinnerTime.includes("showtimes")){
+        holdDinnerTime = holdDinnerTime.replace("showtimes", "PM");
+    }
     var restaurantOutputHTML =
-    '<tr restaurant-id="' + restaurant.id + '">' +
-    '<td class="shrink">' + holdDinnerTime + '</td>' +
-    '<td class="expand">' +
-    '<i class="fa fa-cutlery" aria-hidden="true"></i>' +
-    '<span class="dnd-date-detail-title">  ' + restaurant.name + '</span>' +
-    '<p class="dnd-date-detail-desc">' + restaurant.location + '</p>' +
-    '</td><td class="shrink">' + restaurant.primaryCuisine + '</td>' +
-    '<td class="shrink" id="restaurant-rating"></td>' +
-    '<td class="shrink"><a href="' + restaurant.url + '" target="blank">Link</a></td>' +
-    '</tr>'
+        '<tr restaurant-id="' + restaurant.id + '">' +
+        '<td class="shrink">' + holdDinnerTime + '</td>' +
+        '<td class="expand">' +
+        '<i class="fa fa-cutlery" aria-hidden="true"></i>' +
+        '<span class="dnd-date-detail-title">  ' + restaurant.name + '</span>' +
+        '<p class="dnd-date-detail-desc">' + restaurant.location + '</p>' +
+        '</td><td class="shrink">' + restaurant.primaryCuisine + '</td>' +
+        '<td class="shrink" id="restaurant-rating"></td>' +
+        '<td class="shrink"><a href="' + restaurant.url + '" target="blank">Link</a></td>' +
+        '</tr>'
 
     // dnd-restaurant-results
     let restaurantElement = $(restaurantOutputHTML);
@@ -302,7 +324,7 @@ function togglePaneElement(named) {
         searchPane.show();
         resultsPane.hide();
         sessionValue = 'search';
-    } else if (named === 'results'){
+    } else if (named === 'results') {
         resultsPane.show();
         searchPane.hide();
         sessionValue = 'results';
@@ -376,7 +398,7 @@ function openAlertModal(text, duration = 1500) {
 
 // USER PREFS
 
-function saveUserDataToLocal(data={}) {
+function saveUserDataToLocal(data = {}) {
     for (var k in data) currentUser[k] = data[k];
     currentUser.saveLocalData();
 }
@@ -390,7 +412,7 @@ function getUserDataFromLocal() {
 }
 
 // Generates a widget with 0-5 heart rating
-function getRatingsWidget(starCount, category, uuid=null) {
+function getRatingsWidget(starCount, category, uuid = null) {
     // fa-heart-o on fa-heart
 
     var uuidString = (uuid === null) ? guid() : uuid;
@@ -398,7 +420,7 @@ function getRatingsWidget(starCount, category, uuid=null) {
     let container = $('<div class="dnd-user-rating-container"></div>');
     // container.append(tooltip)
     let parentDiv = $('<div data-value="' + uuidString + '" id="dnd-rating-widget" class="dnd-user-rating-widget"></div>');
-    [1, 2, 3, 4, 5].forEach(function(item) {
+    [1, 2, 3, 4, 5].forEach(function (item) {
         var ariaName = (item <= starCount) ? 'fa-heart' : 'fa-heart-o';
         var fillValue = (item <= starCount) ? 'filled' : 'unfilled';
         var classString = (item <= starCount) ? 'dnd-heart-widget' : 'dnd-heart-widget unfilled';
@@ -462,14 +484,14 @@ var currentUser = {
 
 
 // Foundation initialize
-$(function() {
+$(function () {
     $(document).foundation();
     console.log('# initializing Foundation...');
 });
 
 
 // Foundation Modal Listeners
-$(document).on('open.zf.reveal', '[data-reveal]', function() {
+$(document).on('open.zf.reveal', '[data-reveal]', function () {
     var modal = $(this);
     let modalid = modal.attr('id');
 
@@ -498,7 +520,7 @@ $(document).on("formvalid.zf.abide", function (ev, frm) {
 var movieResults = [];
 
 // search form submitted...
-$(document).on("submit", function(ev) {
+$(document).on("submit", function (ev) {
     ev.preventDefault();
 
 
@@ -520,7 +542,7 @@ $(document).on("submit", function(ev) {
 
     // just get a value in here...will be replaced later
     holdDinnerTime = (requestedHour - 2) + ':00';
-    if (requestedHour > 21 ) {
+    if (requestedHour > 21) {
         openAlertModal('That\'s too late to plan this date!', 0);
         return;
     }
@@ -549,7 +571,7 @@ $(document).on("submit", function(ev) {
     // this sends to firebase?
     updateInputInDateHistoryJsonObject(zipCode, radius, date, selectedCuisines.toString(), selectedGenres);
 
-    getMovies(currentUser.results, zipCode, radius, date, time, selectedGenres, function(moviesInfo) {
+    getMovies(currentUser.results, zipCode, radius, date, time, selectedGenres, function (moviesInfo) {
         // add all the jquery outputs for movie info here > movie title / theater & show times
         var movieObj = moviesInfo[0];
         writeMovieToOutput(movieObj);
@@ -563,9 +585,9 @@ $(document).on("submit", function(ev) {
 
 
 // page load
-$(document).ready(function() {
+$(document).ready(function () {
 
-    dateHistoryRef.on("value", function(snapshot) {
+    dateHistoryRef.on("value", function (snapshot) {
         $('#dnd-recommended-results').empty();
         var objects = snapshot.val();
         for (var key in objects) {
@@ -594,7 +616,9 @@ $(document).ready(function() {
 
     let userCon = currentUser.dbRef = userHistoryQuery.push(true);
     userCon.onDisconnect().remove();
-    userHistoryQuery.child(currentUser.dbRef.key).update({'userID': currentUser.uuid})
+    userHistoryQuery.child(currentUser.dbRef.key).update({
+        'userID': currentUser.uuid
+    })
 
     // build the ui elements
     buildMovieGenresList();
@@ -606,38 +630,38 @@ $(document).ready(function() {
 
     // FOOTER
     // link to home page
-    $('body').on('click', '#dnd-btn-home', function() {
+    $('body').on('click', '#dnd-btn-home', function () {
         togglePaneElement('search');
     });
 
     // user preferences modal
-    $('body').on('click', '#dnd-btn-settings', function() {
+    $('body').on('click', '#dnd-btn-settings', function () {
         $('#dnd-settings-modal').foundation('open');
     });
 
     // recommendations page clicked
-    $('body').on('click', '#dnd-random-results-tab-link', function() {
+    $('body').on('click', '#dnd-random-results-tab-link', function () {
         getOutputFromDateHistoryDatabase(dateHistoryData.zipCode);
         console.log('switching to recommendations');
         togglePaneElement('recommendations');
     });
 
     // recommendations page clicked
-    $('body').on('click', '#dnd-recommended-results-tab-link', function() {
+    $('body').on('click', '#dnd-recommended-results-tab-link', function () {
         getOutputFromDateHistoryDatabase(dateHistoryData.zipCode);
         console.log('switching to recommendations');
         togglePaneElement('recommendations');
     });
 
     // recommendations page clicked
-    $('body').on('click', '#dnd-btn-suggestions', function() {
+    $('body').on('click', '#dnd-btn-suggestions', function () {
         getOutputFromDateHistoryDatabase(dateHistoryData.zipCode);
         console.log('switching to recommendations');
         togglePaneElement('recommendations');
     });
 
     // user preferences modal submitted
-    $('body').on('click', '#dnd-settings-save', function() {
+    $('body').on('click', '#dnd-settings-save', function () {
         let saveButton = $(this);
         let modal = saveButton.parents().find('#dnd-settings-modal');
         currentUser.zipCode = modal.find('#dnd-settings-input-zipcode').val();
@@ -650,22 +674,22 @@ $(document).ready(function() {
     // NAVIGATION LINKS
 
     // home link clicked
-    $('body').on('click', '#dnd-breadcumb-home', function() {
+    $('body').on('click', '#dnd-breadcumb-home', function () {
         togglePaneElement('search');
     });
 
     // results link clicked
-    $('body').on('click', '#dnd-breadcumb-results', function() {
+    $('body').on('click', '#dnd-breadcumb-results', function () {
         togglePaneElement('results');
     });
 
     // retry widget clicked
-    $('body').on('click', '#dnd-search-btn-retry', function() {
+    $('body').on('click', '#dnd-search-btn-retry', function () {
         $('#dnd-search-form').submit()
     });
 
     // rating widget clicked
-    $('body').on('click', '.dnd-heart-widget', function() {
+    $('body').on('click', '.dnd-heart-widget', function () {
         let icon = $(this);
         let heartNum = icon.attr('data-value');
         let isFilled = icon.attr('fill-value');

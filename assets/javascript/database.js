@@ -214,7 +214,7 @@ function getOutputFromDateHistoryDatabase(zipCode) {
     isRestaurantCallCompleted = false;
     isMovieCallComplete = false;
     var i = 0;
-
+console.log("getOutputFromDateHistoryDatabase");
     // dateHistoryQuery.on("child_added", function (snapshot) {
     // dateHistoryQuery.once("child_added", function (snap) {
     // snap.forEach(function (snapshot) {
